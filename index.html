@@ -1249,6 +1249,10 @@ function applyLang(lang) {
   // Update html lang attribute
   document.documentElement.lang = lang === 'es' ? 'es' : 'en';
 
+
+  document.getElementById('navCta').href = 'book.html?lang=' + lang;
+
+
   // Animate all translatable elements
   const els = document.querySelectorAll('[data-es][data-en]');
   els.forEach(el => {
