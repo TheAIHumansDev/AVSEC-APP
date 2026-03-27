@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVSEC AI — Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0066cc;
+    --bright: #0088ff;
+    --green: #1a8a4a;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+
+  /* ── LIGHT (DEFAULT) ── */
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:#f0f6ff;
+    color:#0d1825;
+    min-height:100vh;
+    cursor:none;
+    overflow-x:hidden;
+    transition:background .3s,color .3s;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      repeating-linear-gradient(0deg,transparent 0,transparent 39px,rgba(0,102,204,.04) 39px,rgba(0,102,204,.04) 40px),
+      repeating-linear-gradient(90deg,transparent 0,transparent 79px,rgba(0,102,204,.03) 79px,rgba(0,102,204,.03) 80px);
+  }
+
+  /* CURSOR */
+  .cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:multiply;transition:width .15s,height .15s;}
+  .cur-ring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(0,102,204,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 5vw;height:60px;
+    background:rgba(240,246,255,.95);backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(0,102,204,.12);
+    transition:background .3s,border-color .3s;
+  }
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.08em;color:#0d1825;text-decoration:none;transition:color .3s;}
+  .nav-logo span{color:var(--bright);}
+  .nav-badge{font-family:'Space Mono',monospace;font-size:.5rem;background:var(--accent);color:#fff;padding:2px 6px;border-radius:3px;letter-spacing:.1em;vertical-align:middle;margin-left:4px;}
+  .nav-right{display:flex;align-items:center;gap:14px;}
+  .nav-back{font-size:.75rem;font-weight:500;color:#7a9ab8;text-decoration:none;letter-spacing:.05em;text-transform:uppercase;transition:color .2s;cursor:none;display:flex;align-items:center;gap:7px;}
+  .nav-back:hover{color:var(--bright);}
+  .theme-btn{width:34px;height:34px;border-radius:8px;background:rgba(0,102,204,.07);border:1px solid rgba(0,102,204,.18);display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:none;transition:all .2s;flex-shrink:0;}
+  .theme-btn:hover{background:rgba(0,102,204,.14);border-color:rgba(0,102,204,.35);transform:scale(1.08);}
+
+  /* PAGE */
+  .page{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:56px 5vw 80px;}
+
+  /* HEADER */
+  .page-eyebrow{font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:9px;margin-bottom:18px;}
+  .pulse{width:6px;height:6px;background:var(--bright);border-radius:50%;flex-shrink:0;animation:pu 1.8s ease infinite;}
+  @keyframes pu{0%,100%{box-shadow:0 0 0 0 rgba(0,136,255,.5)}50%{box-shadow:0 0 0 7px rgba(0,136,255,0)}}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,6vw,4.5rem);line-height:.93;letter-spacing:.02em;color:#0d1825;margin-bottom:14px;transition:color .3s;}
+  .page-title span{color:var(--bright);}
+  .page-desc{font-size:1rem;color:#5a7fa8;line-height:1.7;max-width:560px;margin-bottom:48px;transition:color .3s;}
+
+  /* EMBED WRAPPER */
+  .embed-shell{
+    background:rgba(255,255,255,.7);
+    border:1px solid rgba(0,102,204,.14);
+    border-radius:14px;
+    padding:20px;
+    box-shadow:0 8px 40px rgba(0,80,180,.09);
+    transition:background .3s,border-color .3s,box-shadow .3s;
+    margin-bottom:20px;
+  }
+  .embed-label{
+    font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;
+    color:#aac4dd;margin-bottom:14px;display:flex;align-items:center;gap:8px;
+    transition:color .3s;
+  }
+  .embed-label::before{content:'';width:20px;height:1px;background:rgba(0,102,204,.25);}
+  .embed-label::after{content:'';flex:1;height:1px;background:rgba(0,102,204,.1);}
+
+  .canva-wrap{
+    position:relative;width:100%;height:0;
+    padding-top:250%;
+    overflow:hidden;border-radius:8px;
+    box-shadow:0 2px 8px 0 rgba(63,69,81,.1);
+  }
+  .canva-wrap iframe{
+    position:absolute;width:100%;height:100%;top:0;left:0;border:none;padding:0;margin:0;
+  }
+
+  /* CREDIT */
+  .embed-credit{
+    text-align:right;margin-top:12px;
+    font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.1em;
+    color:#c0d6e8;transition:color .3s;
+  }
+  .embed-credit a{color:#aac4dd;text-decoration:none;transition:color .2s;}
+  .embed-credit a:hover{color:var(--accent);}
+
+  /* INFO STRIP */
+  .info-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px;
+  }
+  .info-card{
+    background:rgba(255,255,255,.75);border:1px solid rgba(0,102,204,.12);border-radius:10px;
+    padding:18px 16px;text-align:center;
+    transition:background .3s,border-color .3s,transform .2s,box-shadow .2s;
+  }
+  .info-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,80,180,.1);border-color:rgba(0,102,204,.28);}
+  .info-card-icon{font-size:1.5rem;margin-bottom:8px;display:block;}
+  .info-card-val{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);letter-spacing:.04em;display:block;line-height:1;}
+  .info-card-lbl{font-size:.72rem;color:#7a9ab8;margin-top:4px;display:block;line-height:1.4;transition:color .3s;}
+
+  /* CTA */
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:40px;}
+  .btn-primary{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;padding:13px 28px;border-radius:8px;font-size:.87rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .22s;}
+  .btn-primary:hover{background:var(--bright);box-shadow:0 8px 28px rgba(0,136,255,.32);transform:translateY(-2px);}
+  .btn-ghost{display:inline-flex;align-items:center;gap:9px;background:transparent;color:#5a7fa8;padding:13px 24px;border-radius:8px;font-size:.87rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;cursor:none;border:1px solid rgba(0,102,204,.2);transition:all .22s;}
+  .btn-ghost:hover{border-color:rgba(0,102,204,.45);color:var(--accent);transform:translateY(-2px);}
+
+  /* ── DARK MODE ── */
+  body.dark{background:#0d1420;color:#fff;}
+  body.dark::before{
+    background:
+      repeating-linear-gradient(0deg,transparent 0,transparent 39px,rgba(0,136,255,.03) 39px,rgba(0,136,255,.03) 40px),
+      repeating-linear-gradient(90deg,transparent 0,transparent 79px,rgba(0,136,255,.025) 79px,rgba(0,136,255,.025) 80px);
+  }
+  body.dark .cur{background:var(--bright);mix-blend-mode:screen;}
+  body.dark nav{background:rgba(13,20,32,.95);border-bottom-color:rgba(0,136,255,.15);}
+  body.dark .nav-logo{color:#fff;}
+  body.dark .nav-back{color:rgba(255,255,255,.38);}
+  body.dark .nav-back:hover{color:var(--bright);}
+  body.dark .theme-btn{background:rgba(255,255,255,.06);border-color:rgba(0,136,255,.18);}
+  body.dark .theme-btn:hover{background:rgba(0,136,255,.12);border-color:rgba(0,136,255,.4);}
+  body.dark .page-title{color:#fff;}
+  body.dark .page-desc{color:rgba(255,255,255,.42);}
+  body.dark .embed-shell{background:rgba(255,255,255,.03);border-color:rgba(0,136,255,.18);box-shadow:0 8px 40px rgba(0,0,0,.3);}
+  body.dark .embed-label{color:rgba(255,255,255,.18);}
+  body.dark .embed-credit{color:rgba(255,255,255,.15);}
+  body.dark .embed-credit a{color:rgba(255,255,255,.25);}
+  body.dark .embed-credit a:hover{color:var(--bright);}
+  body.dark .info-card{background:rgba(255,255,255,.04);border-color:rgba(0,136,255,.14);}
+  body.dark .info-card:hover{box-shadow:0 8px 28px rgba(0,0,0,.4);border-color:rgba(0,136,255,.35);}
+  body.dark .info-card-lbl{color:rgba(255,255,255,.38);}
+  body.dark .btn-ghost{color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.12);}
+  body.dark .btn-ghost:hover{border-color:rgba(0,136,255,.4);color:var(--bright);}
+
+  /* RESPONSIVE */
+  @media(max-width:600px){
+    .info-strip{grid-template-columns:1fr 1fr;}
+    .info-strip .info-card:last-child{grid-column:span 2;}
+    .cta-row{flex-direction:column;}
+    .btn-primary,.btn-ghost{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="cring"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">AVSEC<span>AI</span><span class="nav-badge">v3.0</span></a>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">🌙</span>
+    </button>
+    <a href="index.html" class="nav-back">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2.5L3.5 6.5 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="navTxt">Volver al inicio</span>
+    </a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-eyebrow"><span class="pulse"></span><span id="eyebrow">// Vista previa del sistema</span></div>
+  <h1 class="page-title" id="pageTitle">AVSEC AI<br><span id="titleAccent">en acción</span></h1>
+  <p class="page-desc" id="pageDesc">Explora el flujo completo de la plataforma: desde el login del oficial hasta el reporte automático. Navega cada pantalla y descubre cómo funciona en campo real.</p>
+
+  <!-- CANVA EMBED -->
+  <div class="embed-shell">
+    <div class="embed-label" id="embedLabel">Presentación interactiva · AVSEC AI v3.0</div>
+    <div class="canva-wrap">
+      <iframe
+        loading="lazy"
+        src="https://www.canva.com/design/DAHFFHj2Oow/i53uu_C7JfN0wybwDrAQ_w/view?embed"
+        allowfullscreen="allowfullscreen"
+        allow="fullscreen">
+      </iframe>
+    </div>
+    <div class="embed-credit">
+      <a href="https://www.canva.com/design/DAHFFHj2Oow/i53uu_C7JfN0wybwDrAQ_w/view?utm_content=DAHFFHj2Oow&utm_campaign=designshare&utm_medium=embeds&utm_source=link" target="_blank" rel="noopener" id="creditLink">Ver en Canva →</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="info-strip">
+    <div class="info-card">
+      <span class="info-card-icon">✈️</span>
+      <span class="info-card-val">12</span>
+      <span class="info-card-lbl" id="stat1">Zonas de inspección de aeronave</span>
+    </div>
+    <div class="info-card">
+      <span class="info-card-icon">📋</span>
+      <span class="info-card-val">58</span>
+      <span class="info-card-lbl" id="stat2">Checkpoints totales por operación</span>
+    </div>
+    <div class="info-card">
+      <span class="info-card-icon">📸</span>
+      <span class="info-card-val">100%</span>
+      <span class="info-card-lbl" id="stat3">Evidencia fotográfica por checkpoint</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-row">
+    <a href="book.html" class="btn-primary" id="ctaPrimary">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5 3l7 4.5L5 12V3z" fill="white"/></svg>
+      <span id="ctaPrimaryTxt">Solicitar demo en vivo</span>
+    </a>
+    <a href="index.html#features" class="btn-ghost" id="ctaGhost">
+      <span id="ctaGhostTxt">Ver funcionalidades</span>
+    </a>
+  </div>
+
+</div>
+
+<script>
+// ── CURSOR
+const cur=document.getElementById('cur'),cr=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function a(){cur.style.left=mx+'px';cur.style.top=my+'px';rx+=(mx-rx)*.14;ry+=(my-ry)*.14;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';cr.style.width='46px';cr.style.height='46px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';cr.style.width='32px';cr.style.height='32px';});
+});
+
+// ── THEME (light por defecto)
+const savedTheme=localStorage.getItem('avsec_theme')||'light';
+if(savedTheme==='dark'){
+  document.body.classList.add('dark');
+  document.getElementById('themeIcon').textContent='☀️';
+}
+function toggleTheme(){
+  const isDark=document.body.classList.toggle('dark');
+  document.getElementById('themeIcon').textContent=isDark?'☀️':'🌙';
+  localStorage.setItem('avsec_theme',isDark?'dark':'light');
+}
+
+// ── LANGUAGE
+const p=new URLSearchParams(window.location.search);
+let L=p.get('lang')||localStorage.getItem('avsec_lang')||'es';
+if(L!=='es'&&L!=='en') L='es';
+
+const T={
+  es:{
+    docTitle:'AVSEC AI — Demo',
+    navTxt:'Volver al inicio',
+    eyebrow:'// Vista previa del sistema',
+    pageTitle:'AVSEC AI',
+    titleAccent:'en acción',
+    pageDesc:'Explora el flujo completo de la plataforma: desde el login del oficial hasta el reporte automático. Navega cada pantalla y descubre cómo funciona en campo real.',
+    embedLabel:'Presentación interactiva · AVSEC AI v3.0',
+    creditLink:'Ver en Canva →',
+    stat1:'Zonas de inspección de aeronave',
+    stat2:'Checkpoints totales por operación',
+    stat3:'Evidencia fotográfica por checkpoint',
+    ctaPrimaryTxt:'Solicitar demo en vivo',
+    ctaGhostTxt:'Ver funcionalidades',
+    ctaPrimaryHref:'book.html?lang=es',
+  },
+  en:{
+    docTitle:'AVSEC AI — Demo',
+    navTxt:'Back to home',
+    eyebrow:'// System preview',
+    pageTitle:'AVSEC AI',
+    titleAccent:'in action',
+    pageDesc:'Explore the full platform flow: from officer login to automatic report delivery. Navigate every screen and see how it works in real field operations.',
+    embedLabel:'Interactive presentation · AVSEC AI v3.0',
+    creditLink:'View on Canva →',
+    stat1:'Aircraft inspection zones',
+    stat2:'Total checkpoints per operation',
+    stat3:'Photo evidence per checkpoint',
+    ctaPrimaryTxt:'Request live demo',
+    ctaGhostTxt:'View features',
+    ctaPrimaryHref:'book.html?lang=en',
+  }
+};
+
+function applyL(l){
+  const t=T[l];
+  document.documentElement.lang=l;
+  document.title=t.docTitle;
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.innerHTML=v;};
+  const st=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  st('navTxt',t.navTxt);
+  st('eyebrow',t.eyebrow);
+  st('pageTitle',t.pageTitle);
+  st('titleAccent',t.titleAccent);
+  st('pageDesc',t.pageDesc);
+  st('embedLabel',t.embedLabel);
+  st('creditLink',t.creditLink);
+  st('stat1',t.stat1);st('stat2',t.stat2);st('stat3',t.stat3);
+  st('ctaPrimaryTxt',t.ctaPrimaryTxt);
+  st('ctaGhostTxt',t.ctaGhostTxt);
+  document.getElementById('ctaPrimary').href=t.ctaPrimaryHref;
+}
+applyL(L);
+</script>
+</body>
+</html>
