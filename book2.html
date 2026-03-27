@@ -128,6 +128,99 @@
     .form-area{padding:32px 5vw 48px;}
   }
   @media(max-width:520px){.c2{grid-template-columns:1fr;}}
+
+  /* THEME TOGGLE BUTTON */
+.theme-toggle {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(0,136,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; cursor: none; transition: all 0.2s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  background: rgba(0,136,255,0.12);
+  border-color: rgba(0,136,255,0.4);
+  transform: scale(1.08);
+}
+
+/* LIGHT MODE OVERRIDES */
+body.light {
+  background: #f0f6ff;
+  color: #0d1825;
+}
+body.light::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0, transparent 39px, rgba(0,102,204,0.05) 39px, rgba(0,102,204,0.05) 40px),
+    repeating-linear-gradient(90deg, transparent 0, transparent 79px, rgba(0,102,204,0.04) 79px, rgba(0,102,204,0.04) 80px);
+}
+body.light nav {
+  background: rgba(240,246,255,0.95);
+  border-bottom-color: rgba(0,102,204,0.12);
+}
+body.light .nav-logo { color: #0d1825; }
+body.light .sidebar {
+  background: rgba(255,255,255,0.6);
+  border-right-color: rgba(0,102,204,0.12);
+}
+body.light .sb-title { color: #0d1825; }
+body.light .sb-desc { color: #4a6a8a; }
+body.light .perk {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(0,102,204,0.12);
+}
+body.light .perk strong { color: #0d1825; }
+body.light .perk span { color: #5a7fa8; }
+body.light .trust-chip {
+  color: #8aabcc;
+  border-color: rgba(0,102,204,0.15);
+}
+body.light input,
+body.light select,
+body.light textarea {
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(0,102,204,0.2);
+  color: #0d1825;
+}
+body.light input:focus,
+body.light select:focus,
+body.light textarea:focus {
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+}
+body.light input::placeholder,
+body.light textarea::placeholder { color: #aac4dd; }
+body.light select option { background: #fff; color: #0d1825; }
+body.light label { color: rgba(0,30,70,0.45); }
+body.light .chip-lbl {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(0,102,204,0.2);
+  color: #4a6a8a;
+}
+body.light input[type="checkbox"]:checked ~ .chip-lbl {
+  background: rgba(0,102,204,0.08);
+  border-color: #0066cc;
+  color: #0d1825;
+}
+body.light .div { background: rgba(0,102,204,0.1); }
+body.light .div::after { background: #f0f6ff; color: #8aabcc; }
+body.light .consent label { color: #6a8aaa; }
+body.light .form-hl { color: #0066cc; }
+body.light .sb-eyebrow { color: #0066cc; }
+body.light .theme-toggle {
+  background: rgba(0,102,204,0.07);
+  border-color: rgba(0,102,204,0.2);
+}
+body.light .suc-info {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(0,102,204,0.18);
+  color: #6a8aaa;
+}
+body.light .btn-ret {
+  border-color: rgba(0,102,204,0.2);
+  color: #6a8aaa;
+}
+body.light .btn-ret:hover { color: #0066cc; border-color: rgba(0,102,204,0.5); }
 </style>
 </head>
 <body>
@@ -137,10 +230,15 @@
 
 <nav>
   <a href="index.html" class="nav-logo">AVSEC<span>AI</span><span class="nav-badge">v3.0</span></a>
-  <a href="index.html" class="nav-back">
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2.5L3.5 6.5 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span id="navTxt">Volver al inicio</span>
-  </a>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">
+      <span id="themeIcon">☀️</span>
+    </button>
+    <a href="index.html" class="nav-back">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2.5L3.5 6.5 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="navTxt">Volver al inicio</span>
+    </a>
+  </div>
 </nav>
 
 <div class="page">
@@ -480,6 +578,20 @@ async function send(){
 // In your landing page, link to book.html like this:
 // <a href="book.html?lang=en">Request Demo</a>  (English)
 // <a href="book.html?lang=es">Solicitar Demo</a>  (Spanish)
+
+// ── THEME TOGGLE
+const savedTheme = localStorage.getItem('avsec_theme') || 'dark';
+if (savedTheme === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('themeIcon').textContent = '🌙';
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+  localStorage.setItem('avsec_theme', isLight ? 'light' : 'dark');
+}
+  
 </script>
 </body>
 </html>
