@@ -171,6 +171,20 @@
     .cta-row{flex-direction:column;}
     .btn-primary,.btn-ghost{justify-content:center;}
   }
+
+/* LANG TOGGLE */
+.lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.7);border:1.5px solid rgba(0,102,204,.18);border-radius:7px;overflow:hidden;height:34px;transition:background .3s,border-color .3s;}
+.lang-btn{padding:0 13px;height:100%;font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.12em;font-weight:700;text-transform:uppercase;color:#7a9ab8;background:transparent;border:none;cursor:none;transition:all .2s;}
+.lang-btn.active{background:var(--accent);color:#fff;}
+.lang-btn:not(.active):hover{color:var(--accent);background:rgba(0,102,204,.07);}
+.lang-div{width:1px;height:60%;background:rgba(0,102,204,.15);}
+
+/* Dark overrides for lang toggle */
+body.dark .lang-toggle{background:rgba(255,255,255,.05);border-color:rgba(0,136,255,.18);}
+body.dark .lang-btn{color:rgba(255,255,255,.35);}
+body.dark .lang-btn:not(.active):hover{color:var(--bright);background:rgba(0,136,255,.08);}
+body.dark .lang-div{background:rgba(0,136,255,.2);}
+  
 </style>
 
 <!-- Google tag -->
@@ -188,17 +202,26 @@
 <div class="cur" id="cur"></div>
 <div class="cur-ring" id="cring"></div>
 
+  
+
 <nav>
   <a href="index.html" class="nav-logo">AVSEC<span>AI</span><span class="nav-badge">v3.0</span></a>
   <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
-      <span id="themeIcon">🌙</span>
-    </button>
-    <a href="index.html" class="nav-back">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2.5L3.5 6.5 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span id="navTxt">Volver al inicio</span>
-    </a>
+  <!-- LANG TOGGLE -->
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btnES" onclick="setLang('es')">ES</button>
+    <div class="lang-div"></div>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
   </div>
+  <!-- THEME -->
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+    <span id="themeIcon">🌙</span>
+  </button>
+  <a href="index.html" class="nav-back">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2.5L3.5 6.5 8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="navTxt">Volver al inicio</span>
+  </a>
+</div>
 </nav>
 
 <div class="page">
@@ -279,65 +302,78 @@ function toggleTheme(){
   localStorage.setItem('avsec_theme',isDark?'dark':'light');
 }
 
-// ── LANGUAGE
-const p=new URLSearchParams(window.location.search);
-let L=p.get('lang')||localStorage.getItem('avsec_lang')||'es';
-if(L!=='es'&&L!=='en') L='es';
+// ── LANGUAGE 1
+// ── LANGUAGE 2
+const p = new URLSearchParams(window.location.search);
+let L = p.get('lang') || localStorage.getItem('avsec_lang') || 'es';
+if (L !== 'es' && L !== 'en') L = 'es';
 
-const T={
-  es:{
-    docTitle:'AVSEC AI — Demo',
-    navTxt:'Volver al inicio',
-    eyebrow:'// Vista previa del sistema',
-    pageTitle:'AVSEC AI',
-    titleAccent:'en acción',
-    pageDesc:'Explora el flujo completo de la plataforma: desde el login del oficial hasta el reporte automático. Navega cada pantalla y descubre cómo funciona en campo real.',
-    embedLabel:'Presentación interactiva · AVSEC AI v3.0',
-    creditLink:'Ver en Canva →',
-    stat1:'Zonas de inspección de aeronave',
-    stat2:'Checkpoints totales por operación',
-    stat3:'Evidencia fotográfica por checkpoint',
-    ctaPrimaryTxt:'Solicitar demo en vivo',
-    ctaGhostTxt:'Ver funcionalidades',
-    ctaPrimaryHref:'book.html?lang=es',
+const T = {
+  es: {
+    docTitle: 'AVSEC AI — Demo',
+    navTxt: 'Volver al inicio',
+    eyebrow: '// Vista previa del sistema',
+    pageTitle: 'AVSEC AI',
+    titleAccent: 'en acción',
+    pageDesc: 'Explora el flujo completo de la plataforma: desde el login del oficial hasta el reporte automático. Navega cada pantalla y descubre cómo funciona en campo real.',
+    embedLabel: 'Presentación interactiva · AVSEC AI v3.0',
+    creditLink: 'Ver en Canva →',
+    stat1: 'Zonas de inspección de aeronave',
+    stat2: 'Checkpoints totales por operación',
+    stat3: 'Evidencia fotográfica por checkpoint',
+    ctaPrimaryTxt: 'Solicitar demo en vivo',
+    ctaGhostTxt: 'Ver funcionalidades',
+    ctaPrimaryHref: 'book.html?lang=es',
   },
-  en:{
-    docTitle:'AVSEC AI — Demo',
-    navTxt:'Back to home',
-    eyebrow:'// System preview',
-    pageTitle:'AVSEC AI',
-    titleAccent:'in action',
-    pageDesc:'Explore the full platform flow: from officer login to automatic report delivery. Navigate every screen and see how it works in real field operations.',
-    embedLabel:'Interactive presentation · AVSEC AI v3.0',
-    creditLink:'View on Canva →',
-    stat1:'Aircraft inspection zones',
-    stat2:'Total checkpoints per operation',
-    stat3:'Photo evidence per checkpoint',
-    ctaPrimaryTxt:'Request live demo',
-    ctaGhostTxt:'View features',
-    ctaPrimaryHref:'book.html?lang=en',
+  en: {
+    docTitle: 'AVSEC AI — Demo',
+    navTxt: 'Back to home',
+    eyebrow: '// System preview',
+    pageTitle: 'AVSEC AI',
+    titleAccent: 'in action',
+    pageDesc: 'Explore the full platform flow: from officer login to automatic report delivery. Navigate every screen and see how it works in real field operations.',
+    embedLabel: 'Interactive presentation · AVSEC AI v3.0',
+    creditLink: 'View on Canva →',
+    stat1: 'Aircraft inspection zones',
+    stat2: 'Total checkpoints per operation',
+    stat3: 'Photo evidence per checkpoint',
+    ctaPrimaryTxt: 'Request live demo',
+    ctaGhostTxt: 'View features',
+    ctaPrimaryHref: 'book.html?lang=en',
   }
 };
 
-function applyL(l){
-  const t=T[l];
-  document.documentElement.lang=l;
-  document.title=t.docTitle;
-  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.innerHTML=v;};
-  const st=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  st('navTxt',t.navTxt);
-  st('eyebrow',t.eyebrow);
-  st('pageTitle',t.pageTitle);
-  st('titleAccent',t.titleAccent);
-  st('pageDesc',t.pageDesc);
-  st('embedLabel',t.embedLabel);
-  st('creditLink',t.creditLink);
-  st('stat1',t.stat1);st('stat2',t.stat2);st('stat3',t.stat3);
-  st('ctaPrimaryTxt',t.ctaPrimaryTxt);
-  st('ctaGhostTxt',t.ctaGhostTxt);
-  document.getElementById('ctaPrimary').href=t.ctaPrimaryHref;
+function setLang(l) {
+  L = l;
+  localStorage.setItem('avsec_lang', l);
+  document.getElementById('btnES').classList.toggle('active', l === 'es');
+  document.getElementById('btnEN').classList.toggle('active', l === 'en');
+  applyL(l);
 }
-applyL(L);
+
+function applyL(l) {
+  const t = T[l];
+  document.documentElement.lang = l;
+  document.title = t.docTitle;
+  const s  = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML   = v; };
+  const st = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  st('navTxt',      t.navTxt);
+  st('eyebrow',     t.eyebrow);
+  st('pageTitle',   t.pageTitle);
+  st('titleAccent', t.titleAccent);
+  st('pageDesc',    t.pageDesc);
+  st('embedLabel',  t.embedLabel);
+  st('creditLink',  t.creditLink);
+  st('stat1',       t.stat1);
+  st('stat2',       t.stat2);
+  st('stat3',       t.stat3);
+  st('ctaPrimaryTxt', t.ctaPrimaryTxt);
+  st('ctaGhostTxt',   t.ctaGhostTxt);
+  document.getElementById('ctaPrimary').href = t.ctaPrimaryHref;
+}
+
+// Inicializar — sincroniza botones Y aplica textos
+setLang(L);
 </script>
 </body>
 </html>
