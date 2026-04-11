@@ -1014,8 +1014,8 @@
     <div class="features-grid">
       <div class="feature-card">
         <span class="feature-icon">🤖</span>
-        <div class="feature-title" data-es="OCR con Visión IA" data-en="AI Vision OCR">OCR con Visión IA</div>
-        <div class="feature-desc" data-es="Reconocimiento óptico de credenciales aeroportuarias. El sistema extrae automáticamente nombre, empresa, cédula, vigencia y nivel de acceso — los campos son editables si el reconocimiento no fue perfecto." data-en="Optical recognition of airport credentials. The system automatically extracts name, company, ID, validity and access level — fields are editable if recognition was imperfect.">Reconocimiento óptico de credenciales aeroportuarias. El sistema extrae automáticamente nombre, empresa, cédula, vigencia y nivel de acceso — los campos son editables si el reconocimiento no fue perfecto.</div>
+        <div class="feature-title" data-es="Visión IA" data-en="AI Vision OCR">Visión IA</div>
+        <div class="feature-desc" data-es="Escáneo de credenciales aeroportuarias. El sistema extrae automáticamente nombre, empresa, cédula, vigencia y nivel de acceso — los campos son editables si el reconocimiento no fue perfecto." data-en="Optical recognition of airport credentials. The system automatically extracts name, company, ID, validity and access level — fields are editable if recognition was imperfect.">Reconocimiento óptico de credenciales aeroportuarias. El sistema extrae automáticamente nombre, empresa, cédula, vigencia y nivel de acceso — los campos son editables si el reconocimiento no fue perfecto.</div>
       </div>
       <div class="feature-card">
         <span class="feature-icon">📸</span>
@@ -1126,7 +1126,7 @@
     </div>
     <div class="ocr-demo" id="ocrDemo">
       <div class="scan-line"></div>
-      <div class="ocr-title">// OCR output · live extraction</div>
+      <div class="ocr-title">// Vision AI output · live extraction</div>
       <div class="ocr-field"><span class="ocr-key" data-es="NOMBRE" data-en="NAME">NOMBRE</span><span class="ocr-val" id="ocrNombre">—</span></div>
       <div class="ocr-field"><span class="ocr-key" data-es="CÉDULA" data-en="ID NO.">CÉDULA</span><span class="ocr-val" id="ocrCedula">—</span></div>
       <div class="ocr-field"><span class="ocr-key" data-es="EMPRESA" data-en="COMPANY">EMPRESA</span><span class="ocr-val" id="ocrEmpresa">—</span></div>
@@ -1362,11 +1362,10 @@ document.querySelectorAll('.feature-card').forEach((c, i) => c.style.transitionD
 document.querySelectorAll('.zone-card').forEach((c, i) => c.style.transitionDelay = (i * 0.06) + 's');
 document.querySelectorAll('.comp-card').forEach((c, i) => c.style.transitionDelay = (i * 0.1) + 's');
 
-// OCR DEMO ANIMATION
 const ocrData = {
   nombre: ['Carlos Ulate M.', 'Ana Rodríguez V.', 'Marco Jiménez L.'],
   cedula: ['1-0234-5678', '3-0456-7890', '2-0567-8901'],
-  empresa: ['SANSA Airlines', 'GroundCo CR', 'AeroRamp SJO'],
+  empresa: ['AI Airlines', 'GroundCo CR', 'AeroRamp SJO'],
   vigencia: ['15/08/2027', '01/03/2026', '22/11/2026'],
   num: ['95279', '81344', '72105'],
   acceso: ['Zonas 2-5', 'Zona 3 · VERDE', 'Zonas 1-6'],
