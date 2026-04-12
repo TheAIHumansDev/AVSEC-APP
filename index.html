@@ -108,8 +108,8 @@ nav.up{box-shadow:var(--shadow);background:rgba(255,255,255,.97)}
   position:absolute;inset:0;pointer-events:none;
   background-image:linear-gradient(rgba(26,86,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,255,.055) 1px,transparent 1px);
   background-size:48px 48px;
-  -webkit-mask-image:radl-gradient(ellipse 80% 80% at 70% 50%,black,transparent);
-  mask-image:radl-gradient(ellipse 80% 80% at 70% 50%,black,transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black,transparent);
+  mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black,transparent);
 }
 .scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(26,86,255,.25),transparent);animation:scan 7s linear infinite;pointer-events:none;z-index:1}
 @keyframes scan{0%{top:0}100%{top:100%}}
@@ -202,7 +202,7 @@ nav.up{box-shadow:var(--shadow);background:rgba(255,255,255,.97)}
 
 /* ─── AI PROPOSITION STRIP ───────────────────────────────── */
 #ai-strip{padding:100px 5vw;background:var(--navy);position:relative;overflow:hidden}
-#ai-strip::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:900px;height:900px;background:radl-gradient(circle,rgba(26,86,255,.18),transparent 60%);pointer-events:none}
+#ai-strip::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(26,86,255,.18),transparent 60%);pointer-events:none}
 .ai-strip-inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:1}
 .ai-strip-left .s-tag{color:rgba(26,86,255,.9)}
 .ai-strip-h{font-weight:800;font-size:clamp(2rem,4vw,3.5rem);line-height:.97;letter-spacing:-.045em;color:#fff;margin-bottom:20px}
@@ -324,9 +324,9 @@ nav.up{box-shadow:var(--shadow);background:rgba(255,255,255,.97)}
 .step-title{font-weight:700;font-size:.95rem;letter-spacing:-.02em;margin-bottom:8px}
 .step-desc{font-size:.8rem;color:var(--muted);line-height:1.6}
 
-/* ─── SOCL PROOF / NUMBERS ─────────────────────────────── */
+/* ─── SOCIAL PROOF / NUMBERS ─────────────────────────────── */
 #numbers{padding:100px 5vw;background:var(--navy);position:relative;overflow:hidden}
-#numbers::before{content:'';position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:500px;height:500px;background:radl-gradient(circle,rgba(26,86,255,.25),transparent 65%);pointer-events:none}
+#numbers::before{content:'';position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(26,86,255,.25),transparent 65%);pointer-events:none}
 .num-inner{max-width:1140px;margin:0 auto}
 .num-header{text-align:center;margin-bottom:60px}
 .num-header .s-tag{color:rgba(26,86,255,.85)}
@@ -408,7 +408,7 @@ nav.up{box-shadow:var(--shadow);background:rgba(255,255,255,.97)}
 
 /* ─── LEAD CAPTURE CTA ───────────────────────────────────── */
 #lead{padding:120px 5vw;background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 100%);position:relative;overflow:hidden;text-align:center}
-#lead::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radl-gradient(circle,rgba(26,86,255,.22),transparent 60%);pointer-events:none}
+#lead::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(26,86,255,.22),transparent 60%);pointer-events:none}
 .lead-eyebrow{display:inline-block;font-family:var(--mono);font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;background:rgba(26,86,255,.15);color:rgba(26,86,255,.9);border:1px solid rgba(26,86,255,.3);padding:6px 14px;border-radius:4px;margin-bottom:22px}
 .lead-h{font-weight:800;font-size:clamp(2.5rem,5vw,5rem);letter-spacing:-.05em;color:#fff;line-height:.95;margin-bottom:20px;position:relative;z-index:1}
 .lead-h em{font-style:normal;color:#6B9DFF}
@@ -446,7 +446,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
 .footer-cert{font-family:var(--mono);font-size:.58rem;color:rgba(255,255,255,.18);letter-spacing:.1em}
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
-@med(max-width:1100px){
+@media(max-width:1100px){
   .hero-inner,.ai-strip-inner,.value-grid{grid-template-columns:1fr;gap:50px}
   .plat-cards,.price-cards{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr 1fr;gap:16px}.steps::before{display:none}
@@ -455,7 +455,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
   .hero-visual,.ai-terminal{max-width:540px;margin:0 auto}
   .prcard.featured-pr{transform:none}.prcard.featured-pr:hover{transform:translateY(-6px)}
 }
-@med(max-width:700px){
+@media(max-width:700px){
   .navlinks{display:none}
   .plat-cards,.price-cards,.num-grid,.steps,.frow{grid-template-columns:1fr}
   .hero-h1{font-size:2.4rem}
@@ -491,7 +491,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
   <a href="#" class="logo">AVSEC<em>AI</em><span class="logo-tag">v4</span></a>
   <ul class="navlinks">
     <li><a href="#platforms" data-es="Plataformas" data-en="Platforms">Plataformas</a></li>
-    <li><a href="#value" data-es=" Aplicada" data-en="Applied AI">IA Aplicada</a></li>
+    <li><a href="#value" data-es="IA Aplicada" data-en="Applied AI">IA Aplicada</a></li>
     <li><a href="#pricing" data-es="Planes" data-en="Plans">Planes</a></li>
     <li><a href="#faq" data-es="FAQ" data-en="FAQ">FAQ</a></li>
   </ul>
@@ -518,9 +518,9 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
       </div>
 
       <h1 class="hero-h1">
-        <span data-es="Plataforma IA" data-en="AI Platform">Plataforma IA</span>
-        <span class="h1-blue" data-es="para seguridad y operaciones" data-en="for security and operations">para seguridad y operaciones</span>
-        <span class="h1-italic" data-es="en aviación." data-en="in aviation.">en aviación.</span>
+        <span data-es="La IA que" data-en="The AI that">Plataforma IA</span>
+        <span class="h1-blue" data-es="protege tu aeropuerto" data-en="protects your airport">para seguridad y operaciones</span>
+        <span class="h1-italic" data-es="en cada operación." data-en="in every operation.">en aviación.</span>
       </h1>
 
       <p class="hero-sub">
@@ -627,7 +627,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
         <div class="ai-pow r scale" style="transition-delay:.15s">
           <span class="ai-pow-icon">📸</span>
           <div class="ai-pow-title" data-es="Visión Artificial" data-en="Computer Vision">Visión Artificial</div>
-          <div class="ai-pow-desc" data-es="Visión IA en credenciales, validación de fotos de evidencia y análisis de calidad en tiempo real" data-en="Credential Scanning, evidence photo validation and real-time quality analysis">Visión IA en credenciales y validación de fotos de evidencia en tiempo real</div>
+          <div class="ai-pow-desc" data-es="OCR de credenciales, validación de fotos de evidencia y análisis de calidad en tiempo real" data-en="Credential OCR, evidence photo validation and real-time quality analysis">OCR de credenciales y validación de fotos de evidencia en tiempo real</div>
         </div>
         <div class="ai-pow r scale" style="transition-delay:.2s">
           <span class="ai-pow-icon">📊</span>
@@ -648,7 +648,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
       <div class="term-body" id="termBody">
         <div><span class="tc">→ </span><span class="tp">module: ACCESS_CONTROL · flight LA802</span></div>
         <div>&nbsp;</div>
-        <div><span class="tc">visionAI.scan </span><span class="tv">credential_photo.jpg</span></div>
+        <div><span class="tc">ocr.scan </span><span class="tv">credential_photo.jpg</span></div>
         <div><span class="tp"> ├ confidence: </span><span class="ts">98.4%</span></div>
         <div><span class="tp"> ├ name: </span><span class="tv">Carlos Ulate M.</span></div>
         <div><span class="tp"> ├ company: </span><span class="tv">AI Airlines</span></div>
@@ -693,7 +693,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
         <p class="pc-desc" data-es="IA aplicada a Accesos, Aeronaves, Perímetros, Puentes y Rampa. Detecta anomalías, calcula Risk Scores y genera alertas automáticas en tiempo real." data-en="AI applied to Access Control, Aircraft, Perimeters, Bridges and Ramp. Detects anomalies, calculates Risk Scores and generates automatic alerts in real time.">IA aplicada a Accesos, Aeronaves, Perímetros, Puentes y Rampa. Detecta anomalías, calcula Risk Scores y genera alertas automáticas en tiempo real.</p>
       </div>
       <div class="pc-feats">
-        <div class="pc-feat"><span class="pf-icon">🔑</span><div class="pf-body"><strong data-es="Control de Accesos con IA" data-en="AI Access Control">Control de Accesos con IA</strong><span data-es="Visión IA de credenciales + validación de vigencia + Risk Score automático" data-en=" Vision AI Credential  + validity validation + automatic Risk Score">Visión IA en credenciales + validación de vigencia + Risk Score automático</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🔑</span><div class="pf-body"><strong data-es="Control de Accesos con IA" data-en="AI Access Control">Control de Accesos con IA</strong><span data-es="OCR de credenciales + validación de vigencia + Risk Score automático" data-en="Credential OCR + validity validation + automatic Risk Score">OCR de credenciales + validación de vigencia + Risk Score automático</span></div></div>
         <div class="pc-feat"><span class="pf-icon">✈️</span><div class="pf-body"><strong data-es="Inspección de Aeronave · 12 Zonas" data-en="Aircraft Inspection · 12 Zones">Inspección de Aeronave · 12 Zonas</strong><span data-es="Photo QA por IA + scoring de completitud + hallazgos guiados" data-en="AI Photo QA + completeness scoring + guided findings">Photo QA por IA + scoring de completitud + hallazgos guiados</span></div></div>
         <div class="pc-feat"><span class="pf-icon">🔭</span><div class="pf-body"><strong data-es="Vigilancia de Perímetros" data-en="Perimeter Surveillance">Vigilancia de Perímetros</strong><span data-es="Geofence + detección de patrones anómalos + alerta a supervisor" data-en="Geofence + anomalous pattern detection + supervisor alert">Geofence + detección de patrones anómalos + alerta automática</span></div></div>
         <div class="pc-feat"><span class="pf-icon">🚶</span><div class="pf-body"><strong data-es="Módulo Puentes · CP1–CP13" data-en="Bridge Module · CP1–CP13">Módulo Puentes · CP1–CP13</strong><span data-es="Time analysis + conteo PAX asistido por IA + predicción de demoras" data-en="Time analysis + AI-assisted PAX count + delay prediction">Time analysis + conteo PAX por IA + predicción de demoras</span></div></div>
@@ -867,7 +867,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
       <div class="num-card r scale" style="transition-delay:.1s">
         <span class="num-icon">⚡</span>
         <span class="num-val"><span class="num-count" data-target="98">0</span><span class="num-suf">%</span></span>
-        <span class="num-label" data-es="Precisión del motor de Visión IA de credenciales" data-en="Credential Vision AI engine accuracy">Precisión del motor de Visión IA en credenciales</span>
+        <span class="num-label" data-es="Precisión del motor OCR de credenciales" data-en="Credential OCR engine accuracy">Precisión del motor OCR de credenciales</span>
       </div>
       <div class="num-card r scale" style="transition-delay:.15s">
         <span class="num-icon">🛡️</span>
@@ -920,7 +920,7 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
         <div class="pr-feats">
           <div class="pr-feat"><span class="pr-feat-check">✅</span> <div><strong data-es="Módulos:" data-en="Modules:">Módulos:</strong> <span data-es="Accesos + Aeronave + Perímetros + Puentes + Rampa" data-en="Access + Aircraft + Perimeters + Bridges + Ramp">Accesos + Aeronave + Perímetros + Puentes + Rampa</span></div></div>
           <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="IA Risk Scoring en tiempo real" data-en="Real-time AI Risk Scoring">IA Risk Scoring en tiempo real</span></div>
-          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Visión IA en credenciales con detección de patrones" data-en="Vision AI in Credential for pattern detection">Visión IA en credenciales con detección de patrones</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="OCR de credenciales con detección de patrones" data-en="Credential OCR with pattern detection">OCR de credenciales con detección de patrones</span></div>
           <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Reportes automáticos por email" data-en="Automatic email reports">Reportes automáticos por email</span></div>
           <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Dashboard de supervisión en vivo" data-en="Live supervision dashboard">Dashboard de supervisión en vivo</span></div>
           <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="API REST + Webhooks incluidos" data-en="REST API + Webhooks included">API REST + Webhooks incluidos</span></div>
@@ -1169,8 +1169,8 @@ document.querySelectorAll('a,button,.pc,.prcard,.vcard,.step-c,.ai-pow,.num-card
 window.addEventListener('scroll',()=>document.getElementById('mainNav').classList.toggle('up',scrollY>40));
 
 /* TICKER */
-const TICK_ES=['Accesos · Vision AI + Risk Score IA','Inspección Aeronave · 12 Zonas','Vigilancia de Perímetros · Geofence','Módulo Puentes · CP1–CP13','Rampa · 22 Checkpoints · Timer IA','Ground Handling · SLA Scoring IA','Asistencia PRM · IATA RP 1739','Detección de Patrones Anómalos','Risk Engine · Verde / Ámbar / Rojo','Firma Digital Biométrica','Cadena de Custodia Inmutable','API REST · Webhooks en Tiempo Real','OACI Anexo 17 · DGAC Costa Rica','Dashboard Live · KPIs por Aerolínea'];
-const TICK_EN=['Access Control · Visión IA + AI Risk Score','Aircraft Inspection · 12 Zones','Perimeter Surveillance · Geofence','Bridge Module · CP1–CP13','Ramp · 22 Checkpoints · AI Timer','Ground Handling · SLA AI Scoring','PRM Assistance · IATA RP 1739','Anomalous Pattern Detection','Risk Engine · Green / Amber / Red','Biometric Digital Signature','Immutable Chain of Custody','REST API · Real-Time Webhooks','ICAO Annex 17 · DGAC Costa Rica','Live Dashboard · KPIs by Airline'];
+const TICK_ES=['Accesos · OCR + Risk Score IA','Inspección Aeronave · 12 Zonas','Vigilancia de Perímetros · Geofence','Módulo Puentes · CP1–CP13','Rampa · 22 Checkpoints · Timer IA','Ground Handling · SLA Scoring IA','Asistencia PRM · IATA RP 1739','Detección de Patrones Anómalos','Risk Engine · Verde / Ámbar / Rojo','Firma Digital Biométrica','Cadena de Custodia Inmutable','API REST · Webhooks en Tiempo Real','OACI Anexo 17 · DGAC Costa Rica','Dashboard Live · KPIs por Aerolínea'];
+const TICK_EN=['Access Control · OCR + AI Risk Score','Aircraft Inspection · 12 Zones','Perimeter Surveillance · Geofence','Bridge Module · CP1–CP13','Ramp · 22 Checkpoints · AI Timer','Ground Handling · SLA AI Scoring','PRM Assistance · IATA RP 1739','Anomalous Pattern Detection','Risk Engine · Green / Amber / Red','Biometric Digital Signature','Immutable Chain of Custody','REST API · Real-Time Webhooks','ICAO Annex 17 · DGAC Costa Rica','Live Dashboard · KPIs by Airline'];
 
 function buildTicker(l){
   const el=document.getElementById('tickerEl'),items=l==='es'?TICK_ES:TICK_EN;
