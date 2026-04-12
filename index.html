@@ -1154,12 +1154,8 @@ footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
   </div>
 </footer>
 
-  
-
 <!-- ═══ SCRIPTS ═══════════════════════════════════════════════ -->
 <script>
-
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyp91MF2KMNRrU4qGk5Y0EYLdZhTfi0reD004AVXIimivb47A3xVOBqGjvNrY2z9w/exec';
 /* CURSOR */
 const $c=document.getElementById('cur'),$r=document.getElementById('cur2');
 let mx=0,my=0,rx=0,ry=0;
@@ -1239,75 +1235,15 @@ function setPricing(mode){
   document.getElementById('ptAnual').classList.toggle('on',mode==='anual');
 }
 
+/* LEAD FORM */
 function submitLead(){
-  const nombre  = document.getElementById('fNombre').value.trim();
-  const email   = document.getElementById('fEmail').value.trim();
-  const org     = document.getElementById('fOrg').value.trim();
-  const cargo   = document.getElementById('fCargo').value.trim();
-  const tel     = document.getElementById('fTel').value.trim();
-  const platform= document.getElementById('fPlatform').value;
-
-  if(!nombre||!email||!org){
-    alert(lang==='es'
-      ?'Por favor completa nombre, organización y correo.'
-      :'Please fill in name, organization and email.');
-    return;
-  }
-
-  const btn = document.querySelector('.fsubmit');
-  btn.disabled = true;
-  btn.textContent = lang==='es' ? '⏳ Enviando...' : '⏳ Sending...';
-
-  const payload = { nombre, cargo, org, email, tel, platform };
-
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',           // Apps Script no envía CORS headers
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    // no-cors no retorna JSON legible, generamos el # localmente
-    const reserva = 'AVSEC-' + Date.now().toString().slice(-6);
-    showSuccess(reserva, nombre, platform);
-  })
-  .catch(() => {
-    btn.disabled = false;
-    btn.textContent = lang==='es' ? '🚀 Reservar mi demo gratuita →' : '🚀 Reserve my free demo →';
-    alert(lang==='es' ? 'Error de conexión. Intenta de nuevo.' : 'Connection error. Please try again.');
-  });
-}
-
-function showSuccess(reserva, nombre, platform){
-  const labels = {
-    avsec:  '🛡️ AVSEC Platform',
-    ground: '🔧 Ground Handling IA',
-    prm:    '♿ Asistencia PRM',
-    all:    '💎 Las 3 plataformas',
-    '':     '—'
-  };
-  document.getElementById('formContent').style.display = 'none';
-
-  const s = document.getElementById('formSuccess');
-  s.innerHTML = `
-    <span class="fs-emoji">🎉</span>
-    <div class="fs-title">${lang==='es'?'¡Demo reservada!':'Demo reserved!'}</div>
-    <div style="
-      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-      border-radius:10px;padding:18px 22px;margin:18px 0;text-align:left;
-      font-family:var(--mono);font-size:.78rem;line-height:2;
-    ">
-      <div style="color:rgba(255,255,255,.4);margin-bottom:4px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase"># Reserva</div>
-      <div style="color:#6B9DFF;font-weight:700;font-size:1.1rem;letter-spacing:.08em;margin-bottom:14px">${reserva}</div>
-      <div><span style="color:rgba(255,255,255,.4)">Nombre &nbsp;&nbsp;&nbsp;</span><span style="color:#fff">${nombre}</span></div>
-      <div><span style="color:rgba(255,255,255,.4)">Plataforma</span><span style="color:#fff"> ${labels[platform]||'—'}</span></div>
-      <div><span style="color:rgba(255,255,255,.4)">Estado &nbsp;&nbsp;&nbsp;</span><span style="color:#86EFAC">✓ Recibida · en cola</span></div>
-    </div>
-    <div class="fs-sub">${lang==='es'
-      ?'Tu solicitud fue recibida. Nuestro equipo de agentes IA te escribirá de inmediato.'
-      :'Your request was received. Our AI agents team will write to you immediately.'}</div>
-  `;
-  s.style.display = 'block';
+  const n=document.getElementById('fNombre').value;
+  const e=document.getElementById('fEmail').value;
+  const o=document.getElementById('fOrg').value;
+  if(!n||!e||!o){alert(lang==='es'?'Por favor completa nombre, organización y correo.':'Please fill in name, organization and email.');return;}
+  document.getElementById('formContent').style.display='none';
+  document.getElementById('formSuccess').style.display='block';
+  // In production, post to your backend / CRM / email here
 }
 
 /* SCROLL PARALLAX hero grid */
