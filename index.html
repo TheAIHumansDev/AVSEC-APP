@@ -1321,6 +1321,11 @@ function showSuccess(reserva, nombre, platform){
       :'Your request was received. Our AI agents team will write to you immediately.'}</div>
   `;
   s.style.display = 'block';
+
+  // marcar el slot como tomado
+  slotIndex = Math.min(slotIndex + 1, 3);
+  updateSlots();
+  animateSlotChange();
 }
 
 /* SCROLL PARALLAX hero grid */
