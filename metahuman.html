@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaHuman · Aero AI — La Experiencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@200;300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#050810;
+  --night2:#0A0E1A;
+  --night3:#111827;
+  --cobalt:#0F1E3D;
+  --cobalt2:#162647;
+  --cobalt3:#1E3560;
+  --blue-glow:#1A4A9A;
+  --gold:#C9A84C;
+  --gold2:#E2C46A;
+  --gold3:#F5DFA0;
+  --gold-dim:rgba(201,168,76,0.15);
+  --cream:#FAF7F0;
+  --cream2:#F0EAD6;
+  --text-primary:#F5F2EB;
+  --text-secondary:rgba(245,242,235,0.55);
+  --text-muted:rgba(245,242,235,0.3);
+  --border:rgba(201,168,76,0.12);
+  --border2:rgba(245,242,235,0.08);
+  --emerald:#0D5C45;
+  --emerald2:#117A5C;
+  --red-alert:#B73A2A;
+  --disp:'Cormorant Garamond',serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px;scroll-snap-type:y proximity}
+body{font-family:var(--body);background:var(--night);color:var(--text-primary);overflow-x:hidden;line-height:1.6;cursor:none}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:5px;height:5px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s}
+#cur2{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
+body.hov #cur{width:12px;height:12px;background:var(--gold2)}
+body.hov #cur2{width:52px;height:52px;border-color:rgba(201,168,76,.55)}
+
+/* ── PROGRESS BAR ── */
+#bar{position:fixed;top:0;left:0;height:1px;background:linear-gradient(90deg,var(--cobalt3),var(--gold),var(--gold2));z-index:800;width:0;transition:width .06s}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:700;height:60px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 5vw;
+  background:rgba(5,8,16,0.75);backdrop-filter:blur(24px) saturate(1.5);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:var(--disp);font-weight:700;font-size:1.3rem;letter-spacing:-.01em;color:var(--text-primary);text-decoration:none;cursor:none;display:flex;align-items:center;gap:10px}
+.nav-logo em{color:var(--gold);font-style:italic}
+.nav-badge{font-family:var(--mono);font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,var(--cobalt3),var(--blue-glow));color:var(--gold2);padding:3px 9px;border-radius:2px;border:1px solid rgba(201,168,76,.2)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-lnk{font-family:var(--mono);font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;cursor:none;transition:color .2s}
+.nav-lnk:hover{color:var(--gold2)}
+.nav-btn{font-family:var(--body);font-size:.72rem;font-weight:500;background:var(--gold);color:var(--night);padding:8px 20px;border-radius:3px;cursor:none;border:none;text-decoration:none;letter-spacing:.04em;transition:all .2s}
+.nav-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* ── LANG TOGGLE ── */
+.lang-toggle{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:2px;cursor:none}
+.lang-btn{font-family:var(--mono);font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:2px;cursor:none;border:none;background:transparent;color:var(--text-muted);transition:all .2s}
+.lang-btn.active{background:var(--gold);color:var(--night);font-weight:500}
+
+/* ══ HERO CINEMATIC ══ */
+#hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-video-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 60% 50%, rgba(15,30,61,0.9) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(26,74,154,0.3) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
+    var(--night);
+}
+.hero-video-slot{
+  position:absolute;inset:0;z-index:1;
+  display:flex;align-items:center;justify-content:flex-end;
+  padding-right:5vw;
+}
+.avatar-stage{
+  position:relative;width:55%;max-width:680px;height:100vh;
+  display:flex;align-items:center;justify-content:center;
+}
+.avatar-placeholder{
+  width:100%;height:90%;
+  background:linear-gradient(180deg,var(--cobalt2) 0%,var(--cobalt) 60%,var(--night) 100%);
+  border-radius:24px 24px 0 0;
+  position:relative;overflow:hidden;
+  border:1px solid var(--border);
+  border-bottom:none;
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.avatar-silhouette{
+  width:320px;height:520px;
+  background:linear-gradient(180deg,rgba(245,242,235,0.08) 0%,rgba(245,242,235,0.04) 100%);
+  clip-path:polygon(35% 0%, 65% 0%, 80% 15%, 85% 35%, 80% 60%, 75% 75%, 85% 85%, 100% 100%, 0% 100%, 15% 85%, 25% 75%, 20% 60%, 15% 35%, 20% 15%);
+  position:relative;
+}
+.avatar-face{
+  position:absolute;top:30px;left:50%;transform:translateX(-50%);
+  width:160px;height:200px;
+  background:radial-gradient(ellipse at 50% 40%,rgba(201,168,76,0.06) 0%,transparent 70%);
+  border-radius:50% 50% 45% 45%;
+  border:1px solid rgba(201,168,76,0.1);
+}
+.avatar-eyes{position:absolute;top:80px;left:50%;transform:translateX(-50%);width:80px;display:flex;justify-content:space-between}
+.avatar-eye{width:14px;height:6px;background:rgba(201,168,76,0.4);border-radius:50%;box-shadow:0 0 12px rgba(201,168,76,0.3)}
+.avatar-scan{
+  position:absolute;inset:0;overflow:hidden;border-radius:inherit;
+}
+.avatar-scan::after{
+  content:'';position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.6),transparent);
+  animation:scan 3s ease-in-out infinite;
+  box-shadow:0 0 12px rgba(201,168,76,0.3);
+}
+@keyframes scan{0%{top:-1%;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:101%;opacity:0}}
+.video-upload-cta{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;z-index:2;
+}
+.upload-ring{
+  width:80px;height:80px;border:1px solid rgba(201,168,76,0.3);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 12px;
+  position:relative;cursor:none;transition:all .3s;
+}
+.upload-ring::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.1);animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:1}}
+.upload-icon{font-size:24px;opacity:.5}
+.upload-label{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);line-height:1.6}
+.avatar-glow{
+  position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);
+  width:300px;height:80px;
+  background:radial-gradient(ellipse,rgba(201,168,76,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+/* Ambient particles */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;width:1px;height:1px;background:var(--gold);border-radius:50%;
+  animation:float linear infinite;opacity:0;
+}
+@keyframes float{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:.6}90%{opacity:.3}100%{transform:translateY(-20px) translateX(30px);opacity:0}}
+
+/* Hero text left */
+.hero-text{
+  position:absolute;left:5vw;top:50%;transform:translateY(-50%);
+  z-index:10;max-width:460px;
+}
+.hero-eyebrow{
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:20px;
+}
+.live-dot{width:5px;height:5px;background:var(--emerald2);border-radius:50%;box-shadow:0 0 0 0 rgba(17,122,92,0.4);animation:livepulse 2s infinite}
+@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(17,122,92,0.4)}70%{box-shadow:0 0 0 8px rgba(17,122,92,0)}}
+.hero-h1{
+  font-family:var(--disp);font-weight:700;font-style:italic;
+  font-size:clamp(3.5rem,6vw,6.5rem);line-height:.85;letter-spacing:-.03em;
+  color:var(--text-primary);margin-bottom:24px;
+}
+.hero-h1 .gold{color:var(--gold);font-style:italic}
+.hero-h1 .outline{-webkit-text-stroke:1px rgba(201,168,76,0.4);color:transparent;font-style:normal;font-weight:300}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.8;margin-bottom:32px;font-weight:300;max-width:380px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--night);padding:13px 28px;border-radius:3px;font-size:.78rem;font-weight:500;letter-spacing:.04em;text-decoration:none;border:none;cursor:none;transition:all .25s}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,0.25)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text-primary);padding:13px 22px;border-radius:3px;font-size:.78rem;font-weight:400;letter-spacing:.04em;text-decoration:none;border:1px solid var(--border2);cursor:none;transition:all .25s}
+.btn-ghost:hover{border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.06)}
+
+/* Scene indicators */
+.scene-indicator{
+  position:absolute;right:5vw;top:50%;transform:translateY(-50%);
+  z-index:10;display:flex;flex-direction:column;gap:10px;
+}
+.scene-dot{
+  width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,0.2);cursor:none;
+  transition:all .3s;border:1px solid rgba(201,168,76,0.2);
+}
+.scene-dot.active{background:var(--gold);height:20px;border-radius:3px}
+
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  text-align:center;z-index:10;
+  font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);animation:fadeUp 1s 1.2s both;
+}
+.scroll-arrow{width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--gold));margin:8px auto 0;animation:arrowDrop 2s ease-in-out infinite}
+@keyframes arrowDrop{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* ══ SCENE WRAPPER ══ */
+.scene{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:flex;align-items:center;
+}
+
+/* Scene divider */
+.scene-divider{
+  height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.25;position:relative;
+}
+.scene-number{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--mono);font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);background:var(--night);padding:0 16px;white-space:nowrap;
+}
+
+/* ══ CHECKIN SCENE ══ */
+#checkin{background:linear-gradient(135deg,var(--night) 0%,var(--cobalt) 50%,var(--night2) 100%)}
+.checkin-grid{
+  max-width:1300px;margin:0 auto;padding:120px 5vw;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+/* Scene label */
+.scene-label{
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.scene-label-line{width:24px;height:1px;background:var(--gold);opacity:.4}
+.scene-h{
+  font-family:var(--disp);font-weight:600;font-size:clamp(2.5rem,4.5vw,5rem);
+  line-height:.88;letter-spacing:-.03em;color:var(--text-primary);margin-bottom:18px;
+}
+.scene-h em{font-style:italic;color:var(--gold)}
+.scene-sub{font-size:.9rem;color:var(--text-secondary);line-height:1.85;font-weight:300;max-width:420px;margin-bottom:32px}
+
+/* Video frame */
+.video-frame{
+  position:relative;border-radius:16px;overflow:hidden;
+  background:var(--cobalt2);border:1px solid var(--border);
+  box-shadow:0 40px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(201,168,76,0.08);
+}
+.video-inner{
+  width:100%;aspect-ratio:9/16;max-height:520px;
+  background:linear-gradient(180deg,var(--cobalt3) 0%,var(--cobalt) 40%,var(--night2) 100%);
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.video-upload-zone{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:none;position:relative;z-index:2;
+}
+.vuz-ring{
+  width:64px;height:64px;border:1px solid rgba(201,168,76,0.25);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  position:relative;
+}
+.vuz-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(201,168,76,0.1);animation:breathe 3s ease-in-out infinite}
+.vuz-label{font-family:var(--mono);font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,76,0.4);text-align:center;line-height:1.8}
+.video-avatar-hint{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(to top,var(--night2),transparent);
+  padding:40px 20px 20px;
+}
+.vah-name{font-family:var(--disp);font-weight:600;font-size:1.3rem;color:var(--text-primary);letter-spacing:-.02em}
+.vah-status{font-family:var(--mono);font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:4px}
+.video-corner-badge{
+  position:absolute;top:14px;left:14px;z-index:3;
+  background:rgba(5,8,16,0.8);backdrop-filter:blur(8px);border:1px solid var(--border);
+  padding:6px 12px;border-radius:3px;
+  font-family:var(--mono);font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);
+  display:flex;align-items:center;gap:6px;
+}
+.rec-dot{width:5px;height:5px;background:#C0392B;border-radius:50%;animation:recblink 1.2s infinite}
+@keyframes recblink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Conversation thread */
+.conv-thread{display:flex;flex-direction:column;gap:14px}
+.conv-msg{display:flex;flex-direction:column;gap:4px}
+.conv-msg.user{align-items:flex-end}
+.conv-meta{font-family:var(--mono);font-size:.44rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.conv-bubble{
+  max-width:88%;padding:12px 16px;border-radius:12px;
+  font-size:.82rem;line-height:1.65;
+}
+.conv-bubble.agent{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+  color:var(--text-primary);
+  border-top-left-radius:3px;
+}
+.conv-bubble.user{
+  background:rgba(15,30,61,0.8);border:1px solid rgba(201,168,76,0.15);
+  color:var(--text-primary);
+  border-top-right-radius:3px;
+}
+.conv-bubble.alert{
+  background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);
+  color:var(--text-primary);border-left:2px solid var(--gold);border-radius:0 12px 12px 12px;
+}
+.conv-bubble.ok{
+  background:rgba(13,92,69,0.15);border:1px solid rgba(17,122,92,0.25);
+  color:var(--text-primary);border-radius:12px;
+}
+.conv-em{color:var(--gold2);font-weight:500}
+.conv-avatar{
+  width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--cobalt3),var(--blue-glow));
+  border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;
+  font-family:var(--disp);font-weight:700;font-size:.65rem;color:var(--gold);flex-shrink:0;
+}
+.conv-row{display:flex;align-items:flex-start;gap:8px}
+.typing-ind{display:flex;align-items:center;gap:4px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;border-top-left-radius:3px;width:fit-content}
+.td{width:4px;height:4px;background:var(--text-muted);border-radius:50%;animation:tb 1.2s infinite}
+.td:nth-child(2){animation-delay:.2s}
+.td:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* Feature pills */
+.feature-pills{display:flex;flex-direction:column;gap:9px;margin-top:28px}
+.fp{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--border2);border-radius:8px;cursor:none;transition:all .25s}
+.fp:hover{border-color:rgba(201,168,76,0.25);background:rgba(201,168,76,0.04);transform:translateX(4px)}
+.fp-num{font-family:var(--mono);font-size:.5rem;letter-spacing:.1em;color:rgba(201,168,76,0.5);min-width:20px}
+.fp-text{font-size:.82rem;color:var(--text-secondary);font-weight:300;flex:1}
+.fp-arrow{color:rgba(201,168,76,0.3);font-size:.7rem;transition:all .25s}
+.fp:hover .fp-arrow{color:var(--gold);transform:translateX(3px)}
+
+/* ══ LOUNGE SCENE ══ */
+#lounge{background:linear-gradient(180deg,var(--night2) 0%,var(--night) 40%,rgba(10,14,26,1) 100%)}
+.lounge-grid{
+  max-width:1300px;margin:0 auto;padding:120px 5vw;width:100%;
+}
+.lounge-top-row{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:60px}
+/* Wide video — landscape */
+.lounge-video{
+  position:relative;border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:0 40px 80px rgba(0,0,0,0.6);
+}
+.lounge-video-inner{
+  width:100%;aspect-ratio:16/9;
+  background:linear-gradient(135deg,var(--cobalt) 0%,var(--night2) 60%,var(--cobalt2) 100%);
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.lounge-scan-line{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(201,168,76,0.015) 3px,rgba(201,168,76,0.015) 4px);
+}
+.lounge-avatar-duo{
+  display:flex;align-items:flex-end;gap:40px;height:100%;padding-bottom:0;align-self:flex-end;
+}
+.lad-fig{
+  width:140px;height:200px;
+  background:linear-gradient(180deg,rgba(245,242,235,0.06) 0%,rgba(245,242,235,0.02) 100%);
+  clip-path:polygon(30% 0%,70% 0%,90% 20%,90% 70%,75% 85%,90% 100%,10% 100%,25% 85%,10% 70%,10% 20%);
+}
+.lad-fig.small{width:100px;height:160px;opacity:.6}
+/* Two conv columns */
+.lounge-conv-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.lcc{
+  background:rgba(255,255,255,.025);border:1px solid var(--border2);border-radius:12px;overflow:hidden;
+}
+.lcc-header{
+  background:rgba(255,255,255,.04);border-bottom:1px solid var(--border2);padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.lcc-name{font-family:var(--disp);font-weight:600;font-size:.88rem;color:var(--text-primary)}
+.lcc-lang{font-family:var(--mono);font-size:.44rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border-radius:2px;background:rgba(201,168,76,0.15);color:var(--gold2)}
+.lcc-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+
+/* ══ GATES SCENE ══ */
+#gates{background:linear-gradient(180deg,var(--night) 0%,var(--cobalt) 60%,var(--night2) 100%)}
+.gates-grid{
+  max-width:1300px;margin:0 auto;padding:120px 5vw;width:100%;
+  display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center;
+}
+/* Departures board */
+.dep-board{
+  background:var(--night2);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  box-shadow:0 32px 64px rgba(0,0,0,.5);
+}
+.dep-hdr{
+  background:rgba(201,168,76,0.06);border-bottom:1px solid var(--border);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+}
+.dep-hdr-title{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted)}
+.dep-hdr-time{font-family:var(--mono);font-size:.85rem;color:var(--gold2);font-weight:500}
+.dep-row{
+  display:flex;align-items:center;padding:11px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  font-family:var(--mono);font-size:.7rem;transition:background .2s;
+}
+.dep-row:hover{background:rgba(255,255,255,0.03)}
+.dep-row.boarding{background:rgba(201,168,76,0.05);border-left:2px solid var(--gold)}
+.dc{color:var(--text-muted);min-width:0}
+.dc.flight{width:68px;color:var(--text-primary);font-weight:500}
+.dc.dest{flex:1;color:rgba(245,242,235,0.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc.gate{width:48px;text-align:center;color:var(--gold)}
+.dc.status{width:90px;text-align:right}
+.s-ok{color:var(--emerald2);font-size:.52rem;letter-spacing:.08em;text-transform:uppercase}
+.s-board{color:var(--gold);font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;animation:blink .9s infinite}
+.s-delay{color:#E07A50;font-size:.52rem;letter-spacing:.08em;text-transform:uppercase}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.dep-ai-strip{
+  padding:14px 20px;background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.1);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.dep-ai-av{
+  width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--disp);font-weight:700;font-size:.55rem;color:var(--night);flex-shrink:0;margin-top:2px;
+}
+.dep-ai-text{font-size:.76rem;color:rgba(245,242,235,0.7);line-height:1.6}
+
+/* Stats row */
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--border);border-radius:8px;overflow:hidden;
+  margin-top:40px;border:1px solid var(--border);
+}
+.stat-box{
+  background:var(--night2);padding:24px 20px;text-align:center;
+}
+.stat-n{font-family:var(--disp);font-weight:700;font-size:2.6rem;letter-spacing:-.06em;color:var(--text-primary);line-height:1}
+.stat-u{font-size:1.4rem;color:var(--gold);opacity:.7}
+.stat-l{font-family:var(--mono);font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;line-height:1.5}
+
+/* Gates conversation + video combo */
+.gates-right{display:flex;flex-direction:column;gap:20px}
+.gate-video{
+  border-radius:12px;overflow:hidden;border:1px solid var(--border);
+  background:var(--cobalt);aspect-ratio:4/3;position:relative;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+.gate-video-inner{
+  width:100%;height:100%;
+  background:linear-gradient(180deg,var(--cobalt3) 0%,var(--cobalt) 50%,var(--night) 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;
+  position:relative;overflow:hidden;
+}
+
+/* ══ BILINGUAL STRIP ══ */
+#bilingual{
+  background:var(--night2);padding:80px 5vw;position:relative;overflow:hidden;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.bil-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.bil-label{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.bil-h{font-family:var(--disp);font-weight:600;font-size:clamp(2rem,3.5vw,3.5rem);line-height:.9;letter-spacing:-.03em;color:var(--text-primary);margin-bottom:16px}
+.bil-h em{font-style:italic;color:var(--gold)}
+.bil-sub{font-size:.88rem;color:var(--text-secondary);line-height:1.8;font-weight:300}
+.bil-flags{display:flex;gap:8px;margin-top:20px}
+.bil-flag{font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border-radius:3px;border:1px solid var(--border2);color:var(--text-muted)}
+.bil-flag.active{background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.3);color:var(--gold2)}
+.bil-thread{display:flex;flex-direction:column;gap:10px}
+
+/* ══ CTA ══ */
+#cta{
+  background:var(--night);padding:140px 5vw;text-align:center;position:relative;overflow:hidden;
+}
+.cta-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(201,168,76,0.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-grid-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+}
+.cta-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.cta-tag{font-family:var(--mono);font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:block}
+.cta-h{font-family:var(--disp);font-weight:700;font-style:italic;font-size:clamp(3rem,6vw,6.5rem);line-height:.85;letter-spacing:-.04em;color:var(--text-primary);margin-bottom:22px}
+.cta-h em{color:var(--gold)}
+.cta-sub{font-size:.98rem;color:var(--text-secondary);line-height:1.8;margin-bottom:40px;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.trust-item{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.trust-ck{color:var(--gold2)}
+
+/* FOOTER */
+footer{background:var(--night);border-top:1px solid var(--border2);padding:32px 5vw}
+.footer-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-family:var(--mono);font-size:.48rem;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase}
+.footer-links{display:flex;gap:18px}
+.footer-link{font-family:var(--mono);font-size:.48rem;color:var(--text-muted);text-decoration:none;cursor:none;transition:color .2s;letter-spacing:.08em;text-transform:uppercase}
+.footer-link:hover{color:var(--gold2)}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .9s ease,transform .9s ease}
+.rv.left{transform:translateX(-32px)}
+.rv.right{transform:translateX(32px)}
+.rv.scale{transform:scale(.95)}
+.rv.vis{opacity:1;transform:none}
+
+/* SVG icon */
+svg.icon-upload{width:22px;height:22px;stroke:rgba(201,168,76,0.4);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+svg.icon-play{width:20px;height:20px;fill:rgba(201,168,76,0.4)}
+
+/* Ticker */
+.ticker-wrap{background:rgba(201,168,76,0.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;overflow:hidden}
+.ticker-track{display:flex;animation:tick 22s linear infinite;width:max-content}
+.ticker-item{padding:0 36px;font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.ticker-item.hi{color:var(--gold)}
+.t-dot{width:3px;height:3px;background:rgba(201,168,76,0.2);border-radius:50%}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Responsive */
+@media(max-width:1000px){
+  .checkin-grid,.gates-grid,.bil-inner{grid-template-columns:1fr;gap:48px}
+  .lounge-top-row,.lounge-conv-cols{grid-template-columns:1fr;gap:32px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .hero-text{position:relative;left:auto;top:auto;transform:none;padding:100px 5vw 40px}
+  .avatar-stage{width:100%;height:320px}
+  .hero-video-slot{position:relative;padding:0}
+  #hero{flex-direction:column;min-height:auto}
+  .scene-indicator{display:none}
+}
+@media(max-width:640px){
+  .nav-links .nav-lnk{display:none}
+  .hero-h1{font-size:3rem}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .lounge-avatar-duo{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">Aero<em>AI</em> <span class="nav-badge">MetaHuman</span></a>
+  <div class="nav-links">
+    <a href="#checkin" class="nav-lnk" data-en="Check-in" data-es="Check-in">Check-in</a>
+    <a href="#lounge" class="nav-lnk" data-en="VIP Lounge" data-es="Lounge VIP">Lounge VIP</a>
+    <a href="#gates" class="nav-lnk" data-en="Gates" data-es="Gates">Gates</a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnEs" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="#cta" class="nav-btn" data-es="Demo Gratis" data-en="Free Demo">Demo Gratis</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-video-bg"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-text">
+    <div class="hero-eyebrow">
+      <span class="live-dot"></span>
+      <span data-es="MetaHuman · Aero AI · En vivo" data-en="MetaHuman · Aero AI · Live">MetaHuman · Aero AI · En vivo</span>
+    </div>
+    <h1 class="hero-h1">
+      <span class="gold" data-es="Tu avatar." data-en="Your avatar.">Tu avatar.</span><br>
+      <span data-es="Tu copiloto" data-en="Your copilot">Tu copiloto</span><br>
+      <span class="outline" data-es="de vuelo." data-en="in the air.">de vuelo.</span>
+    </h1>
+    <p class="hero-sub" data-es="MetaHuman es el agente conversacional con presencia de avatar hiperrealista — acompaña cada punto del viaje desde check-in hasta embarque, respondiendo en español e inglés." data-en="MetaHuman is the conversational agent with hyperrealistic avatar presence — accompanying every step of the journey from check-in to boarding, responding in Spanish and English.">MetaHuman es el agente conversacional con presencia de avatar hiperrealista — acompaña cada punto del viaje desde check-in hasta embarque, respondiendo en español e inglés.</p>
+    <div class="hero-actions">
+      <a href="#checkin" class="btn-gold" data-es="Ver la experiencia →" data-en="See the experience →">Ver la experiencia →</a>
+      <a href="#cta" class="btn-ghost" data-es="Agendar demo" data-en="Book a demo">Agendar demo</a>
+    </div>
+  </div>
+
+  <div class="hero-video-slot">
+    <div class="avatar-stage">
+      <div class="avatar-placeholder">
+        <div class="avatar-silhouette">
+          <div class="avatar-face">
+            <div class="avatar-eyes">
+              <div class="avatar-eye"></div>
+              <div class="avatar-eye"></div>
+            </div>
+          </div>
+        </div>
+        <div class="avatar-scan"></div>
+        <div class="video-upload-cta">
+          <div class="upload-ring">
+            <svg class="icon-upload" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+          </div>
+          <div class="upload-label" data-es="Carga el video<br>de tu avatar MetaHuman" data-en="Upload your<br>MetaHuman avatar video">Carga el video<br>de tu avatar MetaHuman</div>
+        </div>
+        <div class="avatar-glow"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(5,8,16,0.9),transparent);padding:24px 20px 20px">
+          <div class="vah-name">MetaHuman</div>
+          <div class="vah-status" data-es="● Agente Activo · Terminal Norte SJO" data-en="● Active Agent · SJO North Terminal">● Agente Activo · Terminal Norte SJO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene-indicator">
+    <div class="scene-dot active" onclick="scrollToScene('checkin')"></div>
+    <div class="scene-dot" onclick="scrollToScene('lounge')"></div>
+    <div class="scene-dot" onclick="scrollToScene('gates')"></div>
+  </div>
+
+  <div class="scroll-hint">
+    <span data-es="Descubre el recorrido" data-en="Discover the journey">Descubre el recorrido</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCENE 01 — CHECK-IN
+══════════════════════════════════════ -->
+<div class="scene-divider">
+  <span class="scene-number" data-es="01 · Check-in & Documentación" data-en="01 · Check-in & Documentation">01 · Check-in & Documentación</span>
+</div>
+
+<section id="checkin" class="scene">
+  <div class="checkin-grid">
+
+    <!-- VIDEO LEFT -->
+    <div class="rv left">
+      <div class="video-frame">
+        <div class="video-inner">
+          <div class="video-upload-zone">
+            <div class="vuz-ring">
+              <svg class="icon-upload" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+            </div>
+            <div class="vuz-label" data-es="Video · Avatar en Check-in<br>Formato 9:16 recomendado" data-en="Video · Avatar at Check-in<br>9:16 format recommended">Video · Avatar en Check-in<br>Formato 9:16 recomendado</div>
+          </div>
+          <div class="avatar-scan" style="border-radius:0"></div>
+          <div class="video-avatar-hint">
+            <div class="vah-name">MetaHuman</div>
+            <div class="vah-status" data-es="● Check-in · Vuelo IB402" data-en="● Check-in · Flight IB402">● Check-in · Vuelo IB402</div>
+          </div>
+        </div>
+        <div class="video-corner-badge">
+          <span class="rec-dot"></span>
+          <span data-es="EN VIVO" data-en="LIVE">EN VIVO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: TEXT + CONVERSATION -->
+    <div>
+      <div class="rv" style="transition-delay:.06s">
+        <div class="scene-label">
+          <span class="scene-label-line"></span>
+          <span data-es="01 / Check-in & Documentación" data-en="01 / Check-in & Documentation">01 / Check-in & Documentación</span>
+        </div>
+        <h2 class="scene-h" data-es="El check-in que<br><em>lo ve todo.</em>" data-en="The check-in that<br><em>sees everything.</em>">El check-in que<br><em>lo ve todo.</em></h2>
+        <p class="scene-sub" data-es="MetaHuman acompaña al agente con respuestas instantáneas sobre documentos, visas y pasajeros — mientras su avatar responde en pantalla como un colega experto." data-en="MetaHuman supports the agent with instant answers about documents, visas and passengers — while its avatar responds on screen like an expert colleague.">MetaHuman acompaña al agente con respuestas instantáneas sobre documentos, visas y pasajeros — mientras su avatar responde en pantalla como un colega experto.</p>
+      </div>
+
+      <!-- Live conversation -->
+      <div class="conv-thread rv" style="transition-delay:.12s" id="checkinConv">
+        <div class="conv-msg user">
+          <div class="conv-meta" style="justify-content:flex-end">
+            <span data-es="Oficial Rodríguez · 09:38" data-en="Officer Rodriguez · 09:38">Oficial Rodríguez · 09:38</span>
+          </div>
+          <div class="conv-bubble user" data-es="Pasajero Thompson, pasaporte vencido. ¿Cómo procedo?" data-en="Passenger Thompson, expired passport. How do I proceed?">Pasajero Thompson, pasaporte vencido. ¿Cómo procedo?</div>
+        </div>
+        <div class="conv-msg">
+          <div class="conv-row">
+            <div class="conv-avatar">MH</div>
+            <div>
+              <div class="conv-meta">MetaHuman · 09:38 · &lt;2s</div>
+              <div class="conv-bubble alert" data-es="<span class='conv-em'>Thompson, James R.</span> — pasaporte vencido hace 47 días. Según OACI Anexo 9 §3.3: retener en check-in y notificar supervisor. Escalando automáticamente al oficial de seguridad." data-en="<span class='conv-em'>Thompson, James R.</span> — passport expired 47 days ago. Per ICAO Annex 9 §3.3: retain at check-in and notify supervisor. Automatically escalating to the security officer."><span class='conv-em'>Thompson, James R.</span> — pasaporte vencido hace 47 días. Según OACI Anexo 9 §3.3: retener en check-in y notificar supervisor. Escalando automáticamente al oficial de seguridad.</div>
+            </div>
+          </div>
+        </div>
+        <div class="conv-msg user">
+          <div class="conv-meta" style="justify-content:flex-end">
+            <span data-es="Oficial Rodríguez · 09:39" data-en="Officer Rodriguez · 09:39">Oficial Rodríguez · 09:39</span>
+          </div>
+          <div class="conv-bubble user" data-es="¿Y el pasajero Al-Hassan en 03B? Tiene credencial VIP." data-en="And passenger Al-Hassan in 03B? He has a VIP credential.">¿Y el pasajero Al-Hassan en 03B? Tiene credencial VIP.</div>
+        </div>
+        <div class="conv-msg" id="ckinReply">
+          <div class="conv-row">
+            <div class="conv-avatar">MH</div>
+            <div>
+              <div class="conv-meta">MetaHuman · 09:40 · &lt;2s</div>
+              <div class="conv-bubble ok" data-es="<span class='conv-em'>Al-Hassan, Karim</span> — Business Class IB402, Priority Access confirmado. Centurion Card válida. Lounge Premier autorizado. Informa al supervisor del lounge: llegada estimada en 8 min." data-en="<span class='conv-em'>Al-Hassan, Karim</span> — Business Class IB402, Priority Access confirmed. Centurion Card valid. Premier Lounge authorized. Notify lounge supervisor: estimated arrival in 8 min."><span class='conv-em'>Al-Hassan, Karim</span> — Business Class IB402, Priority Access confirmado. Centurion Card válida. Lounge Premier autorizado. Informa al supervisor del lounge: llegada estimada en 8 min.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-pills rv" style="transition-delay:.18s">
+        <div class="fp">
+          <span class="fp-num">01</span>
+          <span class="fp-text" data-es="Validación documental en tiempo real — OACI Anexo 9, DGAC" data-en="Real-time document validation — ICAO Annex 9, DGAC">Validación documental en tiempo real — OACI Anexo 9, DGAC</span>
+          <span class="fp-arrow">→</span>
+        </div>
+        <div class="fp">
+          <span class="fp-num">02</span>
+          <span class="fp-text" data-es="Watchlist y escalación automática al supervisor" data-en="Watchlist and automatic escalation to supervisor">Watchlist y escalación automática al supervisor</span>
+          <span class="fp-arrow">→</span>
+        </div>
+        <div class="fp">
+          <span class="fp-num">03</span>
+          <span class="fp-text" data-es="Bitácora automática por vuelo, agente y timestamp" data-en="Automatic log by flight, agent and timestamp">Bitácora automática por vuelo, agente y timestamp</span>
+          <span class="fp-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SCENE 02 — VIP LOUNGE
+══════════════════════════════════════ -->
+<div class="scene-divider">
+  <span class="scene-number" data-es="02 · VIP Lounges · Salas Preferenciales" data-en="02 · VIP Lounges · Premium Areas">02 · VIP Lounges · Salas Preferenciales</span>
+</div>
+
+<section id="lounge" class="scene">
+  <div class="lounge-grid">
+
+    <div class="lounge-top-row">
+      <div class="rv left">
+        <div class="scene-label">
+          <span class="scene-label-line"></span>
+          <span data-es="02 / VIP Lounges" data-en="02 / VIP Lounges">02 / VIP Lounges</span>
+        </div>
+        <h2 class="scene-h" data-es="La experiencia<br><em>que se anticipa.</em>" data-en="The experience<br><em>that anticipates.</em>">La experiencia<br><em>que se anticipa.</em></h2>
+        <p class="scene-sub" data-es="En el lounge, MetaHuman identifica al huésped VIP, verifica su elegibilidad y coordina al personal antes de que llegue a la puerta — con su avatar visible en cada pantalla del salón." data-en="In the lounge, MetaHuman identifies the VIP guest, verifies eligibility and coordinates staff before they arrive at the door — with its avatar visible on every screen in the room.">En el lounge, MetaHuman identifica al huésped VIP, verifica su elegibilidad y coordina al personal antes de que llegue a la puerta — con su avatar visible en cada pantalla del salón.</p>
+        <div class="feature-pills" style="margin-top:20px">
+          <div class="fp">
+            <span class="fp-num">✦</span>
+            <span class="fp-text" data-es="Priority Pass · Centurion · Emerald — verificación inmediata" data-en="Priority Pass · Centurion · Emerald — instant verification">Priority Pass · Centurion · Emerald — verificación inmediata</span>
+            <span class="fp-arrow">→</span>
+          </div>
+          <div class="fp">
+            <span class="fp-num">✦</span>
+            <span class="fp-text" data-es="Alertas de boarding — nunca más un VIP pierde su vuelo" data-en="Boarding alerts — never again a VIP misses their flight">Alertas de boarding — nunca más un VIP pierde su vuelo</span>
+            <span class="fp-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Landscape video -->
+      <div class="rv right" style="transition-delay:.1s">
+        <div class="lounge-video">
+          <div class="lounge-video-inner">
+            <div class="lounge-scan-line"></div>
+            <div class="lounge-avatar-duo">
+              <div class="lad-fig small"></div>
+              <div class="lad-fig"></div>
+            </div>
+            <div class="video-upload-zone" style="position:absolute;inset:0;background:rgba(5,8,16,0.55)">
+              <div class="vuz-ring">
+                <svg class="icon-upload" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+              </div>
+              <div class="vuz-label" data-es="Video · Avatar en Lounge VIP<br>Formato 16:9 recomendado" data-en="Video · Avatar in VIP Lounge<br>16:9 format recommended">Video · Avatar en Lounge VIP<br>Formato 16:9 recomendado</div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(5,8,16,0.95),transparent);padding:20px 20px 16px;z-index:3">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div class="vah-name" style="font-size:1rem">MetaHuman · Lounge Premier</div>
+                  <div class="vah-status" data-es="● 4 huéspedes en sala" data-en="● 4 guests in the lounge">● 4 huéspedes en sala</div>
+                </div>
+                <div style="font-family:var(--mono);font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.25);color:var(--gold2);padding:4px 10px;border-radius:2px">ES / EN</div>
+              </div>
+            </div>
+            <div class="video-corner-badge" style="background:rgba(5,8,16,0.85)">
+              <span class="rec-dot"></span>
+              <span data-es="EN VIVO" data-en="LIVE">EN VIVO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two conversation columns -->
+    <div class="lounge-conv-cols rv" style="transition-delay:.14s">
+      <!-- ES conversation -->
+      <div class="lcc">
+        <div class="lcc-header">
+          <span class="lcc-name" data-es="Personal del lounge" data-en="Lounge staff">Personal del lounge</span>
+          <span class="lcc-lang">ES</span>
+        </div>
+        <div class="lcc-body">
+          <div class="conv-msg user">
+            <div class="conv-meta" style="justify-content:flex-end">
+              <span data-es="Personal · 09:22" data-en="Staff · 09:22">Personal · 09:22</span>
+            </div>
+            <div class="conv-bubble user" data-es="El señor Kim pidió dieta vegetariana pero no la hay disponible." data-en="Mr. Kim ordered a vegetarian meal but none is available.">El señor Kim pidió dieta vegetariana pero no la hay disponible.</div>
+          </div>
+          <div class="conv-msg">
+            <div class="conv-row">
+              <div class="conv-avatar">MH</div>
+              <div>
+                <div class="conv-meta">MetaHuman · &lt;2s</div>
+                <div class="conv-bubble alert" data-es="Señor Kim — Gold, 14 visitas. Preferencia vegetariana confirmada en perfil. El menú correcto no fue sincronizado esta mañana. <span class='conv-em'>Notificando a cocina ahora.</span>" data-en="Mr. Kim — Gold, 14 visits. Vegetarian preference confirmed in profile. The correct menu was not synced this morning. <span class='conv-em'>Notifying kitchen now.</span>">Señor Kim — Gold, 14 visitas. Preferencia vegetariana confirmada en perfil. El menú correcto no fue sincronizado esta mañana. <span class='conv-em'>Notificando a cocina ahora.</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="conv-msg">
+            <div class="conv-row">
+              <div class="conv-avatar">MH</div>
+              <div>
+                <div class="conv-meta" data-es="MetaHuman · Auto-alerta" data-en="MetaHuman · Auto-alert">MetaHuman · Auto-alerta</div>
+                <div class="conv-bubble ok" data-es="⚑ Vuelo IB402 inicia embarque en Gate 12. Sr. Kim — <span class='conv-em'>¿Desea escolta al gate?</span> Buggy disponible en 3 min." data-en="⚑ Flight IB402 boarding at Gate 12. Mr. Kim — <span class='conv-em'>Would you like a gate escort?</span> Buggy available in 3 min.">⚑ Vuelo IB402 inicia embarque en Gate 12. Sr. Kim — <span class='conv-em'>¿Desea escolta al gate?</span> Buggy disponible en 3 min.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- EN conversation -->
+      <div class="lcc">
+        <div class="lcc-header">
+          <span class="lcc-name" data-es="Acceso · Elegibilidad" data-en="Access · Eligibility">Acceso · Elegibilidad</span>
+          <span class="lcc-lang">EN</span>
+        </div>
+        <div class="lcc-body">
+          <div class="conv-msg user">
+            <div class="conv-meta" style="justify-content:flex-end">
+              <span>Lounge Staff · 09:35</span>
+            </div>
+            <div class="conv-bubble user">Can I let him in without a Priority Pass? He says he has a Centurion card but can't find it.</div>
+          </div>
+          <div class="conv-msg">
+            <div class="conv-row">
+              <div class="conv-avatar">MH</div>
+              <div>
+                <div class="conv-meta">MetaHuman · &lt;2s</div>
+                <div class="conv-bubble alert">Centurion (Black Amex) grants Centurion Lounge access, not this lounge. However, his booking shows Business Class IB402 — that entitles him to the Premier Lounge regardless. <span class="conv-em">Access granted.</span> Log under "airline entitlement" for billing.</div>
+              </div>
+            </div>
+          </div>
+          <div class="conv-msg">
+            <div class="conv-row">
+              <div class="conv-avatar">MH</div>
+              <div>
+                <div class="conv-meta">MetaHuman · NPS</div>
+                <div class="conv-bubble ok"><span class="conv-em">Guest satisfaction score: 94 / 100.</span> Priority entitlement cases resolved avg. &lt;8s. No VIP flights missed this week.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SCENE 03 — GATES
+══════════════════════════════════════ -->
+<div class="scene-divider">
+  <span class="scene-number" data-es="03 · Gates & Embarque" data-en="03 · Gates & Boarding">03 · Gates & Embarque</span>
+</div>
+
+<section id="gates" class="scene">
+  <div class="gates-grid">
+
+    <!-- LEFT: departures board + stats -->
+    <div>
+      <div class="rv left">
+        <div class="scene-label">
+          <span class="scene-label-line"></span>
+          <span data-es="03 / Gates & Embarque" data-en="03 / Gates & Boarding">03 / Gates & Embarque</span>
+        </div>
+        <h2 class="scene-h" data-es="El gate que<br><em>nunca falla.</em>" data-en="The gate that<br><em>never fails.</em>">El gate que<br><em>nunca falla.</em></h2>
+        <p class="scene-sub" data-es="En el gate, cada segundo cuenta. MetaHuman mantiene al oficial informado — PRM, discrepancias de manifiesto, objetos sospechosos — y escala lo crítico antes de que sea tarde." data-en="At the gate, every second counts. MetaHuman keeps the officer informed — PRM, manifest discrepancies, suspicious items — and escalates critical issues before it's too late.">En el gate, cada segundo cuenta. MetaHuman mantiene al oficial informado — PRM, discrepancias de manifiesto, objetos sospechosos — y escala lo crítico antes de que sea tarde.</p>
+      </div>
+
+      <div class="dep-board rv" style="transition-delay:.08s">
+        <div class="dep-hdr">
+          <span class="dep-hdr-title" data-es="Salidas · SJO Terminal Norte" data-en="Departures · SJO North Terminal">Salidas · SJO Terminal Norte</span>
+          <span class="dep-hdr-time" id="liveTime">09:41</span>
+        </div>
+        <div class="dep-row" style="background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06)">
+          <div class="dc flight" style="color:var(--text-muted);font-size:.5rem;letter-spacing:.14em" data-es="VUELO" data-en="FLIGHT">VUELO</div>
+          <div class="dc dest" style="color:var(--text-muted);font-size:.5rem;letter-spacing:.14em" data-es="DESTINO" data-en="DESTINATION">DESTINO</div>
+          <div class="dc gate" style="color:var(--text-muted);font-size:.5rem;letter-spacing:.14em">GATE</div>
+          <div class="dc status" style="color:var(--text-muted);font-size:.5rem;letter-spacing:.14em" data-es="ESTADO" data-en="STATUS">ESTADO</div>
+        </div>
+        <div class="dep-row boarding">
+          <div class="dc flight">IB402</div>
+          <div class="dc dest" data-es="Madrid · MAD" data-en="Madrid · MAD">Madrid · MAD</div>
+          <div class="dc gate">12</div>
+          <div class="dc status"><span class="s-board" data-es="Embarque" data-en="Boarding">Embarque</span></div>
+        </div>
+        <div class="dep-row">
+          <div class="dc flight">AA320</div>
+          <div class="dc dest">Miami · MIA</div>
+          <div class="dc gate">07</div>
+          <div class="dc status"><span class="s-ok" data-es="A tiempo" data-en="On time">A tiempo</span></div>
+        </div>
+        <div class="dep-row">
+          <div class="dc flight">LA802</div>
+          <div class="dc dest">Lima · LIM</div>
+          <div class="dc gate">03</div>
+          <div class="dc status"><span class="s-delay" data-es="Retrasado" data-en="Delayed">Retrasado</span></div>
+        </div>
+        <div class="dep-row">
+          <div class="dc flight">CM211</div>
+          <div class="dc dest" data-es="Panamá · PTY" data-en="Panama · PTY">Panamá · PTY</div>
+          <div class="dc gate">15</div>
+          <div class="dc status"><span class="s-ok" data-es="A tiempo" data-en="On time">A tiempo</span></div>
+        </div>
+        <div class="dep-row">
+          <div class="dc flight">AV105</div>
+          <div class="dc dest" data-es="Bogotá · BOG" data-en="Bogota · BOG">Bogotá · BOG</div>
+          <div class="dc gate">09</div>
+          <div class="dc status"><span class="s-ok" data-es="A tiempo" data-en="On time">A tiempo</span></div>
+        </div>
+        <div class="dep-ai-strip">
+          <div class="dep-ai-av">MH</div>
+          <div class="dep-ai-text" data-es="<strong style='color:var(--gold2)'>IB402 · Gate 12:</strong> 2 pasajeros PRM pendientes de abordaje. Señor Kim (VIP) en camino desde lounge — ETA 4 min. Manifiesto completo al 89%." data-en="<strong style='color:var(--gold2)'>IB402 · Gate 12:</strong> 2 PRM passengers pending boarding. Mr. Kim (VIP) on his way from lounge — ETA 4 min. Manifest 89% complete."><strong style='color:var(--gold2)'>IB402 · Gate 12:</strong> 2 pasajeros PRM pendientes de abordaje. Señor Kim (VIP) en camino desde lounge — ETA 4 min. Manifiesto completo al 89%.</div>
+        </div>
+      </div>
+
+      <div class="stats-row rv" style="transition-delay:.14s">
+        <div class="stat-box">
+          <div class="stat-n">2<span class="stat-u">s</span></div>
+          <div class="stat-l" data-es="Respuesta promedio ante consulta" data-en="Average response time">Respuesta promedio ante consulta</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n">98<span class="stat-u">%</span></div>
+          <div class="stat-l" data-es="Precisión incidente AVSEC" data-en="AVSEC incident accuracy">Precisión incidente AVSEC</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n">24<span class="stat-u">/7</span></div>
+          <div class="stat-l" data-es="Sin turnos, sin fatiga" data-en="No shifts, no fatigue">Sin turnos, sin fatiga</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n">0<span class="stat-u"></span></div>
+          <div class="stat-l" data-es="VIPs que perdieron su vuelo" data-en="VIPs who missed their flight">VIPs que perdieron su vuelo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: video + conversation -->
+    <div class="gates-right">
+      <div class="gate-video rv right" style="transition-delay:.08s">
+        <div class="gate-video-inner">
+          <div class="avatar-scan" style="border-radius:0"></div>
+          <div class="vuz-ring">
+            <svg class="icon-upload" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+          </div>
+          <div class="vuz-label" data-es="Video · Avatar en Gate 12<br>Formato 4:3 recomendado" data-en="Video · Avatar at Gate 12<br>4:3 format recommended">Video · Avatar en Gate 12<br>Formato 4:3 recomendado</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,var(--night2),transparent);padding:20px 16px 14px">
+            <div class="vah-name" style="font-size:.95rem">MetaHuman · Gate 12</div>
+            <div class="vah-status" data-es="● IB402 · Embarque activo" data-en="● IB402 · Active boarding">● IB402 · Embarque activo</div>
+          </div>
+          <div class="video-corner-badge">
+            <span class="rec-dot"></span>
+            <span data-es="EN VIVO" data-en="LIVE">EN VIVO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="conv-thread rv right" style="transition-delay:.14s">
+        <div class="conv-msg user">
+          <div class="conv-meta" style="justify-content:flex-end">
+            <span data-es="Oficial Ulate · Gate 12 · 09:40" data-en="Officer Ulate · Gate 12 · 09:40">Oficial Ulate · Gate 12 · 09:40</span>
+          </div>
+          <div class="conv-bubble user" data-es="Pasajero dice que no habla español ni inglés, solo japonés." data-en="Passenger says they speak neither Spanish nor English, only Japanese.">Pasajero dice que no habla español ni inglés, solo japonés.</div>
+        </div>
+        <div class="conv-msg">
+          <div class="conv-row">
+            <div class="conv-avatar">MH</div>
+            <div>
+              <div class="conv-meta">MetaHuman · 09:40 · &lt;2s</div>
+              <div class="conv-bubble alert" data-es="Pasajero de conexión CX004 — hay 2 japoneses en el manifiesto. Gate agent de Iberia tiene intérprete telefónico: <span class='conv-em'>ext. 4412.</span> También disponible traducción en kiosk B." data-en="Transfer passenger from CX004 — 2 Japanese passengers in the manifest. Iberia gate agent has a phone interpreter: <span class='conv-em'>ext. 4412.</span> Translation also available at kiosk B.">Pasajero de conexión CX004 — hay 2 japoneses en el manifiesto. Gate agent de Iberia tiene intérprete telefónico: <span class='conv-em'>ext. 4412.</span> También disponible traducción en kiosk B.</div>
+            </div>
+          </div>
+        </div>
+        <div class="conv-msg">
+          <div class="conv-row">
+            <div class="conv-avatar">MH</div>
+            <div>
+              <div class="conv-meta" data-es="MetaHuman · Riesgo de vuelo" data-en="MetaHuman · Flight risk">MetaHuman · Riesgo de vuelo</div>
+              <div class="conv-bubble ok" data-es="IB402 — Risk Score: <span class='conv-em'>Bajo (12/100).</span> 2 PRM abordan en 4 min. Manifiesto 97% completo. Estimado departure on time." data-en="IB402 — Risk Score: <span class='conv-em'>Low (12/100).</span> 2 PRM boarding in 4 min. Manifest 97% complete. Estimated departure on time.">IB402 — Risk Score: <span class='conv-em'>Bajo (12/100).</span> 2 PRM abordan en 4 min. Manifiesto 97% completo. Estimado departure on time.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ BILINGUAL STRIP ══ -->
+<section id="bilingual">
+  <div class="bil-inner">
+    <div class="rv left">
+      <div class="bil-label" data-es="ES + EN · Bilingüe nativo" data-en="ES + EN · Native bilingual">ES + EN · Bilingüe nativo</div>
+      <h2 class="bil-h" data-es="Habla como<br>tu equipo<br><em>habla.</em>" data-en="Speaks how<br>your team<br><em>speaks.</em>">Habla como<br>tu equipo<br><em>habla.</em></h2>
+      <p class="bil-sub" data-es="MetaHuman detecta automáticamente el idioma del oficial y responde en el mismo idioma. El mismo hilo puede mezclar español e inglés sin configuración." data-en="MetaHuman automatically detects the officer's language and responds in kind. The same thread can mix Spanish and English without any setup.">MetaHuman detecta automáticamente el idioma del oficial y responde en el mismo idioma. El mismo hilo puede mezclar español e inglés sin configuración.</p>
+      <div class="bil-flags">
+        <span class="bil-flag active">Español</span>
+        <span class="bil-flag active">English</span>
+        <span class="bil-flag" data-es="Próximamente: PT" data-en="Coming soon: PT">Próximamente: PT</span>
+      </div>
+    </div>
+    <div class="bil-thread rv right" style="transition-delay:.1s">
+      <div class="conv-msg user">
+        <div class="conv-meta" style="justify-content:flex-end"><span>Staff Lounge · ES · 09:41</span></div>
+        <div class="conv-bubble user">¿Puedo dejar entrar al señor Kim sin Priority Pass?</div>
+      </div>
+      <div class="conv-msg">
+        <div class="conv-row">
+          <div class="conv-avatar">MH</div>
+          <div>
+            <div class="conv-meta">MetaHuman · ES · &lt;2s</div>
+            <div class="conv-bubble alert"><span class="conv-em">Sí</span> — su reserva Business Class IB402 le da acceso directo al Premier Lounge. Acceso autorizado. Registrar como "aerolínea".</div>
+          </div>
+        </div>
+      </div>
+      <div class="conv-msg user">
+        <div class="conv-meta" style="justify-content:flex-end"><span>Gate Agent · EN · 09:42</span></div>
+        <div class="conv-bubble user">Same passenger is now asking about his connecting flight in MAD.</div>
+      </div>
+      <div class="conv-msg">
+        <div class="conv-row">
+          <div class="conv-avatar">MH</div>
+          <div>
+            <div class="conv-meta">MetaHuman · EN · &lt;2s</div>
+            <div class="conv-bubble ok">Mr. Kim's connection is IB6845 to Tokyo — departs T4S at 14:20, <span class="conv-em">4h 35min layover.</span> Lounge access in MAD available (Velázquez). I can send him the details to his phone.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-grid-bg"></div>
+  <div class="cta-inner rv scale">
+    <span class="cta-tag" data-es="Disponible hoy · Sin infraestructura · PWA" data-en="Available today · No infrastructure · PWA">Disponible hoy · Sin infraestructura · PWA</span>
+    <h2 class="cta-h" data-es="Activa tu<br>copiloto <em>hoy.</em>" data-en="Activate your<br>copilot <em>today.</em>">Activa tu<br>copiloto <em>hoy.</em></h2>
+    <p class="cta-sub" data-es="Demo de 30 minutos con tu operación, tus vuelos y tus procedimientos. Te mostramos MetaHuman respondiendo preguntas reales de tu aeropuerto — con el avatar incluido." data-en="30-minute demo with your operation, your flights and your procedures. We show you MetaHuman answering real questions from your airport — avatar included.">Demo de 30 minutos con tu operación, tus vuelos y tus procedimientos. Te mostramos MetaHuman respondiendo preguntas reales de tu aeropuerto — con el avatar incluido.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-gold" data-es="Agendar demo gratuita →" data-en="Schedule free demo →">Agendar demo gratuita →</a>
+      <a href="#" class="btn-ghost" data-es="Ver planes" data-en="See plans">Ver planes</a>
+    </div>
+    <div class="trust">
+      <span class="trust-item"><span class="trust-ck">✓</span> <span data-es="Sin contrato" data-en="No contract">Sin contrato</span></span>
+      <span class="trust-item"><span class="trust-ck">✓</span> <span data-es="Sin tarjeta de crédito" data-en="No credit card">Sin tarjeta de crédito</span></span>
+      <span class="trust-item"><span class="trust-ck">✓</span> <span data-es="Live en 24h" data-en="Live in 24h">Live en 24h</span></span>
+      <span class="trust-item"><span class="trust-ck">✓</span> <span data-es="OACI Anexo 17" data-en="ICAO Annex 17">OACI Anexo 17</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 Aero AI · MetaHuman Platform · SJO · MROC · Costa Rica</div>
+    <div class="footer-links">
+      <a href="#" class="footer-link" data-es="← Inicio" data-en="← Home">← Inicio</a>
+      <a href="#" class="footer-link" data-es="Precios" data-en="Pricing">Precios</a>
+      <a href="#" class="footer-link">AVSEC</a>
+      <a href="#" class="footer-link">Demo</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function tick(){cur.style.left=mx+'px';cur.style.top=my+'px';rx+=(mx-rx)*.13;ry+=(my-ry)*.13;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(tick)})();
+document.querySelectorAll('a,button,.fp,.conv-bubble,.dep-row,.lcc,.feat-item,.lounge-card,.upload-ring,.vuz-ring').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* ── PROGRESS ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('bar').style.width=
+    (scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%';
+});
+
+/* ── REVEAL ── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}});
+},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ── PARTICLES ── */
+(function(){
+  const p=document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const d=document.createElement('div');
+    d.className='particle';
+    d.style.left=Math.random()*100+'%';
+    d.style.animationDuration=(8+Math.random()*12)+'s';
+    d.style.animationDelay=(-Math.random()*20)+'s';
+    d.style.opacity=0;
+    p.appendChild(d);
+  }
+})();
+
+/* ── TICKER ── */
+(function(){
+  const items=[
+    {t:{es:'Check-in · Documentación',en:'Check-in · Documentation'},hi:false},
+    {t:{es:'Lounge VIP · Acceso Premium',en:'VIP Lounge · Premium Access'},hi:true},
+    {t:{es:'Gates · Embarque',en:'Gates · Boarding'},hi:false},
+    {t:{es:'AVSEC · Seguridad',en:'AVSEC · Security'},hi:false},
+    {t:{es:'PRM · Asistencia Especial',en:'PRM · Special Assistance'},hi:false},
+    {t:{es:'Bilingüe ES / EN',en:'Bilingual ES / EN'},hi:false},
+    {t:{es:'OACI Anexo 17 · DGAC',en:'ICAO Annex 17 · DGAC'},hi:false},
+    {t:{es:'Escalación &lt;10s',en:'Escalation &lt;10s'},hi:false},
+    {t:{es:'Bitácora IA · Auditoría',en:'AI Log · Audit Trail'},hi:false},
+  ];
+  const tr=document.getElementById('tickerTrack');
+  const lang=()=>document.documentElement.lang||'es';
+  function render(){
+    tr.innerHTML='';
+    [...items,...items].forEach(it=>{
+      tr.innerHTML+=`<span class="ticker-item${it.hi?' hi':''}"><span>${it.t[lang()]}</span><span class="t-dot"></span></span>`;
+    });
+  }
+  render();
+  window.__tickerRender=render;
+})();
+
+/* ── LIVE CLOCK ── */
+function updateClock(){
+  const n=new Date();
+  const el=document.getElementById('liveTime');
+  if(el) el.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+}
+updateClock();setInterval(updateClock,10000);
+
+/* ── LANG SWITCH ── */
+let currentLang='es';
+function setLang(l){
+  currentLang=l;
+  document.documentElement.lang=l;
+  document.getElementById('btnEs').classList.toggle('active',l==='es');
+  document.getElementById('btnEn').classList.toggle('active',l==='en');
+  document.querySelectorAll('[data-es][data-en]').forEach(el=>{
+    const val=el.getAttribute('data-'+l);
+    if(val) el.innerHTML=val;
+  });
+  if(window.__tickerRender) window.__tickerRender();
+}
+
+/* ── SCENE SCROLL ── */
+function scrollToScene(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+/* ── SCENE DOTS ── */
+(function(){
+  const dots=document.querySelectorAll('.scene-dot');
+  const scenes=['checkin','lounge','gates'];
+  const io2=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      const idx=scenes.indexOf(e.target.id);
+      if(idx>=0&&e.isIntersecting){
+        dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+      }
+    });
+  },{threshold:.4});
+  scenes.forEach(id=>{const el=document.getElementById(id);if(el) io2.observe(el);});
+})();
+</script>
+</body>
+</html>
