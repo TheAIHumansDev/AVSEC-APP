@@ -1480,12 +1480,13 @@ function closeDemo(){
   document.body.style.overflow = '';
 }
 
-document.getElementById('demoModal').addEventListener('click', function(e){
-  if(e.target === this) closeDemo();
-});
-
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape') closeDemo();
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('demoModal').addEventListener('click', function(e){
+    if(e.target === this) closeDemo();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeDemo();
+  });
 });
   
 </script>
