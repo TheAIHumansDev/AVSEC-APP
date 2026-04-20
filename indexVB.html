@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta property="og:type" content="website" />
+<meta property="og:title" content="Aero AI VB — Plataforma IA para Seguridad, Operaciones y Mantenimiento en Aviación" />
+<meta property="og:description" content="Digitaliza, audita y protege cada operación en tierra. Desde la inspección de aeronave hasta el control de accesos — todo registrado, verificado y reportado en tiempo real." />
+<meta property="og:image" content="https://aeroaiops.com/1.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Aero AI — Plataforma IA para seguridad y operaciones en aviación" />
+<meta property="og:url" content="https://aeroaiops.com" />
+<meta property="og:site_name" content="AVSEC APP" />
+<meta property="og:locale" content="es_CR" />
+
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ─── TOKENS ─────────────────────────────────────────────── */
+:root{
+  --bg:#FAFBFF;
+  --surface:#FFFFFF;
+  --surface2:#F4F6FC;
+  --surface3:#EDF0FA;
+  --navy:#060F2B;
+  --navy2:#0D1F4F;
+  --ink:#1A2140;
+  --muted:#5B6583;
+  --border:#E3E7F5;
+  --border2:#C8D0EE;
+  --blue:#1A56FF;
+  --blue-soft:#E8EEFF;
+  --blue-mid:rgba(26,86,255,.13);
+  --amber:#F0900C;
+  --amber-soft:#FEF3E3;
+  --green:#0A8C52;
+  --green-soft:#E4F7EE;
+  --teal:#0891B2;
+  --teal-soft:#E0F5FB;
+  --red:#DC1F1F;
+  --red-soft:#FEE9E9;
+  --purple:#6B3FE7;
+  --purple-soft:#F0EBFF;
+  /* MetaHuman / violet */
+  --violet:#7C3AED;
+  --violet-soft:#EDE9FF;
+  --violet-mid:rgba(124,58,237,.13);
+  --shadow-sm:0 1px 4px rgba(0,0,0,.07),0 2px 8px rgba(0,0,0,.04);
+  --shadow:0 4px 16px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.05);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.10),0 4px 12px rgba(0,0,0,.06);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.06);
+  --r:10px;--r-lg:18px;--r-xl:24px;
+  --font:'Plus Jakarta Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);overflow-x:hidden;cursor:none;line-height:1.6}
+
+/* ─── CURSOR ─────────────────────────────────────────────── */
+#cur,#cur2{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#cur{width:9px;height:9px;background:var(--blue);transition:width .2s,height .2s,background .2s}
+#cur2{width:32px;height:32px;border:1.5px solid rgba(26,86,255,.45);transition:all .14s ease;opacity:.75}
+body.hov #cur{width:18px;height:18px;background:var(--amber)}
+body.hov #cur2{width:46px;height:46px;border-color:rgba(240,144,12,.4)}
+body.click #cur{transform:translate(-50%,-50%) scale(.7)}
+
+/* ─── NAV ────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;height:64px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 5vw;
+  background:rgba(250,251,255,.82);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--border);transition:box-shadow .3s,background .3s;
+}
+nav.up{box-shadow:var(--shadow);background:rgba(255,255,255,.97)}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:800;font-size:1.25rem;letter-spacing:-.04em;color:var(--navy);cursor:none}
+.logo em{color:var(--blue);font-style:normal}
+.logo-tag{font-family:var(--mono);font-size:.48rem;letter-spacing:.14em;background:var(--blue);color:#fff;padding:3px 7px;border-radius:4px;text-transform:uppercase;vertical-align:middle;margin-left:1px}
+.navlinks{display:flex;gap:1.8rem;list-style:none}
+.navlinks a{font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;cursor:none}
+.navlinks a:hover{color:var(--blue)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.lt{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;height:34px}
+.lb{padding:0 12px;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;background:transparent;border:none;color:var(--muted);cursor:none;transition:all .2s;text-transform:uppercase;font-weight:700}
+.lb.on{background:var(--blue);color:#fff}
+.ls{width:1px;background:var(--border)}
+
+/* LOGIN BUTTON */
+.nav-login{
+  display:inline-flex;align-items:center;gap:7px;
+  background:transparent;color:var(--navy);
+  padding:8px 16px;border-radius:8px;
+  font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  text-decoration:none;transition:all .22s;cursor:none;white-space:nowrap;
+  border:1.5px solid var(--border);
+}
+.nav-login:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-soft);transform:translateY(-1px)}
+.nav-login svg{width:14px;height:14px;flex-shrink:0;transition:transform .2s}
+.nav-login:hover svg{transform:translateX(2px)}
+
+.nav-cta{background:var(--navy);color:#fff;padding:9px 20px;border-radius:8px;font-size:.76rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:all .22s;cursor:none;white-space:nowrap;border:none}
+.nav-cta:hover{background:var(--blue);box-shadow:0 6px 20px rgba(26,86,255,.32);transform:translateY(-1px)}
+
+/* ─── URGENCY BAR ────────────────────────────────────────── */
+.urgency-bar{
+  background:linear-gradient(90deg,var(--amber) 0%,#FCD34D 100%);
+  padding:10px 5vw;text-align:center;font-size:.78rem;font-weight:700;
+  letter-spacing:.02em;color:var(--navy);display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.urgency-bar a{color:var(--navy);text-decoration:underline;cursor:none;text-underline-offset:3px}
+
+/* ─── HERO ───────────────────────────────────────────────── */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:130px 5vw 100px;position:relative;overflow:hidden;
+  background:linear-gradient(150deg,#FFFFFF 0%,#F2F5FF 55%,#E8EDFF 100%);
+}
+#hero::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(150deg,rgba(255,255,255,.92) 0%,rgba(242,245,255,.88) 55%,rgba(232,237,255,.85) 100%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(26,86,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,255,.055) 1px,transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black,transparent);
+  mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black,transparent);
+}
+.scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(26,86,255,.25),transparent);animation:scan 7s linear infinite;pointer-events:none;z-index:1}
+@keyframes scan{0%{top:0}100%{top:100%}}
+
+.hero-inner{position:relative;z-index:2;max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--blue);background:var(--blue-soft);border:1px solid rgba(26,86,255,.2);
+  padding:6px 13px;border-radius:6px;margin-bottom:26px;
+  animation:up .8s ease both;
+}
+.pulse{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(10,140,82,.5)}60%{box-shadow:0 0 0 7px rgba(10,140,82,0)}}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.hero-h1{font-weight:800;font-size:clamp(2.5rem,5.5vw,5.2rem);line-height:.95;letter-spacing:-.05em;margin-bottom:24px;animation:up .9s .1s ease both}
+.hero-h1 .h1-blue{color:var(--blue);display:block}
+.hero-h1 .h1-italic{font-style:italic;font-weight:300;font-size:.75em;letter-spacing:-.03em;display:block;color:var(--muted)}
+
+.hero-sub{font-size:clamp(.95rem,1.5vw,1.12rem);color:var(--muted);line-height:1.8;max-width:520px;margin-bottom:38px;animation:up .9s .2s ease both}
+.hero-sub strong{color:var(--navy);font-weight:700}
+
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:up .9s .32s ease both;margin-bottom:36px}
+.btn-hero{display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:10px;font-size:.86rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:all .25s;cursor:none;border:none}
+.btn-hero.primary{background:var(--blue);color:#fff}
+.btn-hero.primary:hover{background:var(--navy);box-shadow:var(--shadow-xl);transform:translateY(-2px)}
+.btn-hero.secondary{background:var(--surface);color:var(--navy);border:1.5px solid var(--border)}
+.btn-hero.secondary:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow)}
+
+.trust-badges{display:flex;flex-wrap:wrap;gap:10px;animation:up .9s .44s ease both}
+.trust-b{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:5px 12px;border-radius:20px}
+
+/* HERO DASHBOARD MOCKUP */
+.hero-visual{animation:up .9s .15s ease both;position:relative}
+.dash-mock{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-xl);overflow:hidden;animation:floatY 5s ease-in-out infinite alternate}
+@keyframes floatY{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+.dash-topbar{background:var(--surface2);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;gap:8px}
+.dash-dot{width:10px;height:10px;border-radius:50%}
+.dash-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--muted);margin-left:6px;text-transform:uppercase}
+.dash-live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;margin-left:auto;animation:pulse 2s infinite}
+.dash-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.dash-kpi{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.dash-kpi-lbl{font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.dash-kpi-val{font-weight:800;font-size:1.5rem;letter-spacing:-.04em}
+.dash-kpi-val.blue{color:var(--blue)}
+.dash-kpi-val.green{color:var(--green)}
+.dash-kpi-val.amber{color:var(--amber)}
+.dash-kpi-sub{font-size:.62rem;color:var(--muted);margin-top:3px}
+.dash-feed{padding:0 18px 16px}
+.dash-feed-title{font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.dash-event{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;margin-bottom:5px;font-size:.72rem}
+.dash-event.g{background:var(--green-soft)}
+.dash-event.a{background:var(--amber-soft)}
+.dash-event.b{background:var(--blue-soft)}
+.dash-e-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dash-e-dot.g{background:var(--green)}
+.dash-e-dot.a{background:var(--amber)}
+.dash-e-dot.b{background:var(--blue)}
+.dash-e-text{flex:1;font-weight:600;color:var(--navy)}
+.dash-e-time{font-family:var(--mono);font-size:.55rem;color:var(--muted)}
+.dash-ai-badge{margin:0 18px 16px;background:var(--blue-mid);border:1px solid rgba(26,86,255,.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.dash-ai-icon{font-size:1.1rem}
+.dash-ai-text{font-size:.72rem;color:var(--navy);font-weight:600;line-height:1.4}
+.dash-ai-sub{font-size:.62rem;color:var(--muted);font-weight:400}
+
+/* ─── TICKER ─────────────────────────────────────────────── */
+.ticker-wrap{background:var(--navy);overflow:hidden;padding:12px 0;border-top:1px solid rgba(255,255,255,.05)}
+.ticker-inner{display:flex;width:max-content;animation:tick 50s linear infinite}
+.ti{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;color:rgba(255,255,255,.38);text-transform:uppercase;padding:0 38px;white-space:nowrap}
+.ti .hi{color:rgba(255,255,255,.75)}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ─── SECTION SHARED ─────────────────────────────────────── */
+.s-tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:13px}
+.s-h{font-weight:800;font-size:clamp(1.9rem,3.8vw,3.4rem);line-height:.97;letter-spacing:-.045em;margin-bottom:18px}
+.s-h .hi{color:var(--blue)}
+.s-sub{font-size:1.02rem;color:var(--muted);line-height:1.75;max-width:640px}
+
+/* scroll reveal */
+.r{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.r.vis{opacity:1;transform:none}
+.r.left{transform:translateX(-32px)}
+.r.left.vis{transform:none}
+.r.right{transform:translateX(32px)}
+.r.right.vis{transform:none}
+.r.scale{transform:scale(.94)}
+.r.scale.vis{transform:scale(1)}
+
+/* ─── AI PROPOSITION STRIP ───────────────────────────────── */
+#ai-strip{padding:100px 5vw;background:var(--navy);position:relative;overflow:hidden}
+#ai-strip::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(26,86,255,.18),transparent 60%);pointer-events:none}
+.ai-strip-inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:1}
+.ai-strip-left .s-tag{color:rgba(26,86,255,.9)}
+.ai-strip-h{font-weight:800;font-size:clamp(2rem,4vw,3.5rem);line-height:.97;letter-spacing:-.045em;color:#fff;margin-bottom:20px}
+.ai-strip-h em{font-style:normal;color:#6B9DFF}
+.ai-strip-p{font-size:.98rem;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:14px}
+
+.ai-powers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.ai-pow{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:16px;transition:background .3s}
+.ai-pow:hover{background:rgba(26,86,255,.12);border-color:rgba(26,86,255,.3)}
+.ai-pow-icon{font-size:1.3rem;display:block;margin-bottom:8px}
+.ai-pow-title{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:4px}
+.ai-pow-desc{font-size:.76rem;color:rgba(255,255,255,.45);line-height:1.55}
+
+.ai-terminal{background:#020811;border:1px solid rgba(26,86,255,.25);border-radius:var(--r-lg);overflow:hidden;font-family:var(--mono)}
+.term-bar{display:flex;align-items:center;gap:7px;padding:11px 16px;background:rgba(26,86,255,.08);border-bottom:1px solid rgba(26,86,255,.15)}
+.t-dot{width:9px;height:9px;border-radius:50%}
+.t-lbl{font-size:.55rem;letter-spacing:.18em;color:rgba(26,86,255,.8);text-transform:uppercase;margin-left:auto}
+.term-body{padding:18px;font-size:.68rem;line-height:2}
+.tc{color:#60A5FA}.ts{color:#86EFAC}.tv{color:#FCD34D}.tp{color:rgba(255,255,255,.28)}.tr{color:#F9A8D4}.tw{color:#FCA5A5}.tb{display:inline-block;width:7px;height:12px;background:#60A5FA;animation:blink .8s infinite}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* ─── PLATFORMS ──────────────────────────────────────────── */
+#platforms{padding:120px 5vw;background:var(--bg)}
+.plat-header{text-align:center;max-width:700px;margin:0 auto 80px}
+
+/* 4 columns on wide, 2 on medium, 1 on small */
+.plat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1300px;margin:0 auto}
+
+.pc{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);
+  overflow:hidden;position:relative;transition:box-shadow .35s,border-color .35s,transform .35s;cursor:none;
+  display:flex;flex-direction:column;
+}
+.pc:hover{box-shadow:var(--shadow-xl);border-color:var(--border2);transform:translateY(-8px)}
+.pc.featured{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),var(--shadow-lg)}
+.pc.featured:hover{box-shadow:0 0 0 1px var(--blue),var(--shadow-xl);transform:translateY(-10px)}
+
+.pc-top-bar{height:4px}
+.pc-top-bar.blue{background:linear-gradient(90deg,#1A56FF,#4D8AFF)}
+.pc-top-bar.amber{background:linear-gradient(90deg,#F0900C,#FBBF24)}
+.pc-top-bar.green{background:linear-gradient(90deg,#0A8C52,#34D399)}
+.pc-top-bar.violet{background:linear-gradient(90deg,#7C3AED,#A78BFA)}
+
+.pc-badge-wrap{position:absolute;top:18px;right:18px}
+.pc-badge{font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:20px;font-weight:700}
+.pc-badge.popular{background:var(--amber);color:var(--navy)}
+.pc-badge.new{background:var(--purple-soft);color:var(--purple)}
+.pc-badge.metahuman{background:var(--violet);color:#fff}
+
+.pc-head{padding:22px 22px 16px}
+.pc-emoji{font-size:2.2rem;display:block;margin-bottom:12px}
+.pc-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;padding:4px 9px;border-radius:4px;display:inline-block;margin-bottom:11px;font-weight:700}
+.pc-label.blue{background:var(--blue-soft);color:var(--blue)}
+.pc-label.amber{background:var(--amber-soft);color:#92400E}
+.pc-label.green{background:var(--green-soft);color:var(--green)}
+.pc-label.violet{background:var(--violet-soft);color:var(--violet)}
+.pc-title{font-weight:800;font-size:1.2rem;letter-spacing:-.04em;margin-bottom:9px}
+.pc-desc{font-size:.82rem;color:var(--muted);line-height:1.65}
+
+.pc-feats{padding:0 22px 18px;flex:1}
+.pc-feat{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--surface2)}
+.pc-feat:last-child{border-bottom:none}
+.pf-icon{font-size:.95rem;flex-shrink:0;margin-top:2px}
+.pf-body{font-size:.79rem;line-height:1.5}
+.pf-body strong{display:block;font-weight:700;color:var(--navy);margin-bottom:2px}
+.pf-body span{color:var(--muted)}
+
+.pc-ai-note{margin:0 22px 16px;background:var(--blue-soft);border:1px solid rgba(26,86,255,.18);border-radius:8px;padding:10px 13px;font-size:.74rem;line-height:1.5}
+.pc-ai-note.amber{background:var(--amber-soft);border-color:rgba(240,144,12,.2)}
+.pc-ai-note.green{background:var(--green-soft);border-color:rgba(10,140,82,.2)}
+.pc-ai-note.violet{background:var(--violet-soft);border-color:rgba(124,58,237,.2)}
+.pc-ai-note strong{font-weight:700;color:var(--blue)}
+.pc-ai-note.amber strong{color:#92400E}
+.pc-ai-note.green strong{color:var(--green)}
+.pc-ai-note.violet strong{color:var(--violet)}
+
+/* ─── PLATFORM CARD BUTTONS ──────────────────────────────── */
+.pc-cta{padding:0 22px 22px;display:flex;flex-direction:column;gap:8px}
+
+.pc-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:10px;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:all .25s;cursor:none;border:none}
+.pc-btn.primary{background:var(--blue);color:#fff;border:none;box-shadow:0 4px 16px rgba(26,86,255,.28)}
+.pc-btn.primary:hover{background:var(--navy);box-shadow:0 8px 28px rgba(26,86,255,.35);transform:translateY(-1px)}
+
+/* Try Now — outlined style per brand color */
+.pc-btn.try-blue{background:transparent;color:var(--blue);border:1.5px solid rgba(26,86,255,.35)}
+.pc-btn.try-blue:hover{background:var(--blue);color:#fff;box-shadow:0 8px 24px rgba(26,86,255,.28)}
+.pc-btn.try-amber{background:transparent;color:#92400E;border:1.5px solid rgba(240,144,12,.35)}
+.pc-btn.try-amber:hover{background:var(--amber);color:#fff;box-shadow:0 8px 24px rgba(240,144,12,.28)}
+.pc-btn.try-green{background:transparent;color:var(--green);border:1.5px solid rgba(10,140,82,.35)}
+.pc-btn.try-green:hover{background:var(--green);color:#fff;box-shadow:0 8px 24px rgba(10,140,82,.28)}
+.pc-btn.try-violet{background:transparent;color:var(--violet);border:1.5px solid rgba(124,58,237,.35)}
+.pc-btn.try-violet:hover{background:var(--violet);color:#fff;box-shadow:0 8px 24px rgba(124,58,237,.28)}
+
+/* Demo (solid per color) */
+.pc-btn.demo-blue{background:var(--blue-soft);color:var(--blue);border:1.5px solid rgba(26,86,255,.22)}
+.pc-btn.demo-blue:hover{background:var(--blue);color:#fff;box-shadow:0 8px 24px rgba(26,86,255,.32)}
+.pc-btn.demo-amber{background:var(--amber-soft);color:#92400E;border:1.5px solid rgba(240,144,12,.22)}
+.pc-btn.demo-amber:hover{background:var(--amber);color:#fff;box-shadow:0 8px 24px rgba(240,144,12,.32)}
+.pc-btn.demo-green{background:var(--green-soft);color:var(--green);border:1.5px solid rgba(10,140,82,.22)}
+.pc-btn.demo-green:hover{background:var(--green);color:#fff;box-shadow:0 8px 24px rgba(10,140,82,.32)}
+.pc-btn.demo-violet{background:var(--violet-soft);color:var(--violet);border:1.5px solid rgba(124,58,237,.22)}
+.pc-btn.demo-violet:hover{background:var(--violet);color:#fff;box-shadow:0 8px 24px rgba(124,58,237,.32)}
+
+/* ─── VALUE PROPS ────────────────────────────────────────── */
+#value{padding:120px 5vw;background:linear-gradient(180deg,#fff 0%,var(--surface2) 100%)}
+.value-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1140px;margin:0 auto}
+
+.value-vis{display:flex;flex-direction:column;gap:14px}
+.vcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-sm);transition:transform .3s,box-shadow .3s;display:flex;align-items:flex-start;gap:14px}
+.vcard:hover{transform:translateX(8px);box-shadow:var(--shadow-lg)}
+.vcard:nth-child(2){margin-left:28px}
+.vcard:nth-child(4){margin-left:14px}
+.vcard-icon{font-size:1.8rem;flex-shrink:0}
+.vcard-body{}
+.vcard-tag{font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:7px;display:inline-block;font-weight:700}
+.vcard-tag.g{background:var(--green-soft);color:var(--green)}
+.vcard-tag.a{background:var(--amber-soft);color:#92400E}
+.vcard-tag.r{background:var(--red-soft);color:var(--red)}
+.vcard-tag.b{background:var(--blue-soft);color:var(--blue)}
+.vcard-title{font-weight:700;font-size:.95rem;letter-spacing:-.02em;margin-bottom:5px}
+.vcard-desc{font-size:.8rem;color:var(--muted);line-height:1.55}
+
+.value-text .s-h{margin-bottom:20px}
+.value-text p{font-size:.98rem;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.value-points{margin-top:28px}
+.vp{display:flex;align-items:flex-start;gap:13px;padding:13px 0;border-bottom:1px solid var(--border)}
+.vp:last-child{border-bottom:none}
+.vp-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.vp-body strong{font-weight:700;font-size:.9rem;display:block;margin-bottom:3px}
+.vp-body span{font-size:.8rem;color:var(--muted);line-height:1.5}
+
+/* ─── HOW IT WORKS ───────────────────────────────────────── */
+#how{padding:120px 5vw;background:var(--bg)}
+.how-header{text-align:center;max-width:680px;margin:0 auto 80px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1140px;margin:0 auto;position:relative}
+.steps::before{content:'';position:absolute;top:36px;left:calc(12.5% + 20px);right:calc(12.5% + 20px);height:2px;background:linear-gradient(90deg,var(--blue-soft),var(--blue),var(--blue-soft));z-index:0}
+.step-c{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:26px 20px;text-align:center;position:relative;z-index:1;transition:box-shadow .3s,transform .3s}
+.step-c:hover{box-shadow:var(--shadow-lg);transform:translateY(-5px)}
+.step-num{width:44px;height:44px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.72rem;font-weight:700;margin:0 auto 14px;box-shadow:0 4px 14px rgba(26,86,255,.4)}
+.step-emoji{font-size:1.7rem;display:block;margin-bottom:11px}
+.step-title{font-weight:700;font-size:.95rem;letter-spacing:-.02em;margin-bottom:8px}
+.step-desc{font-size:.8rem;color:var(--muted);line-height:1.6}
+
+/* ─── SOCIAL PROOF / NUMBERS ─────────────────────────────── */
+#numbers{padding:100px 5vw;background:var(--navy);position:relative;overflow:hidden}
+#numbers::before{content:'';position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(26,86,255,.25),transparent 65%);pointer-events:none}
+.num-inner{max-width:1140px;margin:0 auto}
+.num-header{text-align:center;margin-bottom:60px}
+.num-header .s-tag{color:rgba(26,86,255,.85)}
+.num-header .s-h{color:#fff}
+.num-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.num-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);padding:28px 22px;text-align:center;transition:background .3s}
+.num-card:hover{background:rgba(26,86,255,.12);border-color:rgba(26,86,255,.25)}
+.num-val{font-weight:800;font-size:2.8rem;letter-spacing:-.05em;color:#fff;display:block;line-height:1}
+.num-suf{font-size:1.5rem;opacity:.6}
+.num-label{font-size:.78rem;color:rgba(255,255,255,.4);margin-top:8px;display:block;line-height:1.45;font-weight:500}
+.num-icon{font-size:1.5rem;display:block;margin-bottom:10px}
+
+/* ─── PRICING SECTION ────────────────────────────────────── */
+#pricing{padding:120px 5vw;background:linear-gradient(180deg,var(--surface2),#fff)}
+.pricing-header{text-align:center;max-width:700px;margin:0 auto 80px}
+
+.pricing-toggle{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:50px}
+.ptgl{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:30px;padding:3px}
+.ptgl-btn{padding:7px 20px;border-radius:26px;font-size:.8rem;font-weight:700;cursor:none;border:none;background:transparent;color:var(--muted);transition:all .25s}
+.ptgl-btn.on{background:var(--surface);color:var(--navy);box-shadow:var(--shadow-sm)}
+.save-badge{background:var(--green-soft);color:var(--green);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;border:1px solid rgba(10,140,82,.2)}
+
+.price-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1140px;margin:0 auto}
+.prcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;position:relative;transition:transform .3s,box-shadow .3s;cursor:none}
+.prcard:hover{transform:translateY(-6px);box-shadow:var(--shadow-xl)}
+.prcard.featured-pr{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);transform:scale(1.03)}
+.prcard.featured-pr:hover{transform:scale(1.03) translateY(-4px);box-shadow:0 0 0 1px var(--blue),var(--shadow-xl)}
+.prcard-accent{height:4px}
+.prcard-accent.b{background:linear-gradient(90deg,#1A56FF,#4D8AFF)}
+.prcard-accent.a{background:linear-gradient(90deg,#F0900C,#FCD34D)}
+.prcard-accent.g{background:linear-gradient(90deg,#0A8C52,#34D399)}
+.prcard-body{padding:28px 26px}
+.pr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.pr-platform{font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;padding:4px 9px;border-radius:4px}
+.pr-platform.b{background:var(--blue-soft);color:var(--blue)}
+.pr-platform.a{background:var(--amber-soft);color:#92400E}
+.pr-platform.g{background:var(--green-soft);color:var(--green)}
+.pr-badge{font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:20px;font-weight:700;background:var(--blue);color:#fff}
+.pr-emoji{font-size:2rem;display:block;margin-bottom:10px}
+.pr-name{font-weight:800;font-size:1.25rem;letter-spacing:-.04em;margin-bottom:6px}
+.pr-tagline{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:20px}
+
+.pr-price-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:20px;text-align:center}
+.pr-price-label{font-family:var(--mono);font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.pr-price-cta{font-weight:700;font-size:.9rem;color:var(--navy);line-height:1.4}
+.pr-price-note{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+.pr-feats{margin-bottom:20px}
+.pr-feat{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:.82rem;color:var(--muted)}
+.pr-feat-check{font-size:.8rem;flex-shrink:0}
+.pr-feat strong{color:var(--navy);font-weight:600}
+
+.pr-cta{display:block;width:100%;padding:13px;border-radius:10px;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;text-align:center;transition:all .25s;cursor:none;border:none}
+.pr-cta.b{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(26,86,255,.3)}
+.pr-cta.b:hover{background:var(--navy);box-shadow:var(--shadow-xl);transform:translateY(-1px)}
+.pr-cta.a{background:var(--amber-soft);color:#92400E;border:1.5px solid rgba(240,144,12,.22)}
+.pr-cta.a:hover{background:var(--amber);color:#fff;box-shadow:0 6px 20px rgba(240,144,12,.35)}
+.pr-cta.g{background:var(--green-soft);color:var(--green);border:1.5px solid rgba(10,140,82,.22)}
+.pr-cta.g:hover{background:var(--green);color:#fff;box-shadow:0 6px 20px rgba(10,140,82,.35)}
+.pr-guarantee{text-align:center;font-size:.72rem;color:var(--muted);margin-top:10px}
+
+.enterprise-strip{max-width:1140px;margin:28px auto 0;background:var(--navy);border-radius:var(--r-xl);padding:36px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.ent-left .ent-title{font-weight:800;font-size:1.25rem;letter-spacing:-.03em;color:#fff;margin-bottom:6px}
+.ent-left .ent-sub{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.5}
+.ent-btn{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);padding:12px 26px;border-radius:10px;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:all .25s;cursor:none;white-space:nowrap}
+.ent-btn:hover{background:var(--blue);border-color:transparent;box-shadow:0 8px 24px rgba(26,86,255,.4)}
+
+/* ─── FAQ / OBJECTIONS ───────────────────────────────────── */
+#faq{padding:100px 5vw;background:var(--bg)}
+.faq-inner{max-width:720px;margin:0 auto}
+.faq-header{text-align:center;margin-bottom:60px}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 0;cursor:none;font-weight:700;font-size:.95rem;letter-spacing:-.01em;transition:color .2s}
+.faq-q:hover{color:var(--blue)}
+.faq-arrow{font-size:.8rem;transition:transform .3s;flex-shrink:0;margin-left:16px;color:var(--muted)}
+.faq-a{font-size:.88rem;color:var(--muted);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:18px}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+
+/* ─── LEAD CAPTURE CTA ───────────────────────────────────── */
+#lead{padding:120px 5vw;background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 100%);position:relative;overflow:hidden;text-align:center}
+#lead::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(26,86,255,.22),transparent 60%);pointer-events:none}
+.lead-eyebrow{display:inline-block;font-family:var(--mono);font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;background:rgba(26,86,255,.15);color:rgba(26,86,255,.9);border:1px solid rgba(26,86,255,.3);padding:6px 14px;border-radius:4px;margin-bottom:22px}
+.lead-h{font-weight:800;font-size:clamp(2.5rem,5vw,5rem);letter-spacing:-.05em;color:#fff;line-height:.95;margin-bottom:20px;position:relative;z-index:1}
+.lead-h em{font-style:normal;color:#6B9DFF}
+.lead-sub{font-size:1.05rem;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 50px;line-height:1.75;position:relative;z-index:1}
+
+.lead-form{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-xl);padding:36px;max-width:560px;margin:0 auto;position:relative;z-index:1;backdrop-filter:blur(10px)}
+.lead-form-title{font-weight:700;font-size:1.05rem;color:#fff;margin-bottom:6px;text-align:left}
+.lead-form-sub{font-size:.8rem;color:rgba(255,255,255,.45);margin-bottom:24px;text-align:left}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.fgroup{margin-bottom:10px}
+.flabel{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);display:block;margin-bottom:6px}
+.finput,.fselect{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:11px 13px;color:#fff;font-family:var(--font);font-size:.88rem;transition:border-color .2s,background .2s;outline:none;cursor:none}
+.finput::placeholder{color:rgba(255,255,255,.28)}
+.finput:focus,.fselect:focus{border-color:rgba(26,86,255,.6);background:rgba(26,86,255,.08)}
+.fselect{color:rgba(255,255,255,.7);appearance:none}
+.fselect option{background:var(--navy);color:#fff}
+.fsubmit{width:100%;background:var(--blue);color:#fff;padding:15px;border-radius:10px;font-family:var(--font);font-size:.9rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:none;transition:all .25s;margin-top:6px}
+.fsubmit:hover{background:#0040D4;box-shadow:0 10px 36px rgba(26,86,255,.5);transform:translateY(-2px)}
+.form-privacy{font-size:.68rem;color:rgba(255,255,255,.28);margin-top:12px;line-height:1.5}
+.form-success{display:none;text-align:center;padding:30px 0}
+.form-success .fs-emoji{font-size:3rem;display:block;margin-bottom:14px}
+.form-success .fs-title{font-weight:800;font-size:1.3rem;color:#fff;margin-bottom:8px}
+.form-success .fs-sub{font-size:.88rem;color:rgba(255,255,255,.5)}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer{background:var(--navy);padding:56px 5vw 28px;color:rgba(255,255,255,.35)}
+.footer-inner{max-width:1140px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand p{font-size:.8rem;line-height:1.7;max-width:240px;margin-top:14px}
+.footer-col-h{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:14px}
+.footer-link{display:block;font-size:.8rem;color:rgba(255,255,255,.38);text-decoration:none;margin-bottom:9px;transition:color .2s;cursor:none}
+.footer-link:hover{color:rgba(255,255,255,.8)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:.7rem;letter-spacing:.05em}
+.footer-cert{font-family:var(--mono);font-size:.58rem;color:rgba(255,255,255,.18);letter-spacing:.1em}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:1300px){
+  .plat-cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:1100px){
+  .hero-inner,.ai-strip-inner,.value-grid{grid-template-columns:1fr;gap:50px}
+  .price-cards{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr;gap:16px}.steps::before{display:none}
+  .num-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero-visual,.ai-terminal{max-width:540px;margin:0 auto}
+  .prcard.featured-pr{transform:none}.prcard.featured-pr:hover{transform:translateY(-6px)}
+}
+@media(max-width:700px){
+  .navlinks{display:none}
+  .nav-login{padding:8px 10px}
+  .nav-login span{display:none}
+  .nav-login svg{width:18px;height:18px}
+  .plat-cards,.price-cards,.num-grid,.steps,.frow{grid-template-columns:1fr}
+  .hero-h1{font-size:2.4rem}
+  .ai-powers{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .enterprise-strip{flex-direction:column;text-align:center}
+  .steps::before{display:none}
+}
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NHE2B8CJ0L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NHE2B8CJ0L');
+</script>
+  
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+
+
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="logo">AERO<em>AI</em><span class="logo-tag">v4</span></a>
+  <ul class="navlinks">
+    <li><a href="#platforms" data-es="Plataformas" data-en="Platforms">Plataformas</a></li>
+    <li><a href="#value" data-es="IA Aplicada" data-en="Applied AI">IA Aplicada</a></li>
+    <li><a href="#pricing" data-es="Planes" data-en="Plans">Planes</a></li>
+    <li><a href="#faq" data-es="FAQ" data-en="FAQ">FAQ</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lt">
+      <button class="lb on" id="btnES" onclick="setLang('es')">ES</button>
+      <div class="ls"></div>
+      <button class="lb" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+    <!-- ── LOGIN BUTTON ── -->
+    <a href="login.html" class="nav-login" data-es="Iniciar sesión" data-en="Log in">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      <span data-es="Iniciar sesión" data-en="Log in">Iniciar sesión</span>
+    </a>
+    <a href="pricing.html" class="nav-cta" data-es="Pricing" data-en="Pricing">Pricing</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════ -->
+<section id="hero">
+
+    <!-- VIDEO BACKGROUND -->
+  <video autoplay muted loop playsinline id="heroBgVideo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.18;pointer-events:none">
+    <source src="landing.mp4" type="video/mp4">
+  </video>
+  
+  <div class="hero-grid"></div>
+  <div class="scanline"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="pulse"></span>
+        <span data-es="Sistema activo · SJO / LIR / SAL · 🇨🇷 🇸🇻" data-en="System active ·SJO / LIR / SAL · 🇨🇷 🇸🇻">Sistema activo · SJO / LIR / SAL · 🇨🇷 🇸🇻</span>
+      </div>
+
+      <h1 class="hero-h1">
+        <span data-es="Plataforma IA" data-en="AI Platform">Plataforma IA</span>
+        <span class="h1-blue" data-es="para seguridad y operaciones" data-en="for security and operations">para seguridad y operaciones</span>
+        <span class="h1-italic" data-es="en aviación." data-en="in aviation.">en aviación.</span>
+      </h1>
+
+      <p class="hero-sub">
+        <span data-es=" Aero AI detecta patrones, anticipa anomalías y alerta antes de que ocurran incidentes — en Accesos, Aeronaves, Perímetros, Ground Handling y Asistencia PRM." data-en="Aero AI detects patterns, anticipates anomalies and alerts before incidents occur — in Access Control, Aircraft, Perimeters, Ground Handling and PRM Assistance."> Aero AI detecta patrones, anticipa anomalías y alerta antes de que ocurran incidentes — en Accesos, Aeronaves, Perímetros, Ground Handling y Asistencia PRM.</span>
+      </p>
+
+      <div class="hero-btns">
+        <a href="#lead" class="btn-hero primary">🚀 <span data-es="Agendar Demo" data-en="Book Demo">Agendar Demo</span></a>
+        <a href="#platforms" class="btn-hero secondary"><span data-es="Ver plataformas →" data-en="See platforms →">Ver plataformas →</span></a>
+      </div>
+
+      <div class="trust-badges">
+        <span class="trust-b">✅ <span data-es="OACI Anexo 17" data-en="ICAO Annex 17">OACI Anexo 17</span></span>
+        <span class="trust-b">🔒 <span data-es="Firma digital biométrica" data-en="Biometric digital signature">Estándares IATA</span></span>
+        <span class="trust-b">📱 <span data-es="PWA nativa · sin instalar" data-en="Native PWA · no install">PWA nativa · sin descargar Apps</span></span>
+        <span class="trust-b">⚡ <span data-es="API REST incluida" data-en="REST API included">API REST disponible</span></span>
+      </div>
+    </div>
+
+    <!-- Dashboard mockup -->
+    <div class="hero-visual">
+      <div class="dash-mock">
+        <div class="dash-topbar">
+          <div class="dash-dot" style="background:#ff5f57"></div>
+          <div class="dash-dot" style="background:#febc2e"></div>
+          <div class="dash-dot" style="background:#28c840"></div>
+          <span class="dash-title">Aero AI · Live Dashboard</span>
+          <div class="dash-live-dot"></div>
+        </div>
+        <div class="dash-body">
+          <div class="dash-kpi">
+            <div class="dash-kpi-lbl">Risk Score</div>
+            <div class="dash-kpi-val green">12</div>
+            <div class="dash-kpi-sub">/ 100 · LOW ✓</div>
+          </div>
+          <div class="dash-kpi">
+            <div class="dash-kpi-lbl">Ops. hoy</div>
+            <div class="dash-kpi-val blue">47</div>
+            <div class="dash-kpi-sub">↑ +12% vs ayer</div>
+          </div>
+          <div class="dash-kpi">
+            <div class="dash-kpi-lbl">Alertas</div>
+            <div class="dash-kpi-val amber">2</div>
+            <div class="dash-kpi-sub">Ámbar · en curso</div>
+          </div>
+        </div>
+        <div class="dash-feed">
+          <div class="dash-feed-title">Feed en vivo</div>
+          <div class="dash-event g">
+            <div class="dash-e-dot g"></div>
+            <div class="dash-e-text">LA802 · Inspección ✓ Score 94%</div>
+            <div class="dash-e-time">14:32</div>
+          </div>
+          <div class="dash-event a">
+            <div class="dash-e-dot a"></div>
+            <div class="dash-e-text">IB7832 · Rampa 17:42 → ÁMBAR</div>
+            <div class="dash-e-time">14:39</div>
+          </div>
+          <div class="dash-event b">
+            <div class="dash-e-dot b"></div>
+            <div class="dash-e-text">CM214 · PRM 2 sillas asignadas</div>
+            <div class="dash-e-time">14:41</div>
+          </div>
+        </div>
+        <div class="dash-ai-badge">
+          <div class="dash-ai-icon">🧠</div>
+          <div>
+            <div class="dash-ai-text" data-es="IA detectó patrón: credencial vencida reincidente" data-en="AI detected pattern: recurring expired credential">IA detectó patrón: credencial vencida reincidente</div>
+            <div class="dash-ai-sub" data-es="3er intento esta semana · escalado a supervisión" data-en="3rd attempt this week · escalated to supervision">3er intento esta semana · escalado a supervisión</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="tickerEl"></div>
+</div>
+
+<!-- ═══ AI STRIP ════════════════════════════════════════════ -->
+<section id="ai-strip">
+  <div class="ai-strip-inner">
+    <div class="ai-strip-left r left">
+      <span class="s-tag" data-es="// Inteligencia Artificial Aplicada" data-en="// Applied Artificial Intelligence">// Inteligencia Artificial Aplicada</span>
+      <h2 class="ai-strip-h">
+        <span data-es="IA que" data-en="AI that">IA que</span> <em data-es="ve más allá" data-en="sees beyond">ve más allá</em><br>
+        <span data-es="del registro." data-en="the log.">del registro.</span>
+      </h2>
+      <p class="ai-strip-p" data-es="La mayoría de los sistemas de seguridad aeroportuaria digitalizan formularios. Aero AI hace algo completamente diferente: analiza cada operación, descubre patrones invisibles al ojo humano y actúa antes de que el problema ocurra." data-en="Most airport security systems digitize forms. Aero AI does something completely different: analyzes every operation, discovers patterns invisible to the human eye and acts before the problem occurs.">La mayoría de los sistemas de seguridad aeroportuaria digitalizan formularios. Aero AI hace algo completamente diferente: analiza cada operación, descubre patrones invisibles al ojo humano y actúa antes de que el problema ocurra.</p>
+      <p class="ai-strip-p" data-es="No se trata de reemplazar al oficial de seguridad — se trata de darle una capa de inteligencia que multiplica su capacidad de detección y su protección legal." data-en="It's not about replacing the security officer — it's about giving them an intelligence layer that multiplies their detection capacity and legal protection.">No se trata de reemplazar al oficial de seguridad — se trata de darle una capa de inteligencia que multiplica su capacidad de detección y su protección legal.</p>
+      <div class="ai-powers">
+        <div class="ai-pow r scale" style="transition-delay:.05s">
+          <span class="ai-pow-icon">🔍</span>
+          <div class="ai-pow-title" data-es="Detección de Patrones" data-en="Pattern Detection">Detección de Patrones</div>
+          <div class="ai-pow-desc" data-es="Identifica comportamientos repetitivos anómalos en accesos, inspecciones y operaciones" data-en="Identifies repetitive anomalous behaviors in access, inspections and operations">Identifica comportamientos repetitivos anómalos a través de operaciones</div>
+        </div>
+        <div class="ai-pow r scale" style="transition-delay:.1s">
+          <span class="ai-pow-icon">⚡</span>
+          <div class="ai-pow-title" data-es="Alertas Predictivas" data-en="Predictive Alerts">Alertas Predictivas</div>
+          <div class="ai-pow-desc" data-es="Predice retrasos y escalaciones antes de que excedan umbrales operacionales" data-en="Predicts delays and escalations before they exceed operational thresholds">Predice retrasos y escalaciones antes de que excedan umbrales</div>
+        </div>
+        <div class="ai-pow r scale" style="transition-delay:.15s">
+          <span class="ai-pow-icon">📸</span>
+          <div class="ai-pow-title" data-es="Visión Artificial" data-en="Computer Vision">Visión Artificial</div>
+          <div class="ai-pow-desc" data-es="Vision AI de credenciales, validación de fotos de evidencia y análisis de calidad en tiempo real" data-en="Credential Vision AI, evidence photo validation and real-time quality analysis">Vision AI de credenciales y validación de fotos de evidencia en tiempo real</div>
+        </div>
+        <div class="ai-pow r scale" style="transition-delay:.2s">
+          <span class="ai-pow-icon">📊</span>
+          <div class="ai-pow-title" data-es="Risk Scoring Dinámico" data-en="Dynamic Risk Scoring">Risk Scoring Dinámico</div>
+          <div class="ai-pow-desc" data-es="Score ponderado por operación: verde, ámbar o rojo con escalación automática a supervisión" data-en="Weighted score per operation: green, amber or red with automatic escalation">Score ponderado por operación con escalación automática</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal live -->
+    <div class="ai-terminal r right">
+      <div class="term-bar">
+        <div class="t-dot" style="background:#ff5f57"></div>
+        <div class="t-dot" style="background:#febc2e"></div>
+        <div class="t-dot" style="background:#28c840"></div>
+        <span class="t-lbl">AI Engine · Live</span>
+      </div>
+      <div class="term-body" id="termBody">
+        <div><span class="tc">→ </span><span class="tp">module: ACCESS_CONTROL · flight LA802</span></div>
+        <div>&nbsp;</div>
+        <div><span class="tc">vision.scan </span><span class="tv">credential_photo.jpg</span></div>
+        <div><span class="tp"> ├ confidence: </span><span class="ts">98.4%</span></div>
+        <div><span class="tp"> ├ name: </span><span class="tv">Carlos Ulate M.</span></div>
+        <div><span class="tp"> ├ company: </span><span class="tv">AI Airlines</span></div>
+        <div><span class="tp"> ├ zones: </span><span class="tv">[2,3,4,5] AIRSIDE</span></div>
+        <div><span class="tp"> └ expires: </span><span class="ts">2027-08-15 ✓</span></div>
+        <div>&nbsp;</div>
+        <div><span class="tc">pattern.analyze </span><span class="tv">user_id=8821</span></div>
+        <div><span class="tp"> ├ access_history: </span><span class="ts">142 entries</span></div>
+        <div><span class="tp"> ├ anomaly_score: </span><span class="ts">LOW (0.02)</span></div>
+        <div><span class="tp"> └ pattern: </span><span class="ts">NORMAL</span></div>
+        <div>&nbsp;</div>
+        <div><span class="tc">risk.score </span><span class="tv">session_9821</span></div>
+        <div><span class="tp"> ├ credential: </span><span class="ts">VALID ✓</span></div>
+        <div><span class="tp"> ├ zone_match: </span><span class="ts">TRUE ✓</span></div>
+        <div><span class="tp"> ├ risk_score: </span><span class="ts">12/100 · LOW</span></div>
+        <div><span class="tp"> └ action: </span><span class="ts">✓ AUTHORIZED</span></div>
+        <div>&nbsp;</div>
+        <div><span class="tc">→ </span><span class="tp">awaiting next event </span><span class="tb"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PLATFORMS ═══════════════════════════════════════════ -->
+<section id="platforms">
+  <div class="plat-header r">
+    <span class="s-tag" data-es="// Cuatro Plataformas · Un Ecosistema" data-en="// Four Platforms · One Ecosystem">// Cuatro Plataformas · Un Ecosistema</span>
+    <h2 class="s-h" data-es="Elige tu módulo <span class='hi'>de inteligencia</span>" data-en="Choose your <span class='hi'>intelligence</span> module">Elige tu módulo <span class="hi">de inteligencia</span></h2>
+    <p class="s-sub" data-es="Cada plataforma funciona de forma autónoma e integrable. Combínalas para cobertura total — o comienza con la que más necesitas hoy." data-en="Each platform works autonomously and is integrable. Combine them for full coverage — or start with the one you need most today.">Cada plataforma funciona de forma autónoma e integrable. Combínalas para cobertura total — o comienza con la que más necesitas hoy.</p>
+  </div>
+
+  <div class="plat-cards">
+
+    <!-- ── AVSEC ── -->
+    <div class="pc featured r scale" style="transition-delay:.05s">
+      <div class="pc-top-bar blue"></div>
+      <div class="pc-badge-wrap"><span class="pc-badge popular">⭐ Más Popular</span></div>
+      <div class="pc-head">
+        <span class="pc-emoji">🛡️</span>
+        <span class="pc-label blue" data-es="Plataforma 1 · AVSEC" data-en="Platform 1 · AVSEC">Plataforma 1 · AVSEC</span>
+        <h3 class="pc-title" data-es="Seguridad Aeroportuaria IA" data-en="AI Airport Security">Seguridad Aeroportuaria IA</h3>
+        <p class="pc-desc" data-es="IA aplicada a Accesos, Aeronaves, Perímetros, Puentes y Rampa. Detecta anomalías, calcula Risk Scores y genera alertas automáticas en tiempo real." data-en="AI applied to Access Control, Aircraft, Perimeters, Bridges and Ramp. Detects anomalies, calculates Risk Scores and generates automatic alerts in real time.">IA aplicada a Accesos, Aeronaves, Perímetros, Puentes y Rampa. Detecta anomalías, calcula Risk Scores y genera alertas automáticas en tiempo real.</p>
+      </div>
+      <div class="pc-feats">
+        <div class="pc-feat"><span class="pf-icon">🔑</span><div class="pf-body"><strong data-es="Control de Accesos con IA" data-en="AI Access Control">Control de Accesos con IA</strong><span data-es="Vision AI de credenciales + validación de vigencia + Risk Score automático" data-en="Credential Vision AI + validity validation + automatic Risk Score">Vision AI de credenciales + validación de vigencia + Risk Score automático</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">✈️</span><div class="pf-body"><strong data-es="Inspección de Aeronave · 12 Zonas" data-en="Aircraft Inspection · 12 Zones">Inspección de Aeronave · 12 Zonas</strong><span data-es="Photo QA por IA + scoring de completitud + hallazgos guiados" data-en="AI Photo QA + completeness scoring + guided findings">Photo QA por IA + scoring de completitud + hallazgos guiados</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🔭</span><div class="pf-body"><strong data-es="Vigilancia de Perímetros" data-en="Perimeter Surveillance">Vigilancia de Perímetros</strong><span data-es="Geofence + detección de patrones anómalos + alerta a supervisor" data-en="Geofence + anomalous pattern detection + supervisor alert">Geofence + detección de patrones anómalos + alerta automática</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🚶</span><div class="pf-body"><strong data-es="Módulo Puentes · CP1–CP13" data-en="Bridge Module · CP1–CP13">Módulo Puentes · CP1–CP13</strong><span data-es="Time analysis + conteo PAX asistido por IA + predicción de demoras" data-en="Time analysis + AI-assisted PAX count + delay prediction">Time analysis + conteo PAX por IA + predicción de demoras</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">📦</span><div class="pf-body"><strong data-es="Rampa · 18–22 Checkpoints" data-en="Ramp · 18–22 Checkpoints">Rampa · 18–22 Checkpoints</strong><span data-es="Chain of custody IA + timer con alerta ámbar + reporte automático" data-en="AI chain of custody + amber alert timer + auto report">Chain of custody IA + timer ámbar + reporte automático</span></div></div>
+      </div>
+      <div class="pc-ai-note">
+        🧠 <strong data-es="IA detecta:" data-en="AI detects:">IA detecta:</strong> <span data-es="patrones de acceso reincidente, brechas en chain of custody, foto de evidencia de baja calidad y demoras anómalas entre checkpoints." data-en="repeat access patterns, chain of custody gaps, low-quality evidence photos and anomalous delays between checkpoints.">patrones de acceso reincidente, brechas en cadena de custodia y demoras anómalas entre checkpoints.</span>
+      </div>
+      <div class="pc-cta">
+        <a href="login.html" class="pc-btn try-blue">⚡ <span data-es="Probar ahora" data-en="Try Now">Probar ahora</span></a>
+        <a href="#lead" <a href="#" class="pc-btn primary" onclick="openDemo('avsec');return false;">▶ <span data-es="Ver Demo AVSEC →" data-en="Watch AVSEC Demo →">Ver Demo AVSEC →</span></a>
+      </div>
+    </div>
+
+    <!-- ── GROUND HANDLING ── -->
+    <div class="pc r scale" style="transition-delay:.12s">
+      <div class="pc-top-bar amber"></div>
+      <div class="pc-head">
+        <span class="pc-emoji">🔧</span>
+        <span class="pc-label amber" data-es="Plataforma 2 · Ground" data-en="Platform 2 · Ground">Plataforma 2 · Ground</span>
+        <h3 class="pc-title" data-es="Ground Handling IA" data-en="AI Ground Handling">Ground Handling IA</h3>
+        <p class="pc-desc" data-es="Digitaliza y audita todas las operaciones de rampa y servicios en tierra. IA que monitorea SLAs, verifica GSE autorizado y predice retrasos antes de que ocurran." data-en="Digitize and audit all ramp operations and ground services. AI that monitors SLAs, verifies authorized GSE and predicts delays before they occur.">Digitaliza y audita todas las operaciones de rampa y servicios en tierra. IA que monitorea SLAs, verifica GSE y predice retrasos antes de que ocurran.</p>
+      </div>
+      <div class="pc-feats">
+        <div class="pc-feat"><span class="pf-icon">⏱️</span><div class="pf-body"><strong data-es="Timer IA + Predicción de Retraso" data-en="AI Timer + Delay Prediction">Timer IA + Predicción de Retraso</strong><span data-es="Alerta predictiva antes de exceder SLA — basada en históricos por aerolínea" data-en="Predictive alert before exceeding SLA — based on airline historical data">Alerta predictiva antes de exceder SLA — basada en históricos</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🚗</span><div class="pf-body"><strong data-es="Verificación GSE Automática" data-en="Automatic GSE Verification">Verificación GSE Automática</strong><span data-es="IA reconoce placa del vehículo y verifica autorización para esa puerta" data-en="AI recognizes vehicle plate and verifies authorization for that gate">IA reconoce placa y verifica autorización por puerta</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🍽️</span><div class="pf-body"><strong data-es="Catering · Agua · Limpieza · Waste" data-en="Catering · Water · Cleaning · Waste">Catering · Agua · Limpieza · Waste</strong><span data-es="Registro de cada servicio con foto obligatoria, proveedor y tiempo real vs SLA" data-en="Log of each service with mandatory photo, provider and actual vs SLA time">Registro con foto, proveedor y tiempo real vs SLA contratado</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">📊</span><div class="pf-body"><strong data-es="SLA Scoring por Proveedor" data-en="SLA Scoring by Provider">SLA Scoring por Proveedor</strong><span data-es="Reportes automáticos de cumplimiento enviados al gestor de contratos" data-en="Automatic compliance reports sent to contract manager">Reportes automáticos al gestor de contratos por vuelo</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">⛓️</span><div class="pf-body"><strong data-es="Chain of Custody de Carga IA" data-en="AI Cargo Chain of Custody">Chain of Custody de Carga IA</strong><span data-es="Detecta brechas en secuencia de checkpoints antes del pushback" data-en="Detects checkpoint sequence gaps before pushback">Detecta brechas en secuencia antes del pushback</span></div></div>
+      </div>
+      <div class="pc-ai-note amber">
+        🧠 <strong data-es="IA detecta:" data-en="AI detects:">IA detecta:</strong> <span data-es="proveedores que incumplen SLA de forma sistemática, combinaciones inusuales de servicios y vehículos no autorizados en rampa." data-en="providers that systematically fail SLA, unusual service combinations and unauthorized vehicles on the ramp.">proveedores con incumplimiento sistemático de SLA y vehículos no autorizados.</span>
+      </div>
+      <div class="pc-cta">
+        <a href="login.html" class="pc-btn try-amber">⚡ <span data-es="Probar ahora" data-en="Try Now">Probar ahora</span></a>
+<a href="#" class="pc-btn primary" onclick="openDemo('ground');return false;">▶ <span data-es="Ver Demo GH →" data-en="Watch GH Demo →">Ver GH Demo →</span></a>     
+      </div>
+    </div>
+
+    <!-- ── PRM / SILLAS ── -->
+    <div class="pc r scale" style="transition-delay:.2s">
+      <div class="pc-top-bar green"></div>
+      <div class="pc-badge-wrap"><span class="pc-badge new">🌟 IATA RP 1739</span></div>
+      <div class="pc-head">
+        <span class="pc-emoji">♿</span>
+        <span class="pc-label green" data-es="Plataforma 3 · PRM" data-en="Platform 3 · PRM">Plataforma 3 · PRM</span>
+        <h3 class="pc-title" data-es="Asistencia PRM con IA" data-en="AI PRM Assistance">Asistencia PRM con IA</h3>
+        <p class="pc-desc" data-es="La IA extrae solicitudes PRM del manifiesto, asigna personal y traza el recorrido completo de cada pasajero con movilidad reducida. Cumplimiento IATA RP 1739." data-en="AI extracts PRM requests from manifest, assigns staff and traces the complete journey of every passenger with reduced mobility. IATA RP 1739 compliant.">IA que extrae PRM del manifiesto, asigna personal y traza el recorrido de cada pasajero con movilidad reducida. Cumplimiento IATA RP 1739.</p>
+      </div>
+      <div class="pc-feats">
+        <div class="pc-feat"><span class="pf-icon">📋</span><div class="pf-body"><strong data-es="Extracción IA del Manifiesto" data-en="AI Manifest Extraction">Extracción IA del Manifiesto</strong><span data-es="WCHR, WCHS, WCHC, DEAF, BLND extraídos automáticamente del SSR" data-en="WCHR, WCHS, WCHC, DEAF, BLND automatically extracted from SSR">WCHR, WCHS, WCHC, DEAF, BLND extraídos automáticamente</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">👥</span><div class="pf-body"><strong data-es="Asignación Inteligente de Personal" data-en="Intelligent Staff Assignment">Asignación Inteligente de Personal</strong><span data-es="IA optimiza asignaciones por disponibilidad, distancia y categoría PRM" data-en="AI optimizes assignments by availability, distance and PRM category">IA optimiza por disponibilidad, distancia y categoría del pasajero</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🗺️</span><div class="pf-body"><strong data-es="Trazabilidad Total · Sala → Asiento" data-en="Full Traceability · Lounge → Seat">Trazabilidad Total · Sala → Asiento</strong><span data-es="Cada hito del recorrido con foto obligatoria y timestamp exacto" data-en="Every journey milestone with mandatory photo and exact timestamp">Cada hito con foto obligatoria y timestamp exacto</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">⏰</span><div class="pf-body"><strong data-es="Alerta de Tiempo de Espera" data-en="Wait Time Alert">Alerta de Tiempo de Espera</strong><span data-es="IA alerta si el tiempo de espera supera el umbral configurado por aerolínea" data-en="AI alerts if wait time exceeds the configured airline threshold">IA alerta si supera umbral configurado por aerolínea</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">📜</span><div class="pf-body"><strong data-es="Reporte IATA RP 1739 Automático" data-en="Automatic IATA RP 1739 Report">Reporte IATA RP 1739 Automático</strong><span data-es="Generado y enviado a la aerolínea al cierre del vuelo" data-en="Generated and sent to the airline at flight close">Generado y enviado a la aerolínea al cierre del vuelo</span></div></div>
+      </div>
+      <div class="pc-ai-note green">
+        🧠 <strong data-es="IA detecta:" data-en="AI detects:">IA detecta:</strong> <span data-es="pasajeros PRM no asistidos, tiempos de espera excesivos y optimiza rutas de traslado en tiempo real." data-en="unattended PRM passengers, excessive wait times and optimizes transfer routes in real time.">pasajeros PRM no asistidos y optimiza rutas de traslado en tiempo real.</span>
+      </div>
+      <div class="pc-cta">
+        <a href="login.html" class="pc-btn try-green">⚡ <span data-es="Probar ahora" data-en="Try Now">Probar ahora</span></a>
+<a href="#" class="pc-btn primary" onclick="openDemo('whc');return false;">▶ <span data-es="Ver Demo Sillas Ruedas →" data-en="Watch WHC Demo →">Ver Demo Sillas Ruedas →</span></a>      </div>
+    </div>
+
+    <!-- ── METAHUMAN ── NEW PLATFORM ── -->
+<!-- ── METAHUMAN ── PASSENGER EXPERIENCE ── -->
+    <div class="pc r scale" style="transition-delay:.28s">
+      <div class="pc-top-bar violet"></div>
+      <div class="pc-badge-wrap"><span class="pc-badge metahuman">✨ Nuevo</span></div>
+      <div class="pc-head">
+        <span class="pc-emoji">🤖</span>
+        <span class="pc-label violet" data-es="Plataforma 4 · MetaHuman" data-en="Platform 4 · MetaHuman">Plataforma 4 · MetaHuman</span>
+        <h3 class="pc-title" data-es="Experiencia de Pasajero con IA" data-en="AI Passenger Experience">Experiencia de Pasajero con IA</h3>
+        <p class="pc-desc" data-es="Agente MetaHuman que acompaña al pasajero desde el check-in hasta el abordaje — digitalizando documentos, gestionando gates y orquestando servicios VIP Lounge con IA generativa." data-en="MetaHuman agent that accompanies the passenger from check-in to boarding — digitalizing documents, managing gates and orchestrating VIP Lounge services with generative AI.">Agente IA que acompaña al pasajero desde check-in hasta abordaje — documentos, gates y servicios VIP Lounge en un solo ecosistema.</p>
+      </div>
+ 
+      <!-- Sub-module tabs visual -->
+      <div style="display:flex;gap:6px;padding:0 22px 14px;flex-wrap:wrap">
+        <span style="font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--violet-soft);color:var(--violet);font-weight:700;border:1px solid rgba(124,58,237,.2)">🧳 Check-in</span>
+        <span style="font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--violet-soft);color:var(--violet);font-weight:700;border:1px solid rgba(124,58,237,.2)">🚪 Gates</span>
+        <span style="font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--violet-soft);color:var(--violet);font-weight:700;border:1px solid rgba(124,58,237,.2)">🥂 VIP Lounge</span>
+      </div>
+ 
+      <div class="pc-feats">
+        <div class="pc-feat"><span class="pf-icon">🧳</span><div class="pf-body"><strong data-es="Check-in Inteligente con IA" data-en="AI Smart Check-in">Check-in Inteligente con IA</strong><span data-es="Validación de documentos, pasaportes y visas por Vision AI · pase de abordar digital · asignación de asientos · equipaje + exceso · asistencia especial WCHR/BLND/DEAF" data-en="Document, passport and visa validation by Vision AI · digital boarding pass · seat assignment · baggage + excess · WCHR/BLND/DEAF special assistance">Documentos + pasaportes por Vision AI · boarding pass · asientos · equipaje · asistencia especial</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🚪</span><div class="pf-body"><strong data-es="Gestión de Gates · Boarding IA" data-en="Gate Management · AI Boarding">Gestión de Gates · Boarding IA</strong><span data-es="Escaneo de boarding pass por IA · verificación de puerta asignada · control de tiempos de abordaje · predicción de demoras · alerta de pasajeros faltantes" data-en="AI boarding pass scan · assigned gate verification · boarding time control · delay prediction · missing passenger alert">Escaneo IA de boarding pass · verificación de puerta · tiempos + predicción de demoras · pasajeros faltantes</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🥂</span><div class="pf-body"><strong data-es="VIP Lounge · Acceso y Servicios IA" data-en="VIP Lounge · AI Access & Services">VIP Lounge · Acceso y Servicios IA</strong><span data-es="Validación automática de elegibilidad (tarjeta, clase, membresía) · fast track · reserva de servicios: masajes, sala silenciosa, restaurante, spa — gestionados por el MetaHuman" data-en="Automatic eligibility validation (card, class, membership) · fast track · service booking: massage, quiet room, restaurant, spa — managed by MetaHuman">Elegibilidad automática · fast track · reserva de masaje, sala silenciosa, restaurante y spa</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">🌐</span><div class="pf-body"><strong data-es="Asistente Multilenguaje · Voz + Texto" data-en="Multilingual Assistant · Voice + Text">Asistente Multilenguaje · Voz + Texto</strong><span data-es="El MetaHuman conversa con el pasajero en su idioma nativo · ES, EN, PT, FR, ZH — voz y chat simultáneos" data-en="MetaHuman converses with passenger in their native language · ES, EN, PT, FR, ZH — voice and chat simultaneously">Conversa en ES, EN, PT, FR, ZH — voz y chat simultáneos sin fricción</span></div></div>
+        <div class="pc-feat"><span class="pf-icon">📊</span><div class="pf-body"><strong data-es="NPS + Satisfacción en Tiempo Real" data-en="Real-time NPS + Satisfaction">NPS + Satisfacción en Tiempo Real</strong><span data-es="La IA mide satisfacción por interacción, detecta fricción y escala incidentes de experiencia a supervisión" data-en="AI measures satisfaction per interaction, detects friction and escalates experience incidents to supervision">Mide satisfacción por interacción y escala fricción a supervisión automáticamente</span></div></div>
+      </div>
+      <div class="pc-ai-note violet">
+        🧠 <strong data-es="MetaHuman detecta:" data-en="MetaHuman detects:">MetaHuman detecta:</strong> <span data-es="documentos próximos a vencer, pasajeros con necesidades especiales no registradas, colas anómalas en check-in y tiempos de espera en lounge que superan el umbral de NPS." data-en="documents about to expire, passengers with unregistered special needs, anomalous check-in queues and lounge wait times that exceed NPS threshold.">documentos por vencer, necesidades especiales sin registrar, colas anómalas y tiempos en lounge que afectan NPS.</span>
+      </div>
+      <div class="pc-cta">
+        <a href="login.html" class="pc-btn try-violet">⚡ <span data-es="Probar ahora" data-en="Try Now">Probar ahora</span></a>
+        <a href="metahuman.html" class="pc-btn demo-violet">🤖 <span data-es="Explorar MetaHuman →" data-en="Explore MetaHuman →">Explorar MetaHuman →</span></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ VALUE / AI DEEP ══════════════════════════════════════ -->
+<section id="value">
+  <div class="value-grid" style="max-width:1140px;margin:0 auto">
+
+    <div class="value-vis">
+      <div class="vcard r left" style="transition-delay:.05s">
+        <div class="vcard-icon">🧠</div>
+        <div class="vcard-body">
+          <span class="vcard-tag b" data-es="Detección IA" data-en="AI Detection">Detección IA</span>
+          <div class="vcard-title" data-es="Patrón detectado: acceso reincidente" data-en="Pattern detected: repeat access">Patrón detectado: acceso reincidente</div>
+          <div class="vcard-desc" data-es="El mismo usuario intentó acceder con credencial vencida 3 veces en 7 días. Escalación automática generada." data-en="Same user attempted access with expired credential 3 times in 7 days. Automatic escalation generated.">El mismo usuario intentó acceder con credencial vencida 3 veces en 7 días. Escalación automática.</div>
+        </div>
+      </div>
+      <div class="vcard r left" style="transition-delay:.12s;margin-left:28px">
+        <div class="vcard-icon">⚡</div>
+        <div class="vcard-body">
+          <span class="vcard-tag a" data-es="Predicción" data-en="Prediction">Predicción</span>
+          <div class="vcard-title" data-es="IB7832 → +18 min sobre SLA" data-en="IB7832 → +18 min over SLA">IB7832 → +18 min sobre SLA</div>
+          <div class="vcard-desc" data-es="Basado en histórico de catering para ese proveedor, la IA predijo la demora 12 minutos antes." data-en="Based on catering history for that provider, AI predicted the delay 12 minutes in advance.">Basado en histórico del proveedor, la IA predijo la demora 12 minutos antes de que ocurriera.</div>
+        </div>
+      </div>
+      <div class="vcard r left" style="transition-delay:.19s">
+        <div class="vcard-icon">📸</div>
+        <div class="vcard-body">
+          <span class="vcard-tag g" data-es="Photo QA IA" data-en="AI Photo QA">Photo QA IA</span>
+          <div class="vcard-title" data-es="Foto de evidencia rechazada · blur" data-en="Evidence photo rejected · blur">Foto de evidencia rechazada · blur</div>
+          <div class="vcard-desc" data-es="La IA detectó blur excesivo en la foto de Zone 06. Solicitó retoma automáticamente antes de continuar." data-en="AI detected excessive blur in Zone 06 photo. Automatically requested a retake before proceeding.">La IA detectó blur excesivo en la foto de Zone 06 y solicitó retoma automáticamente.</div>
+        </div>
+      </div>
+      <div class="vcard r left" style="transition-delay:.26s;margin-left:14px">
+        <div class="vcard-icon">🎯</div>
+        <div class="vcard-body">
+          <span class="vcard-tag g" data-es="Score IA" data-en="AI Score">Score IA</span>
+          <div class="vcard-title" data-es="Operación completa · Score 96/100" data-en="Complete operation · Score 96/100">Operación completa · Score 96/100</div>
+          <div class="vcard-desc" data-es="100% de zonas cubiertas. Calidad fotográfica 94%. Reporte enviado a gerencia automáticamente." data-en="100% zones covered. 94% photo quality. Report automatically sent to management.">100% zonas cubiertas. Calidad 94%. Reporte enviado a gerencia automáticamente.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="value-text r right">
+      <span class="s-tag" data-es="// Por qué Aero AI es diferente" data-en="// Why Aero AI is different">// Por qué Aero AI es diferente</span>
+      <h2 class="s-h">
+        <span data-es="No digitalizamos" data-en="We don't">No digitalizamos</span><br>
+        <span class="hi" data-es="formularios." data-en="digitize">formularios.</span><br>
+        <span data-es="Aplicamos IA." data-en="forms. We apply AI.">Aplicamos IA.</span>
+      </h2>
+      <p data-es="Un sistema que solo registra datos no protege a nadie. La diferencia entre Aero AI y cualquier otro software de seguridad aeroportuaria es que nuestra IA trabaja activamente entre operaciones: busca patrones, compara con históricos y genera inteligencia que los humanos no podrían procesar manualmente." data-en="A system that only records data doesn't protect anyone. The difference between Aero AI and any other airport security software is that our AI actively works between operations: searches for patterns, compares with historical data and generates intelligence that humans couldn't process manually.">Un sistema que solo registra datos no protege a nadie. Aero AI trabaja activamente entre operaciones: busca patrones, compara con históricos y genera inteligencia que los humanos no podrían procesar manualmente.</p>
+      <p data-es="El resultado: aeropuertos con menos incidentes, aerolíneas con menos multas y officials con respaldo documental completo ante cualquier auditoría." data-en="The result: airports with fewer incidents, airlines with fewer fines and officers with complete documentary backup for any audit.">El resultado: aeropuertos con menos incidentes, aerolíneas con menos multas y officials con respaldo documental ante cualquier auditoría.</p>
+      <div class="value-points">
+        <div class="vp"><div class="vp-icon">⚠️</div><div class="vp-body"><strong data-es="Sin Aero AI: Riesgo de multas $500K+" data-en="Without Aero AI: Fine risk $500K+">Sin Aero AI: Riesgo de multas $500K+</strong><span data-es="Las autoridades internacionales pueden multar por incidente no documentado según OACI Anexo 17" data-en="International authorities can fine per undocumented incident under ICAO Annex 17">Autoridades internacionales pueden multar por incidente no documentado según OACI Anexo 17</span></div></div>
+        <div class="vp"><div class="vp-icon">✅</div><div class="vp-body"><strong data-es="Con Aero AI: Trazabilidad 100% auditada" data-en="With Aero AI: 100% audited traceability">Con Aero AI: Trazabilidad 100% auditada</strong><span data-es="Cada operación: foto, timestamp, firma digital, Risk Score. Cadena de custodia inmutable." data-en="Every operation: photo, timestamp, digital signature, Risk Score. Immutable chain of custody.">Cada operación: foto, timestamp, firma digital, Risk Score. Cadena de custodia inmutable.</span></div></div>
+        <div class="vp"><div class="vp-icon">🚀</div><div class="vp-body"><strong data-es="Instalable hoy · PWA sin infraestructura" data-en="Installable today · PWA with no infrastructure">Instalable hoy · PWA sin infraestructura</strong><span data-es="Funciona desde el móvil del oficial. Sin servidores propios. Arquitectura serverless por diseño." data-en="Runs from the officer's mobile. No proprietary servers. Serverless architecture by design.">Funciona desde el móvil del oficial. Sin servidores propios. Serverless por diseño.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═════════════════════════════════════════ -->
+<section id="how">
+  <div class="how-header r">
+    <span class="s-tag" data-es="// Cómo funciona" data-en="// How it works">// Cómo funciona</span>
+    <h2 class="s-h" data-es="De la operación al <span class='hi'>insight IA</span>" data-en="From operation to <span class='hi'>AI insight</span>">De la operación al <span class="hi">insight IA</span></h2>
+    <p class="s-sub" data-es="Un flujo diseñado para el oficial en campo — sin fricción, sin papel, con inteligencia que trabaja en segundo plano." data-en="A flow designed for the field officer — frictionless, paperless, with intelligence working in the background.">Un flujo diseñado para el oficial en campo — sin fricción, sin papel, con inteligencia trabajando en segundo plano.</p>
+  </div>
+  <div class="steps" style="max-width:1140px;margin:0 auto">
+    <div class="step-c r scale" style="transition-delay:.05s">
+      <div class="step-num">01</div>
+      <span class="step-emoji">📱</span>
+      <div class="step-title" data-es="Login & Vuelo" data-en="Login & Flight">Login & Vuelo</div>
+      <p class="step-desc" data-es="El oficial accede con credenciales únicas. Selecciona el vuelo y la operación — el sistema precarga el checklist de IA correspondiente." data-en="The officer logs in with unique credentials. Selects flight and operation — the system preloads the corresponding AI checklist.">El oficial accede y selecciona el vuelo. El sistema precarga el checklist de IA correspondiente.</p>
+    </div>
+    <div class="step-c r scale" style="transition-delay:.12s">
+      <div class="step-num">02</div>
+      <span class="step-emoji">🤖</span>
+      <div class="step-title" data-es="IA Guía la Operación" data-en="AI Guides the Operation">IA Guía la Operación</div>
+      <p class="step-desc" data-es="En cada checkpoint, la IA valida la foto, extrae datos de credenciales y confirma calidad antes de avanzar. No hay forma de saltar un paso crítico." data-en="At each checkpoint, AI validates the photo, extracts credential data and confirms quality before advancing. There's no way to skip a critical step.">En cada paso, la IA valida la foto, extrae datos y confirma calidad. No se puede saltar un paso crítico.</p>
+    </div>
+    <div class="step-c r scale" style="transition-delay:.19s">
+      <div class="step-num">03</div>
+      <span class="step-emoji">🔍</span>
+      <div class="step-title" data-es="Análisis en Tiempo Real" data-en="Real-Time Analysis">Análisis en Tiempo Real</div>
+      <p class="step-desc" data-es="Mientras la operación avanza, la IA calcula el Risk Score dinámico, detecta anomalías y envía alertas a supervisión si hay desviaciones." data-en="As the operation progresses, AI calculates the dynamic Risk Score, detects anomalies and sends alerts to supervision if there are deviations.">La IA calcula el Risk Score, detecta anomalías y envía alertas a supervisión en tiempo real.</p>
+    </div>
+    <div class="step-c r scale" style="transition-delay:.26s">
+      <div class="step-num">04</div>
+      <span class="step-emoji">📧</span>
+      <div class="step-title" data-es="Reporte Automático" data-en="Automatic Report">Reporte Automático</div>
+      <p class="step-desc" data-es="Al firmar el cierre, el sistema genera y envía automáticamente el reporte completo con fotos, score de IA, firma digital y toda la evidencia." data-en="Upon signing close, the system automatically generates and sends the complete report with photos, AI score, digital signature and all evidence.">Al firmar, el sistema genera y envía el reporte completo con fotos, score de IA y firma digital.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NUMBERS ══════════════════════════════════════════════ -->
+<section id="numbers">
+  <div class="num-inner">
+    <div class="num-header r">
+      <span class="s-tag">// Impacto real</span>
+      <h2 class="s-h" style="color:#fff" data-es="Por qué los aeropuertos <span class='hi'>eligen Aero AI</span>" data-en="Why airports <span class='hi'>choose Aero AI</span>">Por qué los aeropuertos <span class="hi">eligen Aero AI</span></h2>
+    </div>
+    <div class="num-grid">
+      <div class="num-card r scale" style="transition-delay:.05s">
+        <span class="num-icon">✈️</span>
+        <span class="num-val"><span class="num-count" data-target="58">0</span><span class="num-suf">+</span></span>
+        <span class="num-label" data-es="Checkpoints totales por operación completa" data-en="Total checkpoints per complete operation">Checkpoints totales por operación completa</span>
+      </div>
+      <div class="num-card r scale" style="transition-delay:.1s">
+        <span class="num-icon">⚡</span>
+        <span class="num-val"><span class="num-count" data-target="98">0</span><span class="num-suf">%</span></span>
+        <span class="num-label" data-es="Precisión del motor Vision AI de credenciales" data-en="Credential Vision AI engine accuracy">Precisión del motor Vision AI de credenciales</span>
+      </div>
+      <div class="num-card r scale" style="transition-delay:.15s">
+        <span class="num-icon">🛡️</span>
+        <span class="num-val"><span class="num-count" data-target="100">0</span><span class="num-suf">%</span></span>
+        <span class="num-label" data-es="Trazabilidad con firma digital y evidencia fotográfica" data-en="Traceability with digital signature and photo evidence">Trazabilidad con firma digital y evidencia fotográfica</span>
+      </div>
+      <div class="num-card r scale" style="transition-delay:.2s">
+        <span class="num-icon">⏱️</span>
+        <span class="num-val">&lt;<span class="num-count" data-target="1">0</span><span class="num-suf">s</span></span>
+        <span class="num-label" data-es="Respuesta del motor de IA por checkpoint" data-en="AI engine response time per checkpoint">Respuesta del motor de IA por checkpoint</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICING ══════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="pricing-header r">
+    <span class="s-tag" data-es="// Planes de Suscripción" data-en="// Subscription Plans">// Planes de Suscripción</span>
+    <h2 class="s-h" data-es="Empieza con <span class='hi'>una plataforma.</span><br>Escala a las cuatro." data-en="Start with <span class='hi'>one platform.</span><br>Scale to all four.">Empieza con <span class="hi">una plataforma.</span><br>Escala a las cuatro.</h2>
+    <p class="s-sub" data-es="Sin contratos anuales obligatorios. Sin costo de implementación. Sin infraestructura propia. Solo activa, úsala y crece." data-en="No mandatory annual contracts. No implementation cost. No proprietary infrastructure. Just activate, use it and grow.">Sin contratos anuales obligatorios. Sin costo de implementación. Sin infraestructura propia. Solo activa, úsala y crece.</p>
+  </div>
+
+  <div class="pricing-toggle r">
+    <div class="ptgl">
+      <button class="ptgl-btn on" id="ptMensual" onclick="setPricing('mensual')" data-es="Mensual" data-en="Monthly">Mensual</button>
+      <button class="ptgl-btn" id="ptAnual" onclick="setPricing('anual')" data-es="Anual" data-en="Annual">Anual</button>
+    </div>
+    <span class="save-badge" data-es="🎉 Ahorra 2 meses" data-en="🎉 Save 2 months">🎉 Ahorra 2 meses</span>
+  </div>
+
+  <div class="price-cards">
+
+    <!-- AVSEC plan -->
+    <div class="prcard featured-pr r scale" style="transition-delay:.05s">
+      <div class="prcard-accent b"></div>
+      <div class="prcard-body">
+        <div class="pr-top">
+          <span class="pr-platform b" data-es="AVSEC Platform" data-en="AVSEC Platform">AVSEC Platform</span>
+          <span class="pr-badge" data-es="⭐ Popular" data-en="⭐ Popular">⭐ Popular</span>
+        </div>
+        <span class="pr-emoji">🛡️</span>
+        <div class="pr-name" data-es="Seguridad Aeroportuaria IA" data-en="AI Airport Security">Seguridad Aeroportuaria IA</div>
+        <div class="pr-tagline" data-es="Para aeropuertos, aerolíneas y operadores AVSEC que necesitan trazabilidad completa con IA." data-en="For airports, airlines and AVSEC operators who need complete AI-powered traceability.">Para aeropuertos, aerolíneas y operadores AVSEC que necesitan trazabilidad completa con IA.</div>
+        <div class="pr-price-wrap">
+          <div class="pr-price-label" data-es="Acceso a la plataforma" data-en="Platform access">Acceso a la plataforma</div>
+          <div class="pr-price-cta" data-es="💬 Precio según volumen operacional" data-en="💬 Pricing by operational volume">💬 Precio según volumen operacional</div>
+          <div class="pr-price-note" data-es="Demo gratuita incluida · Sin compromiso" data-en="Free demo included · No commitment">Demo gratuita incluida · Sin compromiso</div>
+        </div>
+        <div class="pr-feats">
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <div><strong data-es="Módulos:" data-en="Modules:">Módulos:</strong> <span data-es="Accesos + Aeronave + Perímetros + Puentes + Rampa" data-en="Access + Aircraft + Perimeters + Bridges + Ramp">Accesos + Aeronave + Perímetros + Puentes + Rampa</span></div></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="IA Risk Scoring en tiempo real" data-en="Real-time AI Risk Scoring">IA Risk Scoring en tiempo real</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Vision AI de credenciales con detección de patrones" data-en="Credential Vision AI with pattern detection">Vision AI de credenciales con detección de patrones</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Reportes automáticos por email" data-en="Automatic email reports">Reportes automáticos por email</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Dashboard de supervisión en vivo" data-en="Live supervision dashboard">Dashboard de supervisión en vivo</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="API REST + Webhooks incluidos" data-en="REST API + Webhooks included">API REST + Webhooks incluidos</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="OACI Anexo 17 · Firma biométrica legal" data-en="ICAO Annex 17 · Legal biometric signature">OACI Anexo 17 · Firma biométrica legal</span></div>
+        </div>
+        <a href="#lead" class="pr-cta b" data-es="🛡️ Agendar Demo gratuita →" data-en="🛡️ Request free demo →">🛡️ Agendar Demo gratuita →</a>
+        <div class="pr-guarantee" data-es="✓ Sin contrato · Sin tarjeta de crédito · Demo en 48h" data-en="✓ No contract · No credit card · Demo in 48h">✓ Sin contrato · Sin tarjeta de crédito · Demo en 48h</div>
+      </div>
+    </div>
+
+    <!-- GROUND plan -->
+    <div class="prcard r scale" style="transition-delay:.12s">
+      <div class="prcard-accent a"></div>
+      <div class="prcard-body">
+        <div class="pr-top">
+          <span class="pr-platform a" data-es="Ground Platform" data-en="Ground Platform">Ground Platform</span>
+        </div>
+        <span class="pr-emoji">🔧</span>
+        <div class="pr-name" data-es="Ground Handling IA" data-en="AI Ground Handling">Ground Handling IA</div>
+        <div class="pr-tagline" data-es="Para handlers y operadores de rampa que gestionan múltiples vuelos y proveedores en tierra." data-en="For handlers and ramp operators managing multiple flights and ground providers.">Para handlers y operadores de rampa que gestionan múltiples vuelos y proveedores en tierra.</div>
+        <div class="pr-price-wrap">
+          <div class="pr-price-label" data-es="Acceso a la plataforma" data-en="Platform access">Acceso a la plataforma</div>
+          <div class="pr-price-cta" data-es="💬 Precio según movimientos mensuales" data-en="💬 Pricing by monthly movements">💬 Precio según movimientos mensuales</div>
+          <div class="pr-price-note" data-es="Demo gratuita incluida · Sin compromiso" data-en="Free demo included · No commitment">Demo gratuita incluida · Sin compromiso</div>
+        </div>
+        <div class="pr-feats">
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <div><strong data-es="Módulos:" data-en="Modules:">Módulos:</strong> <span data-es="Rampa + Catering + GSE + Waste + Agua" data-en="Ramp + Catering + GSE + Waste + Water">Rampa + Catering + GSE + Waste + Agua</span></div></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Timer IA con predicción de retraso" data-en="AI timer with delay prediction">Timer IA con predicción de retraso</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Verificación automática de GSE por placa" data-en="Automatic GSE verification by plate">Verificación automática de GSE por placa</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="SLA scoring automático por proveedor" data-en="Automatic SLA scoring by provider">SLA scoring automático por proveedor</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Chain of custody de carga con IA" data-en="AI cargo chain of custody">Chain of custody de carga con IA</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Reportes SLA al gestor de contratos" data-en="SLA reports to contract manager">Reportes SLA al gestor de contratos</span></div>
+        </div>
+        <a href="#lead" class="pr-cta a" data-es="🔧 Agendar Demo gratuita →" data-en="🔧 Request free demo →">🔧 Agendar Demo gratuita →</a>
+        <div class="pr-guarantee" data-es="✓ Sin contrato · Sin tarjeta de crédito · Demo en 48h" data-en="✓ No contract · No credit card · Demo in 48h">✓ Sin contrato · Sin tarjeta de crédito · Demo en 48h</div>
+      </div>
+    </div>
+
+    <!-- PRM plan -->
+    <div class="prcard r scale" style="transition-delay:.2s">
+      <div class="prcard-accent g"></div>
+      <div class="prcard-body">
+        <div class="pr-top">
+          <span class="pr-platform g" data-es="PRM Platform" data-en="PRM Platform">PRM Platform</span>
+        </div>
+        <span class="pr-emoji">♿</span>
+        <div class="pr-name" data-es="Asistencia PRM con IA" data-en="AI PRM Assistance">Asistencia PRM con IA</div>
+        <div class="pr-tagline" data-es="Para aerolíneas y handlers que deben garantizar cumplimiento IATA RP 1739 con trazabilidad completa." data-en="For airlines and handlers that must ensure IATA RP 1739 compliance with complete traceability.">Para aerolíneas y handlers con obligación de cumplimiento IATA RP 1739 y trazabilidad de PRM.</div>
+        <div class="pr-price-wrap">
+          <div class="pr-price-label" data-es="Acceso a la plataforma" data-en="Platform access">Acceso a la plataforma</div>
+          <div class="pr-price-cta" data-es="💬 Precio según pasajeros PRM atendidos" data-en="💬 Pricing by PRM passengers assisted">💬 Precio según pasajeros PRM atendidos</div>
+          <div class="pr-price-note" data-es="Demo gratuita incluida · Sin compromiso" data-en="Free demo included · No commitment">Demo gratuita incluida · Sin compromiso</div>
+        </div>
+        <div class="pr-feats">
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <div><strong data-es="Módulos:" data-en="Modules:">Módulos:</strong> <span data-es="Extracción SSR + Asignación + Trazabilidad" data-en="SSR Extraction + Assignment + Traceability">Extracción SSR + Asignación + Trazabilidad</span></div></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Extracción IA de manifiesto (WCHR, WCHC...)" data-en="AI manifest extraction (WCHR, WCHC...)">Extracción IA de manifiesto (WCHR, WCHC…)</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Asignación inteligente de personal" data-en="Intelligent staff assignment">Asignación inteligente de personal</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Trazabilidad sala → asiento con foto" data-en="Lounge → seat traceability with photo">Trazabilidad sala → asiento con foto</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Reporte IATA RP 1739 automático" data-en="Automatic IATA RP 1739 report">Reporte IATA RP 1739 automático</span></div>
+          <div class="pr-feat"><span class="pr-feat-check">✅</span> <span data-es="Alertas de tiempo de espera por IA" data-en="AI wait time alerts">Alertas de tiempo de espera por IA</span></div>
+        </div>
+        <a href="#lead" class="pr-cta g" data-es="♿ Agendar Demo gratuita →" data-en="♿ Request free demo →">♿ Agendar Demo gratuita →</a>
+        <div class="pr-guarantee" data-es="✓ Sin contrato · Sin tarjeta de crédito · Demo en 48h" data-en="✓ No contract · No credit card · Demo in 48h">✓ Sin contrato · Sin tarjeta de crédito · Demo en 48h</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Enterprise strip -->
+  <div class="enterprise-strip r" style="transition-delay:.3s">
+    <div class="ent-left">
+      <div class="ent-title">🏢 <span data-es="¿Aeropuerto o aerolínea con múltiples operadores?" data-en="Airport or airline with multiple operators?">¿Aeropuerto o aerolínea con múltiples operadores?</span></div>
+      <div class="ent-sub" data-es="Plan Enterprise con las 4 plataformas integradas, API dedicada, onboarding personalizado y SLA garantizado. Hablemos." data-en="Enterprise plan with all 4 integrated platforms, dedicated API, personalized onboarding and guaranteed SLA. Let's talk.">Plan Enterprise con las 4 plataformas integradas, API dedicada, onboarding personalizado y SLA garantizado. Hablemos.</div>
+    </div>
+    <a href="#lead" class="ent-btn" data-es="💼 Hablar con el equipo →" data-en="💼 Talk to the team →">💼 Hablar con el equipo →</a>
+  </div>
+</section>
+
+<!-- ═══ FAQ ══════════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="faq-header r">
+      <span class="s-tag" data-es="// Preguntas frecuentes" data-en="// Frequently asked questions">// Preguntas frecuentes</span>
+      <h2 class="s-h" data-es="Resolvemos tus <span class='hi'>dudas</span>" data-en="We resolve your <span class='hi'>doubts</span>">Resolvemos tus <span class="hi">dudas</span></h2>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Necesito instalar algo en los dispositivos del aeropuerto?" data-en="Do I need to install anything on airport devices?">¿Necesito instalar algo en los dispositivos del aeropuerto?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="No. Aero AI funciona como Progressive Web App (PWA) desde el navegador del móvil del oficial. Se instala en la pantalla de inicio como una app nativa, sin App Store ni infraestructura propia requerida." data-en="No. Aero AI works as a Progressive Web App (PWA) from the officer's mobile browser. It installs on the home screen like a native app, with no App Store or proprietary infrastructure required.">No. Aero AI funciona como Progressive Web App (PWA) desde el navegador del móvil del oficial. Se instala en la pantalla de inicio como una app nativa, sin App Store ni infraestructura propia requerida.</div>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Cómo funciona la detección de patrones de la IA?" data-en="How does AI pattern detection work?">¿Cómo funciona la detección de patrones de la IA?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="El motor de IA analiza el historial de operaciones de cada usuario, vuelo, aerolínea y proveedor. Compara comportamientos actuales con líneas base históricas y detecta desviaciones estadísticas anómalas — como un usuario que intenta acceder repetidamente con credencial vencida o un proveedor que sistemáticamente excede su SLA." data-en="The AI engine analyzes the operation history of each user, flight, airline and provider. It compares current behaviors with historical baselines and detects statistically anomalous deviations — like a user repeatedly attempting access with an expired credential or a provider systematically exceeding their SLA.">El motor analiza el historial de operaciones y compara comportamientos actuales con líneas base históricas para detectar desviaciones estadísticas anómalas como accesos reincidentes o proveedores con incumplimiento sistemático.</div>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Las plataformas cumplen con OACI Anexo 17?" data-en="Do the platforms comply with ICAO Annex 17?">¿Las plataformas cumplen con OACI Anexo 17?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="Sí. Aero AI fue desarrollado bajo los estándares y prácticas recomendadas de la OACI Anexo 17 y los manuales de la DGAC de Costa Rica. Cada operación genera evidencia auditada con firma digital, timestamp criptográfico y cadena de custodia inmutable que cumple los requisitos de validez documental ante autoridades de aviación civil." data-en="Yes. Aero AI was developed under ICAO Annex 17 standards and the DGAC Costa Rica manuals. Each operation generates audited evidence with digital signature, cryptographic timestamp and immutable chain of custody that meets documentary validity requirements before civil aviation authorities.">Sí. Desarrollado bajo OACI Anexo 17 y manuales DGAC Costa Rica. Cada operación genera evidencia auditada con firma digital, timestamp criptográfico y cadena de custodia inmutable.</div>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Puedo integrar Aero AI con mis sistemas actuales?" data-en="Can I integrate Aero AI with my current systems?">¿Puedo integrar Aero AI con mis sistemas actuales?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="Sí. Todas las plataformas incluyen API REST documentada con endpoints para enviar datos, recibir eventos en tiempo real vía webhooks, consultar historial y acceder a todos los KPIs. Puedes integrar Aero AI en tus sistemas de gestión de vuelos, reportes corporativos o cualquier herramienta que soporte REST." data-en="Yes. All platforms include a documented REST API with endpoints to send data, receive real-time events via webhooks, query history and access all KPIs. You can integrate Aero AI into your flight management systems, corporate reports or any REST-supporting tool.">Sí. Todas las plataformas incluyen API REST documentada con webhooks. Puedes integrar con sistemas de gestión de vuelos, reportes corporativos o cualquier herramienta que soporte REST.</div>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Cuánto tiempo toma implementar la plataforma?" data-en="How long does platform implementation take?">¿Cuánto tiempo toma implementar la plataforma?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="La implementación básica toma entre 24 y 72 horas. No se requiere infraestructura propia — la arquitectura es serverless. Creamos los usuarios del aeropuerto, configuramos los destinatarios de reportes y realizamos una sesión de onboarding con el equipo de oficiales. El día 4, ya están operando en producción." data-en="Basic implementation takes 24 to 72 hours. No proprietary infrastructure is required — the architecture is serverless. We create airport users, configure report recipients and conduct an onboarding session with the officers team. By day 4, they're already operating in production.">Implementación básica en 24–72 horas. Sin infraestructura propia. Creamos usuarios, configuramos reportes y hacemos onboarding con el equipo. Al día 4 ya están en producción.</div>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Los datos de las operaciones están seguros?" data-en="Is operations data secure?">¿Los datos de las operaciones están seguros?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="Todos los datos operacionales se almacenan en infraestructura de nube certificada con replicación automática. Las claves de la API de visión artificial (IA) nunca son expuestas al cliente — se procesan exclusivamente server-side. La cadena de custodia digital es inmutable: ningún registro puede ser modificado o eliminado una vez guardado." data-en="All operational data is stored in certified cloud infrastructure with automatic replication. AI vision API keys are never exposed to the client — processed exclusively server-side. The digital chain of custody is immutable: no record can be modified or deleted once saved.">Datos en nube certificada con replicación automática. Claves de IA procesadas server-side exclusivamente. Cadena de custodia inmutable — ningún registro puede ser modificado una vez guardado.</div>
+    </div>
+
+    <div class="faq-item r">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span data-es="¿Qué es el MetaHuman y cómo se diferencia de los otros módulos?" data-en="What is MetaHuman and how does it differ from the other modules?">¿Qué es el MetaHuman y cómo se diferencia de los otros módulos?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-a" data-es="MetaHuman es el agente conversacional de Aero AI — mientras los otros módulos digitalizan procesos operacionales, MetaHuman actúa como copiloto inteligente del oficial: responde preguntas en lenguaje natural sobre procedimientos AVSEC, ayuda durante incidentes en tiempo real y registra cada conversación vinculada al vuelo. Se integra con las otras plataformas para acceder a contexto operacional en vivo." data-en="MetaHuman is Aero AI's conversational agent — while the other modules digitize operational processes, MetaHuman acts as the officer's intelligent copilot: answers natural language questions about AVSEC procedures, assists during real-time incidents and logs every conversation linked to the flight. It integrates with the other platforms to access live operational context.">MetaHuman actúa como copiloto inteligente del oficial: responde preguntas en lenguaje natural sobre procedimientos AVSEC, asiste durante incidentes en tiempo real y registra cada conversación vinculada al vuelo. Se integra con las otras plataformas para contexto operacional en vivo.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ LEAD CAPTURE ═════════════════════════════════════════ -->
+<section id="lead">
+  <div class="lead-eyebrow">🚀 Demo gratuita · 30 minutos · Sin compromiso</div>
+  <h2 class="lead-h r">
+    <span data-es="Activa la IA en" data-en="Activate AI in">Activa la IA en</span><br>
+    <em data-es="tu operación" data-en="your operation">tu operación</em><br>
+    <span data-es="esta semana." data-en="this week.">esta semana.</span>
+  </h2>
+  <p class="lead-sub r" data-es="Muéstranos tu operación y te mostramos cómo Aero AI la transforma en menos de 30 minutos. Cupos de demo limitados." data-en="Show us your operation and we'll show you how Aero AI transforms it in under 30 minutes. Limited demo slots.">Muéstranos tu operación y te mostramos cómo Aero AI la transforma en menos de 30 minutos. Cupos de demo limitados.</p>
+
+  <div class="lead-form r">
+    <div id="formContent">
+      <div class="lead-form-title" data-es="Reserva tu demo gratuita" data-en="Reserve your free demo">Reserva tu demo gratuita</div>
+      <div class="lead-form-sub" data-es="Nuestro equipo de agentes IA te escribirá de inmediato." data-en="Our AI agents team will write to you immediately.">Nuestro equipo de agentes IA te escribirá de inmediato.</div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel" data-es="Nombre" data-en="Name">Nombre</label>
+          <input class="finput" type="text" placeholder="Juan Pérez" id="fNombre">
+        </div>
+        <div class="fgroup">
+          <label class="flabel" data-es="Cargo" data-en="Role">Cargo</label>
+          <input class="finput" type="text" placeholder="Jefe de Seguridad" id="fCargo">
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flabel" data-es="Organización" data-en="Organization">Organización</label>
+        <input class="finput" type="text" placeholder="Aeropuerto / Aerolínea / Handler" id="fOrg">
+      </div>
+      <div class="fgroup">
+        <label class="flabel" data-es="Correo electrónico" data-en="Email address">Correo electrónico</label>
+        <input class="finput" type="email" placeholder="juan@aeropuerto.com" id="fEmail">
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flabel" data-es="Teléfono / WhatsApp" data-en="Phone / WhatsApp">Teléfono / WhatsApp</label>
+          <input class="finput" type="tel" placeholder="+506 8888-0000" id="fTel">
+        </div>
+        <div class="fgroup">
+          <label class="flabel" data-es="Plataforma de interés" data-en="Platform of interest">Plataforma de interés</label>
+          <select class="fselect" id="fPlatform">
+            <option value="" data-es="Seleccionar..." data-en="Select...">Seleccionar...</option>
+            <option value="avsec" data-es="🛡️ AVSEC Platform" data-en="🛡️ AVSEC Platform">🛡️ AVSEC Platform</option>
+            <option value="ground" data-es="🔧 Ground Handling IA" data-en="🔧 Ground Handling AI">🔧 Ground Handling IA</option>
+            <option value="prm" data-es="♿ Asistencia PRM" data-en="♿ PRM Assistance">♿ Asistencia PRM</option>
+            <option value="metahuman" data-es="🤖 MetaHuman IA" data-en="🤖 MetaHuman AI">🤖 MetaHuman IA</option>
+            <option value="all" data-es="💎 Las 4 plataformas" data-en="💎 All 4 platforms">💎 Las 4 plataformas</option>
+          </select>
+        </div>
+      </div>
+      <button class="fsubmit" onclick="submitLead()" data-es="🚀 Agendar Demo gratuita →" data-en="🚀 Reserve my free demo →">🚀 Agendar Demo gratuita →</button>
+      <div class="form-privacy" data-es="🔒 Tus datos no se comparten con terceros. Solo te contactaremos para coordinar la demo." data-en="🔒 Your data is not shared with third parties. We'll only contact you to coordinate the demo.">🔒 Tus datos no se comparten con terceros. Solo te contactaremos para coordinar la demo.</div>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <span class="fs-emoji">🎉</span>
+      <div class="fs-title" data-es="¡Demo reservada!" data-en="Demo reserved!">¡Demo reservada!</div>
+      <div class="fs-sub" data-es="Tu solicitud fue recibida. Nuestro equipo de agentes IA te escribirá de inmediato." data-en="Your request was received. Our AI agents team will write to you immediately.">Tu solicitud fue recibida. Nuestro equipo de agentes IA te escribirá de inmediato.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="color:#fff">AERO<em>AI</em><span class="logo-tag">v4</span></a>
+        <p data-es="Plataforma de inteligencia artificial diseñada para seguridad aeroportuaria, ground handling y asistencia PRM. Bajo estandares OACI Anexo 17 & IATA RP 1739." data-en="Artificial intelligence platform designed for airport security, ground handling and PRM assistance. Designed by ICAO Annex 17 and IATA Standards.">Plataforma de IA diseñada para seguridad aeroportuaria, ground handling y asistencia PRM. Bajo estandares OACI Anexo 17 & IATA RP 1739.</p>
+      </div>
+      <div>
+        <div class="footer-col-h" data-es="Plataformas" data-en="Platforms">Plataformas</div>
+        <a href="#platforms" class="footer-link">🛡️ AVSEC Platform</a>
+        <a href="#platforms" class="footer-link">🔧 Ground Handling IA</a>
+        <a href="#platforms" class="footer-link">♿ Asistencia PRM</a>
+        <a href="#platforms" class="footer-link">🤖 MetaHuman IA</a>
+        <a href="#" class="footer-link">🔌 API & Developers</a>
+      </div>
+      <div>
+        <div class="footer-col-h" data-es="Empresa" data-en="Company">Empresa</div>
+        <a href="#" class="footer-link" data-es="Acerca de" data-en="About">Acerca de</a>
+        <a href="#faq" class="footer-link" data-es="Preguntas frecuentes" data-en="FAQ">Preguntas frecuentes</a>
+        <a href="#lead" class="footer-link" data-es="Agendar Demo" data-en="Request demo">Agendar Demo</a>
+        <a href="login.html" class="footer-link" data-es="Iniciar sesión" data-en="Log in">Iniciar sesión</a>
+        <a href="/cdn-cgi/l/email-protection#a9ceccdbccc7cac0c8e9ddc1ccc8c0c1dcc4c8c7da87cac6c4" class="footer-link" data-es="Contacto" data-en="Contact">Contacto</a>
+      </div>
+      <div>
+        <div class="footer-col-h" data-es="Cumplimiento" data-en="Compliance">Cumplimiento</div>
+        <a href="#" class="footer-link">OACI Anexo 17</a>
+        <a href="#" class="footer-link">IATA RP 1739</a>
+        <a href="#" class="footer-link">DGAC Costa Rica</a>
+        <a href="#" class="footer-link" data-es="Política de privacidad" data-en="Privacy policy">Política de privacidad</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Aero AI · Aeropuerto Internacional Juan Santamaría · SJO · MROC · Costa Rica</div>
+      <div class="footer-cert">AERO AI OPS · v4.0 · Powered by AI</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══════════════════════════════════════════════ -->
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyp91MF2KMNRrU4qGk5Y0EYLdZhTfi0reD004AVXIimivb47A3xVOBqGjvNrY2z9w/exec';
+
+/* CURSOR */
+const $c=document.getElementById('cur'),$r=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+document.addEventListener('mousedown',()=>document.body.classList.add('click'));
+document.addEventListener('mouseup',()=>document.body.classList.remove('click'));
+(function tick(){$c.style.left=mx+'px';$c.style.top=my+'px';rx+=(mx-rx)*.13;ry+=(my-ry)*.13;$r.style.left=rx+'px';$r.style.top=ry+'px';requestAnimationFrame(tick)})();
+document.querySelectorAll('a,button,.pc,.prcard,.vcard,.step-c,.ai-pow,.num-card,.faq-q').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* NAV */
+window.addEventListener('scroll',()=>document.getElementById('mainNav').classList.toggle('up',scrollY>40));
+
+/* TICKER */
+const TICK_ES=['Accesos · Vision AI + Risk Score','Inspección Aeronave · 12 Zonas','Vigilancia de Perímetros · Geofence','Módulo Puentes · CP1–CP13','Rampa · 22 Checkpoints · Timer IA','Ground Handling · SLA Scoring IA','Asistencia PRM · IATA RP 1739','MetaHuman · Agente IA Conversacional','Detección de Patrones Anómalos','Risk Engine · Verde / Ámbar / Rojo','Firma Digital Biométrica','Cadena de Custodia Inmutable','API REST · Webhooks en Tiempo Real','OACI Anexo 17 · DGAC Costa Rica','Dashboard Live · KPIs por Aerolínea'];
+const TICK_EN=['Access Control · Vision AI + Risk Score','Aircraft Inspection · 12 Zones','Perimeter Surveillance · Geofence','Bridge Module · CP1–CP13','Ramp · 22 Checkpoints · AI Timer','Ground Handling · SLA AI Scoring','PRM Assistance · IATA RP 1739','MetaHuman · Conversational AI Agent','Anomalous Pattern Detection','Risk Engine · Green / Amber / Red','Biometric Digital Signature','Immutable Chain of Custody','REST API · Real-Time Webhooks','ICAO Annex 17 · DGAC Costa Rica','Live Dashboard · KPIs by Airline'];
+
+function buildTicker(l){
+  const el=document.getElementById('tickerEl'),items=l==='es'?TICK_ES:TICK_EN;
+  el.innerHTML='';
+  [...items,...items].forEach(t=>{const s=document.createElement('span');s.className='ti';s.innerHTML=`<span class="hi">◆</span> ${t} &nbsp;`;el.appendChild(s)});
+}
+
+/* LANG */
+let lang=localStorage.getItem('avsec_lang')||'es';
+function setLang(l){
+  if(l===lang)return;lang=l;localStorage.setItem('avsec_lang',l);
+  document.getElementById('btnES').classList.toggle('on',l==='es');
+  document.getElementById('btnEN').classList.toggle('on',l==='en');
+  document.documentElement.lang=l;
+  const els=document.querySelectorAll('[data-es][data-en]');
+  els.forEach(el=>{el.style.opacity='0'});
+  setTimeout(()=>{
+    els.forEach(el=>{
+      const t=l==='es'?el.dataset.es:el.dataset.en;
+      if(t!==undefined){if(t.includes('<')){el.innerHTML=t;}else{el.textContent=t;}}
+      el.style.opacity='';el.style.transition='opacity .3s';
+    });
+    buildTicker(l);
+  },160);
+}
+
+/* SCROLL REVEAL */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>io.observe(el));
+
+/* STAGGER delays */
+document.querySelectorAll('.plat-cards .pc').forEach((c,i)=>c.style.transitionDelay=(i*.1)+'s');
+document.querySelectorAll('.steps .step-c').forEach((c,i)=>c.style.transitionDelay=(i*.09)+'s');
+document.querySelectorAll('.num-grid .num-card').forEach((c,i)=>c.style.transitionDelay=(i*.08)+'s');
+document.querySelectorAll('.price-cards .prcard').forEach((c,i)=>c.style.transitionDelay=(i*.1)+'s');
+document.querySelectorAll('.ai-powers .ai-pow').forEach((c,i)=>c.style.transitionDelay=(i*.07)+'s');
+
+/* COUNTERS */
+function animCount(el){
+  const t=parseInt(el.dataset.target);let n=0;
+  const step=Math.max(1,Math.ceil(t/40));
+  const id=setInterval(()=>{n=Math.min(n+step,t);el.textContent=n;if(n>=t)clearInterval(id)},28);
+}
+const cio=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.num-count').forEach(animCount);cio.unobserve(e.target)}});
+},{threshold:.3});
+document.querySelectorAll('.num-grid').forEach(el=>cio.observe(el));
+
+/* FAQ */
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+/* PRICING TOGGLE */
+function setPricing(mode){
+  document.getElementById('ptMensual').classList.toggle('on',mode==='mensual');
+  document.getElementById('ptAnual').classList.toggle('on',mode==='anual');
+}
+
+/* SLOT URGENCY */
+const SLOT_ES=['Solo quedan <strong>3 espacios</strong> disponibles esta semana','Solo quedan <strong>2 espacios</strong> disponibles esta semana','⚠️ Último espacio disponible esta semana','🔴 Agenda llena — únete a la lista de espera'];
+const SLOT_EN=['Only <strong>3 spots</strong> available this week','Only <strong>2 spots</strong> available this week','⚠️ Last spot available this week','🔴 Schedule full — join the waitlist'];
+let slotIndex=0;
+const slotEl=document.getElementById('urgencySlots');
+
+function updateSlots(){
+  const msgs=lang==='es'?SLOT_ES:SLOT_EN;
+  if(slotEl)slotEl.innerHTML=msgs[Math.min(slotIndex,msgs.length-1)];
+}
+function animSlot(){
+  if(!slotEl)return;
+  slotEl.style.opacity='0';
+  setTimeout(()=>{slotEl.style.opacity='1';},280);
+}
+function scheduleNextSlot(){
+  if(slotIndex>=2)return;
+  const delay=(Math.floor(Math.random()*3)+2)*60*1000;
+  setTimeout(()=>{
+    slotIndex=Math.min(slotIndex+1,3);
+    updateSlots();animSlot();
+    scheduleNextSlot();
+  },delay);
+}
+
+/* LEAD FORM */
+function submitLead(){
+  const nombre  = document.getElementById('fNombre').value.trim();
+  const email   = document.getElementById('fEmail').value.trim();
+  const org     = document.getElementById('fOrg').value.trim();
+  const cargo   = document.getElementById('fCargo').value.trim();
+  const tel     = document.getElementById('fTel').value.trim();
+  const platform= document.getElementById('fPlatform').value;
+
+  if(!nombre||!email||!org){
+    alert(lang==='es'
+      ?'Por favor completa nombre, organización y correo.'
+      :'Please fill in name, organization and email.');
+    return;
+  }
+
+  const btn=document.querySelector('.fsubmit');
+  btn.disabled=true;
+  btn.textContent=lang==='es'?'⏳ Enviando...':'⏳ Sending...';
+
+  fetch(APPS_SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({nombre,cargo,org,email,tel,platform})
+  })
+  .then(()=>{
+    const reserva='AVSEC-'+Date.now().toString().slice(-6);
+    slotIndex=Math.min(slotIndex+1,3);
+    updateSlots();animSlot();
+    showSuccess(reserva,nombre,platform);
+  })
+  .catch(()=>{
+    btn.disabled=false;
+    btn.textContent=lang==='es'?'🚀 Agendar Demo gratuita →':'🚀 Reserve my free demo →';
+    alert(lang==='es'?'Error de conexión. Intenta de nuevo.':'Connection error. Please try again.');
+  });
+}
+
+function showSuccess(reserva,nombre,platform){
+  const labels={
+    avsec:'🛡️ AVSEC Platform',
+    ground:'🔧 Ground Handling IA',
+    prm:'♿ Asistencia PRM',
+    metahuman:'🤖 MetaHuman IA',
+    all:'💎 Las 4 plataformas',
+    '':'—'
+  };
+  document.getElementById('formContent').style.display='none';
+  const s=document.getElementById('formSuccess');
+  s.innerHTML=`
+    <span class="fs-emoji">🎉</span>
+    <div class="fs-title">${lang==='es'?'¡Demo reservada!':'Demo reserved!'}</div>
+    <div style="
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      border-radius:10px;padding:18px 22px;margin:18px 0;text-align:left;
+      font-family:var(--mono);font-size:.78rem;line-height:2;
+    ">
+      <div style="color:rgba(255,255,255,.4);margin-bottom:4px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase"># Reserva</div>
+      <div style="color:#6B9DFF;font-weight:700;font-size:1.1rem;letter-spacing:.08em;margin-bottom:14px">${reserva}</div>
+      <div><span style="color:rgba(255,255,255,.4)">Nombre &nbsp;&nbsp;&nbsp;</span><span style="color:#fff">${nombre}</span></div>
+      <div><span style="color:rgba(255,255,255,.4)">Plataforma</span><span style="color:#fff"> ${labels[platform]||'—'}</span></div>
+      <div><span style="color:rgba(255,255,255,.4)">Estado &nbsp;&nbsp;&nbsp;</span><span style="color:#86EFAC">✓ Recibida · en cola</span></div>
+    </div>
+    <div class="fs-sub">${lang==='es'
+      ?'Tu solicitud fue recibida. Nuestro equipo de agentes IA te escribirá de inmediato.'
+      :'Your request was received. Our AI agents team will write to you immediately.'}</div>
+  `;
+  s.style.display='block';
+}
+
+/* SCROLL PARALLAX hero grid */
+window.addEventListener('scroll',()=>{
+  const y=scrollY;
+  const grid=document.querySelector('.hero-grid');
+  if(grid)grid.style.transform=`translateY(${y*.2}px)`;
+  const scan=document.querySelector('.scanline');
+  if(scan)scan.style.animationDuration=Math.max(3,(7-y*.003))+'s';
+});
+
+/* INIT */
+buildTicker(lang);
+updateSlots();
+scheduleNextSlot();
+if(lang==='en'){
+  document.getElementById('btnES').classList.remove('on');
+  document.getElementById('btnEN').classList.add('on');
+}
+
+// VIDEO DEMO MODAL
+const DEMO_VIDEOS = {
+  avsec:      { title:'AVSEC Platform · Demo', vid:'WzikA6n8oXs' },
+  ground:     { title:'Ground Handling IA · Demo', vid:'R8Mxt_KP_tQ' },
+  prm:        { title:'Asistencia PRM · Demo', vid:'YOUR_YOUTUBE_ID_HERE' },
+  metahuman:  { title:'MetaHuman IA · Demo', vid:'YOUR_YOUTUBE_ID_HERE' }
+};
+
+function openDemo(key){
+  const d = DEMO_VIDEOS[key];
+  document.getElementById('demoModalTitle').textContent = d.title;
+  document.getElementById('demoIframe').src = `https://www.youtube.com/embed/${d.vid}?autoplay=1&rel=0`;
+  const modal = document.getElementById('demoModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDemo(){
+  document.getElementById('demoModal').style.display = 'none';
+  document.getElementById('demoIframe').src = '';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('demoModal').addEventListener('click', function(e){
+  if(e.target === this) closeDemo();
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeDemo();
+});
+  
+</script>
+
+  <!-- VIDEO DEMO MODAL -->
+<div id="demoModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
+  <div style="position:relative;width:100%;max-width:560px;background:#060F2B;border-radius:16px;overflow:hidden;border:1px solid rgba(26,86,255,.25)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08)">
+      <span id="demoModalTitle" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(26,86,255,.9)">AVSEC Platform · Demo</span>
+      <button onclick="closeDemo()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden">
+      <iframe id="demoIframe" src="" frameborder="0" allow="autoplay;encrypted-media;picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%"></iframe>
+    </div>
+    <div style="padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);text-align:center">
+      <a href="#lead" onclick="closeDemo()" style="font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(26,86,255,.8);text-decoration:none">→ Agendar demo personalizada</a>
+    </div>
+  </div>
+</div>
+  
+</body>
+</html>
