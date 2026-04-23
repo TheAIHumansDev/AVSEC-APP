@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmación de Participación — Panel IA · Americas GHI 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #071e3d;
+    --navy2:  #0c2244;
+    --blue:   #005fa8;
+    --sky:    #4db8ff;
+    --gold:   #c8a84b;
+    --gold2:  #9a7420;
+    --white:  #ffffff;
+    --off:    #f4f7fb;
+    --border: #d0dcea;
+    --text:   #0a1f3f;
+    --muted:  #5a7a9a;
+    --error:  #c0392b;
+    --success:#1a7a4a;
+  }
+
+  body {
+    background: var(--off);
+    font-family: 'Barlow', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    width: 100%;
+    background: var(--navy);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 3px solid var(--gold);
+  }
+
+  .header-logo {
+    width: 52px; height: 52px;
+    flex-shrink: 0;
+  }
+
+  .header-text-block { flex: 1; }
+
+  .header-pre {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .header-title {
+    font-family: 'Barlow', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+
+  .header-title span { color: var(--sky); }
+
+  .header-sub {
+    font-size: 11px;
+    color: #7ab4d8;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+  }
+
+  /* ── HERO STRIP ── */
+  .hero-strip {
+    width: 100%;
+    background: var(--navy2);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .hero-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chip-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .chip-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #7ab4d8;
+    text-transform: uppercase;
+  }
+
+  .chip-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-left: 4px;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    width: 100%;
+    max-width: 680px;
+    padding: 40px 20px 60px;
+  }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--gold);
+    padding: 40px 44px;
+  }
+
+  .form-section-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .form-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ── FIELDS ── */
+  .field-group {
+    margin-bottom: 22px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  label .required {
+    color: var(--gold);
+    margin-left: 2px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--off);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    background: #fff;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23005fa8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+  }
+
+  /* "Otra" org input */
+  .otra-field {
+    margin-top: 10px;
+    display: none;
+  }
+
+  .otra-field.visible { display: block; }
+
+  /* ── CONFIRMATION BLOCK ── */
+  .confirm-block {
+    background: linear-gradient(135deg, #edf3fb, #e4edf8);
+    border: 1px solid #b8d4ee;
+    border-left: 4px solid var(--blue);
+    padding: 22px 24px;
+    margin: 28px 0;
+  }
+
+  .confirm-event-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  .confirm-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .confirm-detail-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .detail-icon {
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .detail-text {
+    font-size: 13px;
+    color: #1a3a5c;
+    line-height: 1.4;
+  }
+
+  .detail-text strong { color: var(--navy); }
+
+  /* Checkbox confirmation */
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: var(--blue);
+    cursor: pointer;
+  }
+
+  .checkbox-label {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .checkbox-label strong { color: var(--blue); }
+
+  /* ── AVAILABILITY RADIOS ── */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    border: 1px solid var(--border);
+    background: var(--off);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .radio-option:hover {
+    border-color: var(--blue);
+    background: #edf3fb;
+  }
+
+  .radio-option input[type="radio"] {
+    width: auto;
+    accent-color: var(--blue);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .radio-option-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .radio-option-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* ── SUBMIT ── */
+  .submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  .submit-note {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .btn-submit {
+    background: var(--blue);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 15px 36px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    flex-shrink: 0;
+  }
+
+  .btn-submit:hover { background: #004a88; }
+  .btn-submit:active { transform: scale(0.98); }
+
+  /* ── SUCCESS STATE ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+  }
+
+  .success-screen.visible { display: block; }
+  .form-inner.hidden { display: none; }
+
+  .success-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+
+  .success-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0 auto 24px;
+  }
+
+  .success-ref {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 10px 24px;
+  }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    width: 100%;
+    background: #e4ecf5;
+    border-top: 1px solid var(--border);
+    padding: 14px 40px;
+    text-align: center;
+  }
+
+  .page-footer span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #9ab0c8;
+    text-transform: uppercase;
+  }
+
+  /* ── VALIDATION ── */
+  .field-error {
+    font-size: 11px;
+    color: var(--error);
+    margin-top: 5px;
+    display: none;
+  }
+
+  .field-error.visible { display: block; }
+  input.invalid, select.invalid, textarea.invalid { border-color: var(--error); }
+
+  @media (max-width: 600px) {
+    .form-card { padding: 28px 20px; }
+    .field-row { grid-template-columns: 1fr; }
+    .page-header { padding: 20px; }
+    .hero-strip { padding: 14px 20px; gap: 16px; }
+    .submit-row { flex-direction: column; align-items: stretch; }
+    .btn-submit { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <img src="https://aeroaiops.com/ghi.png" alt="GHI 2026" class="header-logo" />
+    <div class="header-text-block">
+      <div class="header-pre">Aerojet Handling Group &nbsp;·&nbsp; Convocatoria Oficial</div>
+      <div class="header-title">Panel <span>IA</span> — Aeropuertos Inteligentes</div>
+      <div class="header-sub">10th Americas GHI Conference &nbsp;·&nbsp; 2026</div>
+    </div>
+  </header>
+
+  <!-- HERO STRIP -->
+  <div class="hero-strip">
+    <div class="hero-chip">
+      <div class="chip-dot"></div>
+      <span class="chip-label">Fecha</span>
+      <span class="chip-value">4 de Junio 2026</span>
+    </div>
+    <div class="hero-chip">
+      <div class="chip-dot"></div>
+      <span class="chip-label">Sede</span>
+      <span class="chip-value">Panama Convention Center</span>
+    </div>
+    <div class="hero-chip">
+      <div class="chip-dot"></div>
+      <span class="chip-label">Formato</span>
+      <span class="chip-value">Panel Presencial · AI Day</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="form-card">
+
+      <!-- SUCCESS SCREEN -->
+      <div class="success-screen" id="successScreen">
+        <div class="success-icon">✅</div>
+        <div class="success-title">¡Confirmación Recibida!</div>
+        <p class="success-sub">
+          Gracias por confirmar su participación en el Panel IA de Aeropuertos Inteligentes.<br>
+          El equipo de Aerojet Handling Group se pondrá en contacto con usted a la brevedad con los detalles finales.
+        </p>
+        <div class="success-ref" id="refNumber">GHI-2026-PANEL-0001</div>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-inner" id="formInner">
+
+        <!-- Section 1: Personal Info -->
+        <div class="form-section-title">Información del Panelista</div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label>Nombre <span class="required">*</span></label>
+            <input type="text" id="firstName" placeholder="Nombre" />
+            <div class="field-error" id="firstNameErr">Campo requerido</div>
+          </div>
+          <div class="field-group">
+            <label>Apellido <span class="required">*</span></label>
+            <input type="text" id="lastName" placeholder="Apellido" />
+            <div class="field-error" id="lastNameErr">Campo requerido</div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Cargo / Título Profesional <span class="required">*</span></label>
+          <input type="text" id="jobTitle" placeholder="Ej. Country Manager, Director de Operaciones…" />
+          <div class="field-error" id="jobTitleErr">Campo requerido</div>
+        </div>
+
+        <!-- Section 2: Organization -->
+        <div class="form-section-title" style="margin-top:32px;">Organización</div>
+
+        <div class="field-group">
+          <label>Organización <span class="required">*</span></label>
+          <select id="orgSelect" onchange="toggleOtraOrg()">
+            <option value="">— Seleccione su organización —</option>
+            <option value="AERIS">AERIS Holding Costa Rica</option>
+            <option value="Avianca">Avianca</option>
+            <option value="IATA">IATA — International Air Transport Association</option>
+            <option value="ACI">ACI — Airports Council International</option>
+            <option value="Copa Airlines">Copa Airlines</option>
+            <option value="Panama Airports">Aeropuerto Internacional de Tocumen</option>
+            <option value="Otra">Otra organización…</option>
+          </select>
+          <div class="field-error" id="orgSelectErr">Seleccione una organización</div>
+        </div>
+
+        <div class="field-group otra-field" id="otraField">
+          <label>Indique su organización <span class="required">*</span></label>
+          <input type="text" id="otraOrg" placeholder="Nombre de su organización" />
+          <div class="field-error" id="otraOrgErr">Campo requerido</div>
+        </div>
+
+        <!-- Section 3: Contact -->
+        <div class="form-section-title" style="margin-top:32px;">Datos de Contacto</div>
+
+        <div class="field-group">
+          <label>Correo Electrónico <span class="required">*</span></label>
+          <input type="email" id="email" placeholder="nombre@organizacion.com" />
+          <div class="field-error" id="emailErr">Ingrese un correo válido</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label>Teléfono / WhatsApp <span class="required">*</span></label>
+            <input type="tel" id="phone" placeholder="+507 6000 0000" />
+            <div class="field-error" id="phoneErr">Campo requerido</div>
+          </div>
+          <div class="field-group">
+            <label>País de Residencia</label>
+            <input type="text" id="country" placeholder="Panamá, Costa Rica…" />
+          </div>
+        </div>
+
+        <!-- Section 4: Confirmation -->
+        <div class="form-section-title" style="margin-top:32px;">Confirmación de Participación</div>
+
+        <div class="confirm-block">
+          <div class="confirm-event-title">
+            Panel IA sobre Aeropuertos Inteligentes en América Latina
+          </div>
+          <div class="confirm-details">
+            <div class="confirm-detail-row">
+              <span class="detail-icon">📅</span>
+              <span class="detail-text"><strong>Fecha:</strong> Jueves 4 de Junio, 2026 &nbsp;·&nbsp; AI Day</span>
+            </div>
+            <div class="confirm-detail-row">
+              <span class="detail-icon">📍</span>
+              <span class="detail-text"><strong>Sede:</strong> Panama Convention Center, Ciudad de Panamá</span>
+            </div>
+            <div class="confirm-detail-row">
+              <span class="detail-icon">🎤</span>
+              <span class="detail-text"><strong>Modalidad:</strong> Panelista presencial — 10th Americas GHI Conference</span>
+            </div>
+            <div class="confirm-detail-row">
+              <span class="detail-icon">🤝</span>
+              <span class="detail-text"><strong>Organizador:</strong> Aerojet Handling Group &nbsp;·&nbsp; Laura Granados, Presidenta</span>
+            </div>
+          </div>
+          <label class="checkbox-row">
+            <input type="checkbox" id="confirmCheck" />
+            <span class="checkbox-label">
+              Confirmo mi disponibilidad y acepto participar como panelista en el
+              <strong>Panel IA sobre Aeropuertos Inteligentes</strong> el
+              <strong>4 de Junio 2026</strong> en el Panama Convention Center.
+            </span>
+          </label>
+          <div class="field-error" id="confirmCheckErr" style="margin-top:8px;">Debe confirmar su disponibilidad para continuar</div>
+        </div>
+
+        <!-- Section 5: Availability -->
+        <div class="form-section-title" style="margin-top:8px;">Disponibilidad en el Evento</div>
+
+        <div class="field-group">
+          <label>¿Asistirá al evento completo? <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="attendance" value="full" />
+              <span class="radio-option-label">Sí, asistiré los 3 días</span>
+              <span class="radio-option-sub">2 – 4 Jun 2026</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="attendance" value="aiday" />
+              <span class="radio-option-label">Solo el AI Day</span>
+              <span class="radio-option-sub">4 Jun 2026</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="attendance" value="partial" />
+              <span class="radio-option-label">Asistencia parcial</span>
+              <span class="radio-option-sub">Por confirmar</span>
+            </label>
+          </div>
+          <div class="field-error" id="attendanceErr" style="margin-top:6px;">Seleccione una opción</div>
+        </div>
+
+        <!-- Section 6: Dietary / Additional -->
+        <div class="form-section-title" style="margin-top:32px;">Información Adicional</div>
+
+        <div class="field-group">
+          <label>Restricciones alimentarias / necesidades especiales</label>
+          <input type="text" id="dietary" placeholder="Vegetariano, sin gluten, ninguna…" />
+        </div>
+
+        <div class="field-group">
+          <label>¿Requiere apoyo con hospedaje o traslados?</label>
+          <select id="logistics">
+            <option value="">— Seleccionar —</option>
+            <option value="ninguno">No requiero apoyo</option>
+            <option value="hospedaje">Requiero información de hospedaje</option>
+            <option value="traslados">Requiero información de traslados</option>
+            <option value="ambos">Requiero información de ambos</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label>Comentarios o preguntas adicionales</label>
+          <textarea id="comments" placeholder="Escriba aquí cualquier comentario, pregunta o información relevante…"></textarea>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-row">
+          <p class="submit-note">
+            Su información será utilizada únicamente para coordinar su participación en el panel. Fecha límite: <strong>24 de Abril · 12:00 MD</strong>.
+          </p>
+          <button class="btn-submit" onclick="submitForm()">Confirmar Participación</button>
+        </div>
+
+      </div>
+      <!-- END FORM -->
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <span>Aerojet Handling Group &nbsp;·&nbsp; Panel IA Aeropuertos Inteligentes &nbsp;·&nbsp; Americas GHI 2026 &nbsp;·&nbsp; Confidencial</span>
+  </footer>
+
+<script>
+  function toggleOtraOrg() {
+    const sel = document.getElementById('orgSelect');
+    const field = document.getElementById('otraField');
+    field.classList.toggle('visible', sel.value === 'Otra');
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function setError(fieldId, errId, show) {
+    const field = document.getElementById(fieldId);
+    const err   = document.getElementById(errId);
+    if (!field || !err) return;
+    field.classList.toggle('invalid', show);
+    err.classList.toggle('visible', show);
+  }
+
+  function submitForm() {
+    let valid = true;
+
+    const firstName = document.getElementById('firstName').value.trim();
+    setError('firstName', 'firstNameErr', !firstName);
+    if (!firstName) valid = false;
+
+    const lastName = document.getElementById('lastName').value.trim();
+    setError('lastName', 'lastNameErr', !lastName);
+    if (!lastName) valid = false;
+
+    const jobTitle = document.getElementById('jobTitle').value.trim();
+    setError('jobTitle', 'jobTitleErr', !jobTitle);
+    if (!jobTitle) valid = false;
+
+    const org = document.getElementById('orgSelect').value;
+    setError('orgSelect', 'orgSelectErr', !org);
+    if (!org) valid = false;
+
+    if (org === 'Otra') {
+      const otra = document.getElementById('otraOrg').value.trim();
+      setError('otraOrg', 'otraOrgErr', !otra);
+      if (!otra) valid = false;
+    }
+
+    const email = document.getElementById('email').value.trim();
+    const emailOk = validateEmail(email);
+    setError('email', 'emailErr', !emailOk);
+    if (!emailOk) valid = false;
+
+    const phone = document.getElementById('phone').value.trim();
+    setError('phone', 'phoneErr', !phone);
+    if (!phone) valid = false;
+
+    const confirmed = document.getElementById('confirmCheck').checked;
+    const confirmErr = document.getElementById('confirmCheckErr');
+    confirmErr.classList.toggle('visible', !confirmed);
+    if (!confirmed) valid = false;
+
+    const attendance = document.querySelector('input[name="attendance"]:checked');
+    const attErr = document.getElementById('attendanceErr');
+    attErr.classList.toggle('visible', !attendance);
+    if (!attendance) valid = false;
+
+    if (!valid) return;
+
+    // Generate reference number
+    const ref = 'GHI-2026-' + (firstName.substring(0,2) + lastName.substring(0,2)).toUpperCase() + '-' + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('refNumber').textContent = ref;
+
+    document.getElementById('formInner').classList.add('hidden');
+    document.getElementById('successScreen').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
