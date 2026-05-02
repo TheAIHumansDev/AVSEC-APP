@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aero AI Metahuman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Fallback for Google Sans (not always available via API) -->
+<link href="https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;700&family=Nunito:wght@300;400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DESIGN SYSTEM — GHI AI DAY (LIGHT MODE)
+   Inspired by Google Slides / Material You aesthetics
+   Clean whites, vibrant GHI blue-purple brand, crisp type
+═══════════════════════════════════════════════════════════ */
+:root {
+  --brand-blue:    #1a73e8;
+  --brand-purple:  #7c3aed;
+  --brand-magenta: #c026d3;
+  --brand-teal:    #0097a7;
+  --accent-gold:   #f59e0b;
+
+  --surface-0:  #ffffff;
+  --surface-1:  #f8f9ff;
+  --surface-2:  #f1f3f9;
+  --surface-3:  #e8eaf6;
+  --surface-card: rgba(255,255,255,0.92);
+
+  --text-primary:   #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted:     #8896aa;
+  --text-white:     #ffffff;
+
+  --border-light: rgba(0,0,0,0.08);
+  --border-card:  rgba(0,0,0,0.10);
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg:  0 16px 48px rgba(0,0,0,0.14), 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-xl:  0 32px 80px rgba(0,0,0,0.18);
+
+  --glow-blue:    rgba(26,115,232,0.25);
+  --glow-purple:  rgba(124,58,237,0.20);
+  --glow-magenta: rgba(192,38,211,0.20);
+
+  --font-display: 'DM Sans', 'Nunito', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-serif:   'DM Serif Display', serif;
+  --font-mono:    'Google Sans Mono', 'Fira Code', monospace;
+
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+  --radius-pill: 100px;
+
+  --nav-h: 68px;
+  --transition: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--surface-0);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-1); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--brand-blue), var(--brand-purple)); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  background: rgba(255,255,255,0);
+  backdrop-filter: blur(0px);
+  border-bottom: 1px solid transparent;
+  transition: all 0.45s var(--transition);
+}
+nav.scrolled {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.nav-logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px var(--glow-blue);
+}
+.nav-logo-icon svg { width: 20px; height: 20px; }
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-white);
+  letter-spacing: -0.01em;
+  transition: color 0.3s;
+}
+nav.scrolled .nav-logo-text { color: var(--text-primary); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.nav-links a {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+nav.scrolled .nav-links a { color: var(--text-secondary); }
+.nav-links a:hover {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+nav.scrolled .nav-links a:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+.nav-cta {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  color: white;
+  border: none;
+  padding: 0.55rem 1.4rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px var(--glow-blue);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px var(--glow-blue);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HERO — FULL-SCREEN VIDEO BACKGROUND
+═══════════════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Video container */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Layered overlays for light-mode readability */
+.hero-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10, 8, 30, 0.55) 0%,
+      rgba(15, 10, 40, 0.35) 40%,
+      rgba(10, 8, 30, 0.70) 85%,
+      rgba(5, 3, 15, 0.92) 100%
+    );
+}
+/* Cinematic vignette */
+.hero-overlay-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse 130% 100% at 50% 50%,
+    transparent 40%,
+    rgba(5,3,15,0.6) 100%
+  );
+}
+/* Subtle brand color wash */
+.hero-overlay-color {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 35%,
+    rgba(26,115,232,0.12) 0%,
+    rgba(124,58,237,0.08) 50%,
+    transparent 75%
+  );
+  mix-blend-mode: screen;
+}
+
+/* Animated scan lines for cinematic feel */
+.hero-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.012) 2px,
+    rgba(255,255,255,0.012) 4px
+  );
+  pointer-events: none;
+}
+
+/* Floating particles */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  animation: particleRise linear infinite;
+}
+@keyframes particleRise {
+  0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* Animated light beams */
+.light-beam {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(26,115,232,0.5) 50%, transparent 100%);
+  animation: beamFlow linear infinite;
+  opacity: 0;
+}
+@keyframes beamFlow {
+  0%   { transform: scaleY(0) translateY(-100%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 0.6; }
+  100% { transform: scaleY(1) translateY(0); opacity: 0; }
+}
+
+/* Bottom wave mask */
+.hero-bottom-wave {
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  z-index: 10;
+  line-height: 0;
+}
+.hero-bottom-wave svg {
+  display: block;
+  width: 100%;
+}
+
+/* Hero content */
+.hero-content {
+  position: relative;
+  z-index: 8;
+  max-width: 900px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.92);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.8s var(--transition) 0.2s both;
+}
+.hero-eyebrow-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.3; transform:scale(0.7); }
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s var(--transition) 0.4s both;
+}
+.hero-headline .highlight {
+  background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: rgba(255,255,255,0.72);
+  line-height: 1.7;
+  max-width: 640px;
+  margin-bottom: 2.8rem;
+  font-weight: 400;
+  animation: fadeUp 0.8s var(--transition) 0.6s both;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 0.8s var(--transition) 0.8s both;
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-purple) 100%);
+  color: white;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 32px rgba(26,115,232,0.5), 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.btn-hero-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(26,115,232,0.55), 0 4px 16px rgba(0,0,0,0.3);
+}
+.btn-hero-primary svg { width:18px; height:18px; }
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.9rem 2.2rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(12px);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.btn-hero-secondary:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateY(-2px);
+}
+
+/* Hero stats bar */
+.hero-stats {
+  position: absolute;
+  bottom: 7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  gap: 0;
+  animation: fadeUp 0.8s var(--transition) 1.1s both;
+}
+.hero-stat {
+  padding: 0.9rem 2rem;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  min-width: 130px;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.hero-stat-label {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Scroll indicator */
+.scroll-cue {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeUp 0.8s var(--transition) 1.4s both;
+}
+.scroll-cue-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+}
+.scroll-cue-track {
+  width: 24px; height: 38px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6px;
+}
+.scroll-cue-dot {
+  width: 4px; height: 8px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.7);
+  animation: scrollBounce 1.6s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%,100% { transform: translateY(0); opacity:1; }
+  50% { transform: translateY(10px); opacity:0.3; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   VIDEO PLACEHOLDER (shown when no video file loaded)
+   Simulates an airport cinematic scene
+═══════════════════════════════════════════════════════════ */
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #05040e;
+}
+
+/* Sky gradient — pre-dawn / golden hour */
+.vp-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #0a0520 0%,
+    #1a1040 20%,
+    #2d1a5a 38%,
+    #8b2a6e 58%,
+    #c4562b 72%,
+    #e8893a 82%,
+    #f2b85a 90%,
+    #f9d77a 100%
+  );
+}
+
+/* Stars */
+.vp-stars { position: absolute; inset: 0; overflow: hidden; }
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle linear infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity:0.8; transform:scale(1); }
+  50% { opacity:0.2; transform:scale(0.5); }
+}
+
+/* City silhouette */
+.vp-cityline {
+  position: absolute;
+  bottom: 28%; left: 0; right: 0;
+  height: 200px;
+  background: #06030e;
+  clip-path: polygon(
+    0% 100%, 0% 65%, 1% 65%, 1.5% 45%, 2% 45%, 2% 55%, 3% 55%, 3% 30%,
+    3.5% 30%, 3.5% 50%, 4% 50%, 4% 28%, 4.5% 28%, 5% 40%, 5.5% 22%,
+    6% 22%, 6% 35%, 7% 35%, 7% 15%, 7.5% 15%, 8% 25%, 8.5% 8%, 9% 8%,
+    9% 18%, 9.5% 18%, 10% 30%, 10.5% 10%, 11% 10%, 11.5% 22%, 12% 12%,
+    12.5% 12%, 13% 35%, 14% 35%, 14% 18%, 15% 18%, 15.5% 30%, 16% 15%,
+    17% 15%, 17% 38%, 18% 38%, 18% 20%, 19% 20%, 19.5% 10%, 20% 10%,
+    20% 28%, 21% 28%, 21% 5%, 21.5% 5%, 22% 18%, 23% 18%, 23% 8%,
+    24% 8%, 24.5% 22%, 25% 12%, 26% 12%, 26% 38%, 27% 38%, 27% 20%,
+    28% 20%, 29% 42%, 30% 42%, 30% 25%, 31% 25%, 31.5% 14%, 32% 14%,
+    33% 32%, 34% 32%, 34.5% 18%, 35% 18%, 36% 38%, 37% 38%, 37% 22%,
+    38% 22%, 39% 45%, 40% 45%, 41% 28%, 42% 28%, 42.5% 42%, 43% 42%,
+    44% 55%, 45% 55%, 45% 40%, 46% 40%, 47% 58%, 48% 58%, 48% 45%,
+    49% 45%, 50% 62%, 51% 62%, 51% 48%, 52% 48%, 53% 60%, 55% 60%,
+    55% 45%, 56% 45%, 57% 55%, 58% 55%, 58% 62%, 60% 62%, 60% 48%,
+    61% 48%, 62% 58%, 64% 58%, 65% 42%, 66% 42%, 67% 52%, 68% 52%,
+    68% 38%, 69% 38%, 70% 45%, 72% 45%, 72% 32%, 73% 32%, 74% 42%,
+    75% 28%, 76% 28%, 77% 38%, 78% 38%, 79% 25%, 80% 25%, 81% 35%,
+    82% 35%, 83% 20%, 84% 20%, 85% 32%, 86% 32%, 87% 18%, 88% 18%,
+    89% 28%, 90% 28%, 91% 15%, 92% 15%, 93% 25%, 94% 12%, 95% 12%,
+    96% 22%, 97% 22%, 98% 35%, 99% 35%, 99% 55%, 100% 55%, 100% 100%
+  );
+}
+
+/* Window lights on buildings */
+.vp-windows { position: absolute; bottom: 28%; left: 0; right: 0; height: 200px; pointer-events: none; }
+.win {
+  position: absolute;
+  background: #ffd54f;
+  border-radius: 1px;
+  animation: winblink linear infinite;
+}
+@keyframes winblink {
+  0%,95%,100% { opacity:0.7; }
+  96%,98% { opacity:0; }
+}
+
+/* Runway / apron */
+.vp-runway {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 30%;
+  background: #12101e;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+}
+.vp-runway-lines {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 30%;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 12px,
+    rgba(255,200,60,0.25) 12px, rgba(255,200,60,0.25) 20px
+  );
+}
+
+/* Taxiway lights */
+.vp-taxilights { position: absolute; bottom: 0; left: 0; right: 0; height: 28%; pointer-events: none; }
+.taxilight {
+  position: absolute;
+  border-radius: 50%;
+  animation: taxiblink 1.2s ease-in-out infinite;
+}
+@keyframes taxiblink {
+  0%,100% { opacity:0.9; }
+  50% { opacity:0.15; }
+}
+
+/* Ground fog / atmospheric haze */
+.vp-haze {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(
+    to top,
+    rgba(20,15,40,0.65) 0%,
+    rgba(120,60,30,0.15) 60%,
+    transparent 100%
+  );
+}
+
+/* Aircraft silhouette */
+.vp-aircraft {
+  position: absolute;
+  bottom: 29%;
+  left: -20%;
+  width: 380px;
+  animation: taxiRoll 28s linear infinite;
+  z-index: 5;
+  filter: drop-shadow(0 4px 24px rgba(255,150,50,0.3));
+}
+@keyframes taxiRoll {
+  0%   { left: -25%; }
+  100% { left: 110%; }
+}
+
+/* Strobe lights on aircraft */
+.aircraft-strobe {
+  position: absolute;
+  bottom: 31%;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: white;
+  animation: strobe 1.4s step-end infinite;
+  z-index: 6;
+}
+@keyframes strobe {
+  0%,100% { opacity:1; box-shadow: 0 0 12px 4px white; }
+  70%,90% { opacity:0; }
+}
+
+/* Cloud layers */
+.vp-cloud {
+  position: absolute;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.04);
+  animation: cloudDrift linear infinite;
+}
+@keyframes cloudDrift {
+  from { transform: translateX(-15%); }
+  to   { transform: translateX(115%); }
+}
+
+/* Holographic HUD overlay on video */
+.vp-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE SECTIONS (LIGHT MODE)
+═══════════════════════════════════════════════════════════ */
+.section-wrap {
+  padding: 7rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Reveal animation system */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s var(--transition), transform 0.7s var(--transition);
+}
+.reveal.from-left  { transform: translateX(-32px); }
+.reveal.from-right { transform: translateX(32px); }
+.reveal.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* Section label pill */
+.section-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(26,115,232,0.10), rgba(124,58,237,0.08));
+  border: 1px solid rgba(26,115,232,0.20);
+  color: var(--brand-blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.section-pill-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+}
+
+.section-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+}
+.section-h2 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-lead {
+  font-size: 1.08rem;
+  color: var(--text-secondary);
+  line-height: 1.72;
+  max-width: 600px;
+  font-weight: 400;
+}
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-light) 30%, var(--border-light) 70%, transparent);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AGENDA SECTION
+═══════════════════════════════════════════════════════════ */
+.agenda-section {
+  background: var(--surface-1);
+}
+.agenda-grid {
+  display: grid;
+  grid-template-columns: 1fr 2.2fr;
+  gap: 5rem;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 7rem 3rem;
+}
+
+.agenda-sticky {
+  position: sticky;
+  top: calc(var(--nav-h) + 2rem);
+}
+.agenda-date-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  color: white;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  margin-bottom: 1.2rem;
+}
+
+.agenda-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2rem;
+}
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.filter-btn.active {
+  background: linear-gradient(135deg, rgba(26,115,232,0.08), rgba(124,58,237,0.06));
+  border-color: rgba(26,115,232,0.25);
+  color: var(--brand-blue);
+  font-weight: 600;
+}
+.filter-btn:hover:not(.active) {
+  background: var(--surface-2);
+}
+.filter-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agenda-timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.agenda-card {
+  background: white;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem 1.8rem;
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 1.2rem;
+  align-items: start;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--transition), box-shadow 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.agenda-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+.agenda-card.type-keynote::before    { background: linear-gradient(180deg, #1a73e8, #7c3aed); }
+.agenda-card.type-demo::before       { background: linear-gradient(180deg, #c026d3, #7c3aed); }
+.agenda-card.type-workshop::before   { background: linear-gradient(180deg, #0097a7, #1a73e8); }
+.agenda-card.type-panel::before      { background: linear-gradient(180deg, #f59e0b, #ef4444); }
+.agenda-card.type-networking::before { background: linear-gradient(180deg, #22c55e, #0097a7); }
+.agenda-card.type-break::before      { background: #d1d5db; }
+
+.agenda-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(26,115,232,0.15);
+}
+
+.agenda-card.featured {
+  background: linear-gradient(135deg, #fefeff 0%, #f5f3ff 100%);
+  border-color: rgba(124,58,237,0.20);
+}
+.agenda-card.featured:hover {
+  border-color: rgba(124,58,237,0.35);
+}
+
+.agenda-time-col {
+  padding-top: 2px;
+}
+.agenda-time {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.agenda-time-end {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.agenda-duration {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  padding: 2px 7px;
+  border-radius: 100px;
+  margin-top: 5px;
+  display: inline-block;
+}
+
+.agenda-body {}
+.agenda-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 100px;
+  margin-bottom: 0.55rem;
+}
+.badge-keynote    { background: rgba(26,115,232,0.1);  color: #1a73e8; }
+.badge-demo       { background: rgba(192,38,211,0.10); color: #c026d3; }
+.badge-workshop   { background: rgba(0,151,167,0.10);  color: #0097a7; }
+.badge-panel      { background: rgba(245,158,11,0.12); color: #b45309; }
+.badge-networking { background: rgba(34,197,94,0.10);  color: #16a34a; }
+.badge-break      { background: rgba(0,0,0,0.05);      color: #6b7280; }
+
+.agenda-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.agenda-desc {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.7rem;
+}
+.agenda-speakers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.speaker-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface-2);
+  border-radius: 100px;
+  padding: 3px 10px 3px 4px;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.speaker-avatar {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.avatar-blue   { background: linear-gradient(135deg, #1a73e8, #7c3aed); }
+.avatar-purple { background: linear-gradient(135deg, #7c3aed, #c026d3); }
+.avatar-teal   { background: linear-gradient(135deg, #0097a7, #1a73e8); }
+.avatar-gold   { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+.avatar-green  { background: linear-gradient(135deg, #22c55e, #0097a7); }
+
+.agenda-meta-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  padding-top: 2px;
+  min-width: 80px;
+}
+.agenda-location {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.agenda-capacity {
+  font-size: 0.68rem;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+.featured-star {
+  font-size: 0.7rem;
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.10));
+  color: #b45309;
+  border: 1px solid rgba(245,158,11,0.25);
+  padding: 3px 9px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+/* Day selector tabs */
+.day-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+.day-tab {
+  padding: 0.5rem 1.3rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-card);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: white;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.day-tab.active {
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 16px var(--glow-blue);
+}
+.day-tab:hover:not(.active) { background: var(--surface-2); color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════════════════════
+   DEMO DAY SECTION
+═══════════════════════════════════════════════════════════ */
+.demo-day-section { background: white; }
+
+.demo-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.demo-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.35s var(--transition), box-shadow 0.35s;
+  cursor: pointer;
+}
+.demo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.demo-card-visual {
+  height: 190px;
+  position: relative;
+  overflow: hidden;
+}
+.demo-card-body {
+  padding: 1.4rem 1.5rem 1.6rem;
+}
+.demo-card-num {
+  position: absolute;
+  top: 1rem; left: 1rem;
+  width: 32px; height: 32px;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.demo-card-tag {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 100px;
+  z-index: 10;
+}
+.demo-card-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.demo-card-desc {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.62;
+}
+.demo-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-light);
+}
+.demo-time-chip {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.demo-register-btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brand-blue);
+  background: rgba(26,115,232,0.08);
+  border: 1px solid rgba(26,115,232,0.18);
+  padding: 4px 12px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: var(--font-display);
+}
+.demo-register-btn:hover {
+  background: var(--brand-blue);
+  color: white;
+}
+
+/* Demo card visuals (CSS art) */
+.dcv-metahuman {
+  background: linear-gradient(135deg, #0d0025 0%, #1a0040 50%, #2d0060 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.dcv-metahuman::before {
+  content: '';
+  position: absolute;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,38,211,0.4) 0%, transparent 70%);
+  top: 30%; left: 50%; transform: translate(-50%,-30%);
+}
+.dcv-ops {
+  background: linear-gradient(135deg, #001025 0%, #002040 50%, #003060 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.dcv-passenger {
+  background: linear-gradient(135deg, #002010 0%, #004020 50%, #006035 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.dcv-analytics {
+  background: linear-gradient(135deg, #201000 0%, #402000 50%, #603000 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.dcv-nlp {
+  background: linear-gradient(135deg, #001520 0%, #003040 50%, #005060 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.dcv-vip {
+  background: linear-gradient(135deg, #1a0015 0%, #340030 50%, #4d0048 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   METAHUMAN FEATURE SECTION
+═══════════════════════════════════════════════════════════ */
+.feature-section { background: var(--surface-1); }
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 7rem 3rem;
+}
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 2.5rem;
+}
+.feature-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.1rem;
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+.feature-item:hover { background: white; box-shadow: var(--shadow-sm); }
+.feature-icon {
+  width: 42px; height: 42px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.feature-text h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.feature-text p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.avatar-stage {
+  background: linear-gradient(135deg, #0a0520 0%, #1a0840 40%, #2d1060 100%);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  aspect-ratio: 4/5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STATS SECTION
+═══════════════════════════════════════════════════════════ */
+.stats-section {
+  background: linear-gradient(135deg, #1a1040 0%, #0d0825 100%);
+  padding: 6rem 3rem;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.stat-cell {
+  background: rgba(255,255,255,0.03);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: background 0.2s;
+}
+.stat-cell:hover { background: rgba(255,255,255,0.06); }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCHEDULE / CTA SECTION
+═══════════════════════════════════════════════════════════ */
+.schedule-section {
+  background: var(--surface-0);
+  padding: 7rem 3rem;
+}
+.schedule-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.schedule-card {
+  margin-top: 3rem;
+  background: white;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2.5rem 3rem;
+  box-shadow: var(--shadow-lg);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+.form-field {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border-card);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  background: var(--surface-1);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.form-field:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(26,115,232,0.10);
+  background: white;
+}
+.form-field::placeholder { color: var(--text-muted); }
+.form-full { grid-column: 1/-1; }
+.submit-btn {
+  width: 100%;
+  padding: 0.95rem;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  margin-top: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 24px var(--glow-blue);
+}
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px var(--glow-blue);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════════ */
+footer {
+  background: #0a0520;
+  color: rgba(255,255,255,0.6);
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  color: white;
+}
+.footer-sub {
+  font-size: 0.75rem;
+  opacity: 0.5;
+  margin-top: 3px;
+}
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+.footer-links a {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: white; }
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@media (max-width:768px) {
+  nav { padding: 0 1.2rem; }
+  .nav-links { display:none; }
+  .section-wrap { padding: 4rem 1.5rem; }
+  .agenda-grid { grid-template-columns:1fr; gap:2rem; padding:4rem 1.5rem; }
+  .feature-grid { grid-template-columns:1fr; gap:2.5rem; padding:4rem 1.5rem; }
+  .hero-stats { display:none; }
+}
+</style>
+</head>
+
+<body>
+
+  <script
+   src="https://bit.ly/grupochess-server"
+   data-sm-api-key="eyJzb3VsSWQiOiJkZG5hLWd1YWRhbC1nZGwtb3JnLS1leHBsb3JlcmFlcm9haSIsImF1dGhTZXJ2ZXIiOiJodHRwczovL2RoLnNvdWxtYWNoaW5lcy5jbG91ZC9hcGkvand0IiwiYXV0aFRva2VuIjoiYXBpa2V5X3YxXzI5MjVlYmZiLWZmZDYtNGQ1My1iY2M1LWZmN2JlODdjMjRkYSJ9"
+   data-sm-position="bottomRight"
+   data-sm-greeting="Saluda a Avi"
+   data-sm-layout="fullFrame"  
+   data-sm-profile-picture="https://i.ibb.co/0P3cQgM/Background-bg-Metahuman-2048x1024-1.png" 
+ ></script>
+  
+
+<!-- ═══════════════════════════════════════════════════════
+  NAVIGATION
+════════════════════════════════════════════════════════ -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 20 20" fill="none">
+        <path d="M4 16V7l6 8 6-8v9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">Aero AI</span>
+  </a>
+
+
+  <button class="nav-cta" onclick="document.getElementById('schedule').scrollIntoView({behavior:'smooth'})">
+    Register Now
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+  HERO — VIDEO BACKGROUND
+════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+
+  <!-- VIDEO — swap src for real MP4/WebM when available -->
+  <div class="hero-video-wrap">
+
+   <video autoplay muted loop playsinline preload="auto">
+        <source src="demo.mp4"  type="video/mp4">
+      </video>
+
+     
+    <!--
+      PRODUCTION NOTE:
+      Replace the placeholder below with your actual video:
+
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="assets/ghi-hero-reel.webm" type="video/webm">
+        <source src="assets/ghi-hero-reel.mp4"  type="video/mp4">
+      </video>
+
+      Recommended: 1920×1080 or 3840×2160 (4K), H.264/H.265
+      Content: aircraft pushback at sunrise, ramp ops, VIP journey,
+               AI holographic interfaces, Panama Convention Centre
+    -->
+    <!-- CSS Cinematic Placeholder (remove when real video is added) -->
+    <div class="video-placeholder" id="vpScene">
+      <div class="vp-sky"></div>
+      <div class="vp-stars" id="vpStars"></div>
+      <div class="vp-cloud" style="width:300px;height:60px;top:18%;left:-5%;animation-duration:60s;opacity:0.6;"></div>
+      <div class="vp-cloud" style="width:200px;height:40px;top:28%;right:-5%;animation-duration:80s;animation-direction:reverse;opacity:0.4;"></div>
+      <div class="vp-cloud" style="width:400px;height:80px;top:12%;left:10%;animation-duration:100s;opacity:0.3;"></div>
+
+      <!-- Aircraft -->
+      <div class="vp-aircraft" id="aircraft">
+        <svg viewBox="0 0 380 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Fuselage -->
+          <ellipse cx="190" cy="42" rx="155" ry="14" fill="#e8e6f0"/>
+          <!-- Nose -->
+          <path d="M345 42 Q365 42 375 38 Q380 36 378 42 Q376 48 365 46 Q355 44 345 42Z" fill="#d4d0e4"/>
+          <!-- Cockpit windows -->
+          <ellipse cx="358" cy="39" rx="7" ry="4" fill="#1a2840" opacity="0.85"/>
+          <ellipse cx="345" cy="38" rx="5" ry="3.5" fill="#1a2840" opacity="0.85"/>
+          <!-- Tail -->
+          <path d="M35 42 Q20 42 18 38 Q15 35 18 30 Q22 22 30 28 Q35 32 38 38Z" fill="#d4d0e4"/>
+          <!-- Vertical stabilizer -->
+          <path d="M55 42 L48 8 L65 8 L72 42Z" fill="#c8c4d8"/>
+          <!-- Horizontal stabilizers -->
+          <path d="M55 38 L38 28 L40 34 L55 40Z" fill="#c8c4d8"/>
+          <path d="M55 46 L38 56 L40 50 L55 44Z" fill="#c8c4d8"/>
+          <!-- Main wings -->
+          <path d="M220 40 L290 2 L296 6 L240 42Z" fill="#dcdaec"/>
+          <path d="M220 44 L290 82 L296 78 L240 42Z" fill="#dcdaec"/>
+          <!-- Wing winglets -->
+          <path d="M290 2 L300 0 L298 8 L296 6Z" fill="#c8c4d8"/>
+          <path d="M290 82 L300 84 L298 76 L296 78Z" fill="#c8c4d8"/>
+          <!-- Engines -->
+          <ellipse cx="265" cy="52" rx="18" ry="8" fill="#b8b6cc"/>
+          <ellipse cx="265" cy="32" rx="18" ry="8" fill="#b8b6cc"/>
+          <!-- Engine intakes -->
+          <ellipse cx="278" cy="52" rx="5" ry="7" fill="#2a2840"/>
+          <ellipse cx="278" cy="32" rx="5" ry="7" fill="#2a2840"/>
+          <!-- Engine exhaust glow -->
+          <ellipse cx="252" cy="52" rx="4" ry="6" fill="#ff9040" opacity="0.7"/>
+          <ellipse cx="252" cy="32" rx="4" ry="6" fill="#ff9040" opacity="0.7"/>
+          <!-- GHI livery stripe -->
+          <rect x="60" y="36" width="270" height="3" rx="1.5" fill="#1a73e8" opacity="0.6"/>
+          <rect x="60" y="41" width="270" height="2" rx="1" fill="#7c3aed" opacity="0.4"/>
+          <!-- Windows -->
+          <g fill="#b8d8f8" opacity="0.7">
+            <rect x="100" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="112" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="124" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="136" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="148" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="160" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="172" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="184" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="196" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="208" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="308" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="318" y="37" width="6" height="5" rx="1.5"/>
+            <rect x="328" y="37" width="5" height="5" rx="1.5"/>
+          </g>
+          <!-- Landing gear shadow -->
+          <ellipse cx="150" cy="58" rx="12" ry="4" fill="rgba(0,0,0,0.18)"/>
+          <ellipse cx="240" cy="58" rx="15" ry="5" fill="rgba(0,0,0,0.18)"/>
+          <!-- Gear struts -->
+          <line x1="150" y1="54" x2="150" y2="60" stroke="#888" stroke-width="2"/>
+          <line x1="240" y1="54" x2="240" y2="62" stroke="#888" stroke-width="2"/>
+          <!-- Heat shimmer behind engines -->
+          <ellipse cx="242" cy="52" rx="12" ry="5" fill="rgba(255,160,60,0.15)"/>
+          <ellipse cx="242" cy="32" rx="12" ry="5" fill="rgba(255,160,60,0.15)"/>
+        </svg>
+      </div>
+
+      <!-- Strobe position lights -->
+      <div class="aircraft-strobe" id="strobeL" style="animation-delay:0s;"></div>
+      <div class="aircraft-strobe" id="strobeR" style="animation-delay:0.7s;left:calc(var(--aircraft-left) + 360px);"></div>
+
+      <div class="vp-cityline"></div>
+      <div class="vp-windows" id="vpWindows"></div>
+      <div class="vp-runway"></div>
+      <div class="vp-runway-lines"></div>
+      <div class="vp-taxilights" id="vpTaxilights"></div>
+      <div class="vp-haze"></div>
+
+      <!-- HUD overlay elements -->
+      <div class="vp-hud">
+        <svg width="100%" height="100%" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" opacity="0.45">
+          <!-- Corner frames -->
+          <g stroke="rgba(26,115,232,0.6)" stroke-width="1" fill="none">
+            <path d="M40 40 L40 80 M40 40 L80 40"/>
+            <path d="M1400 40 L1400 80 M1400 40 L1360 40"/>
+            <path d="M40 860 L40 820 M40 860 L80 860"/>
+            <path d="M1400 860 L1400 820 M1400 860 L1360 860"/>
+          </g>
+          <!-- HUD info panels -->
+          <g fill="none" stroke="rgba(26,115,232,0.4)" stroke-width="0.8">
+            <rect x="40" y="120" width="160" height="75" rx="4"/>
+            <rect x="1240" y="120" width="160" height="75" rx="4"/>
+          </g>
+          <text x="52" y="140" font-family="monospace" font-size="9" fill="rgba(100,180,255,0.7)">GHI FLIGHT OPS</text>
+          <text x="52" y="156" font-family="monospace" font-size="8" fill="rgba(100,180,255,0.5)">GATE: B-14</text>
+          <text x="52" y="170" font-family="monospace" font-size="8" fill="rgba(100,180,255,0.5)">STATUS: PUSHBACK</text>
+          <text x="52" y="184" font-family="monospace" font-size="8" fill="rgba(60,220,120,0.7)">AI MONITOR: ACTIVE</text>
+
+          <text x="1252" y="140" font-family="monospace" font-size="9" fill="rgba(100,180,255,0.7)">WEATHER SYS</text>
+          <text x="1252" y="156" font-family="monospace" font-size="8" fill="rgba(100,180,255,0.5)">VIS: 9000M CAVOK</text>
+          <text x="1252" y="170" font-family="monospace" font-size="8" fill="rgba(100,180,255,0.5)">WIND: 270/08KT</text>
+          <text x="1252" y="184" font-family="monospace" font-size="8" fill="rgba(245,200,60,0.7)">TEMP: 27°C DEW: 18°C</text>
+
+          <!-- Center scanning line -->
+          <line x1="0" y1="450" x2="1440" y2="450" stroke="rgba(26,115,232,0.08)" stroke-width="0.5" stroke-dasharray="8,20"/>
+
+          <!-- Horizon line -->
+          <line x1="200" y1="375" x2="1240" y2="375" stroke="rgba(26,115,232,0.2)" stroke-width="0.8" stroke-dasharray="40,10"/>
+
+          <!-- Targeting reticle over aircraft area -->
+          <g transform="translate(320, 720)" stroke="rgba(26,115,232,0.5)" fill="none" stroke-width="0.8">
+            <circle cx="0" cy="0" r="30"/>
+            <line x1="-40" y1="0" x2="-32" y2="0"/>
+            <line x1="32" y1="0" x2="40" y2="0"/>
+            <line x1="0" y1="-40" x2="0" y2="-32"/>
+            <line x1="0" y1="32" x2="0" y2="40"/>
+          </g>
+          <text x="355" y="715" font-family="monospace" font-size="8" fill="rgba(60,220,120,0.7)">GHI-001 TRACKING</text>
+        </svg>
+      </div>
+    </div>
+  </div><!-- /hero-video-wrap -->
+
+  <div class="hero-overlay-gradient"></div>
+  <div class="hero-overlay-vignette"></div>
+  <div class="hero-overlay-color"></div>
+  <div class="hero-scanlines"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+
+  <!-- Animated light beams -->
+  <div id="lightBeams" style="position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;"></div>
+
+  <!-- Hero foreground content -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      1st Metahuman in Airport · LATAM · 2026
+    </div>
+
+    <h1 class="hero-headline">
+      Meet the <span class="highlight">AI Metahuman</span><br>at SAL Airport </h1>
+
+    </div>
+  </div>
+
+
+
+  <!-- Scroll cue -->
+  <div class="scroll-cue">
+    <span class="scroll-cue-label">Scroll</span>
+    <div class="scroll-cue-track">
+      <div class="scroll-cue-dot"></div>
+    </div>
+  </div>
+
+  <!-- Bottom wave -->
+  <div class="hero-bottom-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80">
+      <path fill="#f8f9ff" d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+  AGENDA SECTION
+════════════════════════════════════════════════════════ -->
+<section class="agenda-section" id="agenda">
+  <div class="agenda-grid">
+
+    <!-- Left sticky panel -->
+    <div class="agenda-sticky reveal from-left">
+      <div class="agenda-date-badge">AI Activities Day</div>
+      <div class="section-pill"><span class="section-pill-dot"></span>Full Programme</div>
+      <h2 class="section-h2" style="font-size:2rem;">One Day.<br><em>Infinite Possibilities.</em></h2>
+      <p class="section-lead" style="font-size:0.9rem;margin-top:0.8rem;">
+        A curated day of keynotes, live AI demonstrations, deep-dive workshops and high-level panel discussions designed for aviation leaders.
+      </p>
+
+      <div class="agenda-filter" style="margin-top:1.8rem;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">Filter by type</div>
+        <button class="filter-btn active" onclick="filterAgenda('all',this)">
+          <span class="filter-dot" style="background:#1a73e8;"></span>All sessions
+        </button>
+        <button class="filter-btn" onclick="filterAgenda('keynote',this)">
+          <span class="filter-dot" style="background:linear-gradient(135deg,#1a73e8,#7c3aed);"></span>Keynotes
+        </button>
+        <button class="filter-btn" onclick="filterAgenda('demo',this)">
+          <span class="filter-dot" style="background:#c026d3;"></span>Live Demos
+        </button>
+        <button class="filter-btn" onclick="filterAgenda('workshop',this)">
+          <span class="filter-dot" style="background:#0097a7;"></span>Workshops
+        </button>
+        <button class="filter-btn" onclick="filterAgenda('panel',this)">
+          <span class="filter-dot" style="background:#f59e0b;"></span>Panels
+        </button>
+        <button class="filter-btn" onclick="filterAgenda('networking',this)">
+          <span class="filter-dot" style="background:#22c55e;"></span>Networking
+        </button>
+      </div>
+    </div>
+
+    <!-- Right agenda timeline -->
+    <div>
+      <div class="day-tabs">
+        <button class="day-tab active">Day 1 — AI Activities</button>
+        <button class="day-tab" onclick="this.parentElement.querySelectorAll('.day-tab').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Day 2 — Demo Day</button>
+      </div>
+
+      <div class="agenda-timeline" id="agendaTimeline">
+
+        <!-- 08:30 Registration -->
+        <div class="agenda-card type-break reveal" data-type="break">
+          <div class="agenda-time-col">
+            <div class="agenda-time">08:30</div>
+            <div class="agenda-time-end">09:00</div>
+            <span class="agenda-duration">30 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-break">Registration</span>
+            <div class="agenda-title">Delegate Registration & Welcome Coffee</div>
+            <div class="agenda-desc">Collect your badge, network with fellow delegates and enjoy a complimentary breakfast welcome reception at the Panama Convention Centre.</div>
+          </div>
+          <div class="agenda-meta-col">
+            <div class="agenda-location">📍 Main Foyer</div>
+          </div>
+        </div>
+
+        <!-- 09:00 Opening Keynote -->
+        <div class="agenda-card type-keynote featured reveal" data-type="keynote">
+          <div class="agenda-time-col">
+            <div class="agenda-time">09:00</div>
+            <div class="agenda-time-end">09:45</div>
+            <span class="agenda-duration">45 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-keynote">Keynote</span>
+            <div class="agenda-title">The AI-First Airport: Transforming Ground Operations at Scale</div>
+            <div class="agenda-desc">Industry leaders unveil the roadmap for AI-powered ground operations across the Americas. A bold vision for the next decade of aviation AI.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-blue">MR</div>
+                Maria Rodriguez, CEO GHI Americas
+              </div>
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-purple">JC</div>
+                James Chen, Anthropic Aviation Lead
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <span class="featured-star">⭐ Keynote</span>
+            <div class="agenda-location">📍 Main Hall A</div>
+            <div class="agenda-capacity">👥 500 seats</div>
+          </div>
+        </div>
+
+        <!-- 09:50 Metahuman Demo -->
+        <div class="agenda-card type-demo featured reveal" data-type="demo">
+          <div class="agenda-time-col">
+            <div class="agenda-time">09:50</div>
+            <div class="agenda-time-end">10:35</div>
+            <span class="agenda-duration">45 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-demo">Live Demo</span>
+            <div class="agenda-title">ARIA Metahuman — First Live Public Interaction</div>
+            <div class="agenda-desc">World premiere of GHI's AI Metahuman concierge. Watch ARIA handle real passenger queries, multilingual support and VIP service workflows in real time — no scripts, fully live.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-purple">LP</div>
+                Laura Pinto, AI Product Director
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <span class="featured-star">🔴 Live</span>
+            <div class="agenda-location">📍 Demo Stage</div>
+            <div class="agenda-capacity">👥 300 seats</div>
+          </div>
+        </div>
+
+        <!-- 10:40 Workshop 1 -->
+        <div class="agenda-card type-workshop reveal" data-type="workshop">
+          <div class="agenda-time-col">
+            <div class="agenda-time">10:40</div>
+            <div class="agenda-time-end">12:10</div>
+            <span class="agenda-duration">90 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-workshop">Workshop</span>
+            <div class="agenda-title">Deploying Conversational AI in Ground Handling Operations</div>
+            <div class="agenda-desc">Hands-on technical workshop covering AI integration frameworks, API architecture, real-time data feeds and deployment models for ramp, fueling and catering operations.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-teal">AK</div>
+                Ahmed Khalil, Solutions Architect
+              </div>
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-blue">ST</div>
+                Sofia Torres, Integration Lead
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <div class="agenda-location">📍 Workshop Room 1</div>
+            <div class="agenda-capacity">👥 60 seats</div>
+          </div>
+        </div>
+
+        <!-- 10:40 parallel Keynote 2 -->
+        <div class="agenda-card type-keynote reveal" data-type="keynote">
+          <div class="agenda-time-col">
+            <div class="agenda-time">10:40</div>
+            <div class="agenda-time-end">11:25</div>
+            <span class="agenda-duration">45 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-keynote">Keynote</span>
+            <div class="agenda-title">Passenger Experience Reimagined: AI-Driven Premium Services</div>
+            <div class="agenda-desc">How the world's top airports are deploying AI to create hyper-personalised VIP experiences — from pre-departure to arrival. Case studies from Singapore, Dubai and Miami.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-gold">HN</div>
+                Hana Nakamura, Passenger Experience VP
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <div class="agenda-location">📍 Hall B</div>
+            <div class="agenda-capacity">👥 250 seats</div>
+          </div>
+        </div>
+
+        <!-- 12:10 Lunch -->
+        <div class="agenda-card type-break reveal" data-type="break">
+          <div class="agenda-time-col">
+            <div class="agenda-time">12:10</div>
+            <div class="agenda-time-end">13:30</div>
+            <span class="agenda-duration">80 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-break">Break</span>
+            <div class="agenda-title">Networking Lunch & AI Solutions Exhibition</div>
+            <div class="agenda-desc">Catered networking lunch with access to the full AI Solutions Exhibition floor. Visit partner booths and schedule private demos during this extended break.</div>
+          </div>
+          <div class="agenda-meta-col">
+            <div class="agenda-location">📍 Exhibition Hall</div>
+          </div>
+        </div>
+
+        <!-- 13:30 Demo 2 -->
+        <div class="agenda-card type-demo reveal" data-type="demo">
+          <div class="agenda-time-col">
+            <div class="agenda-time">13:30</div>
+            <div class="agenda-time-end">14:15</div>
+            <span class="agenda-duration">45 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-demo">Live Demo</span>
+            <div class="agenda-title">Turnaround Intelligence: AI-Guided Ground Coordination</div>
+            <div class="agenda-desc">End-to-end demonstration of AI-assisted aircraft turnaround — from gate arrival to pushback. Live integration with ramp operations, catering, cleaning and fueling systems.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-teal">RV</div>
+                Ricardo Vargas, Operations AI Lead
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <div class="agenda-location">📍 Demo Stage</div>
+            <div class="agenda-capacity">👥 300 seats</div>
+          </div>
+        </div>
+
+        <!-- 14:20 Workshop 2 -->
+        <div class="agenda-card type-workshop reveal" data-type="workshop">
+          <div class="agenda-time-col">
+            <div class="agenda-time">14:20</div>
+            <div class="agenda-time-end">15:30</div>
+            <span class="agenda-duration">70 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-workshop">Workshop</span>
+            <div class="agenda-title">Multilingual AI: Deploying NLP Across 40+ Languages</div>
+            <div class="agenda-desc">Practical masterclass on building language models for aviation contexts. Covers dialect training, cultural context, real-time interpretation and edge case management.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-purple">YO</div>
+                Yuki Ono, NLP Research Director
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <div class="agenda-location">📍 Workshop Room 2</div>
+            <div class="agenda-capacity">👥 60 seats</div>
+          </div>
+        </div>
+
+        <!-- 15:40 Panel -->
+        <div class="agenda-card type-panel featured reveal" data-type="panel">
+          <div class="agenda-time-col">
+            <div class="agenda-time">15:40</div>
+            <div class="agenda-time-end">16:40</div>
+            <span class="agenda-duration">60 min</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-panel">Panel Discussion</span>
+            <div class="agenda-title">AI Ethics, Safety & Regulation in Commercial Aviation</div>
+            <div class="agenda-desc">Senior industry voices debate the regulatory landscape, safety protocols, liability frameworks and ethical AI deployment standards emerging across Latin America and the Caribbean.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-gold">PM</div>
+                Patricia Mora, ICAO AI Task Force
+              </div>
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-blue">DL</div>
+                David Lim, Airport Safety Director
+              </div>
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-green">CF</div>
+                Clara Fuentes, Legal Counsel IATA
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <span class="featured-star">🏆 Featured</span>
+            <div class="agenda-location">📍 Main Hall A</div>
+            <div class="agenda-capacity">👥 500 seats</div>
+          </div>
+        </div>
+
+        <!-- 17:00 Networking / Awards -->
+        <div class="agenda-card type-networking featured reveal" data-type="networking">
+          <div class="agenda-time-col">
+            <div class="agenda-time">17:00</div>
+            <div class="agenda-time-end">19:00</div>
+            <span class="agenda-duration">2 hrs</span>
+          </div>
+          <div class="agenda-body">
+            <span class="agenda-type-badge badge-networking">Networking</span>
+            <div class="agenda-title">GHI AI Innovation Awards & Drinks Reception</div>
+            <div class="agenda-desc">Celebrate the Americas' most innovative AI deployments in ground handling and airport operations. Open bar reception, private demo appointments and official GHI AI Day photography.</div>
+            <div class="agenda-speakers">
+              <div class="speaker-chip">
+                <div class="speaker-avatar avatar-gold">GHI</div>
+                All Delegates Welcome
+              </div>
+            </div>
+          </div>
+          <div class="agenda-meta-col">
+            <span class="featured-star">🥂 Evening</span>
+            <div class="agenda-location">📍 Terrace Pavilion</div>
+          </div>
+        </div>
+
+      </div><!-- /agenda-timeline -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+  DEMO DAY SECTION
+════════════════════════════════════════════════════════ -->
+<section class="demo-day-section" id="demo-day">
+  <div class="section-wrap">
+    <div style="max-width:800px;">
+      <div class="section-pill reveal"><span class="section-pill-dot"></span>Demo Day — AI Solutions</div>
+      <h2 class="section-h2 reveal">Experience the Future of<br><em>Aviation AI — Live</em></h2>
+      <p class="section-lead reveal reveal-delay-1">
+        Six live demonstrations. Real systems. Real data. Each 45-minute session gives you direct hands-on access to the AI platforms reshaping ground operations worldwide.
+      </p>
+    </div>
+
+    <div class="demo-strip">
+
+      <!-- Demo 1 -->
+      <div class="demo-card reveal">
+        <div class="demo-card-visual dcv-metahuman">
+          <div class="demo-card-num">01</div>
+          <div class="demo-card-tag">⭐ Flagship</div>
+          <svg viewBox="0 0 200 190" width="200" height="190" fill="none" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);">
+            <defs>
+              <radialGradient id="g1" cx="50%" cy="40%" r="50%">
+                <stop offset="0%" stop-color="rgba(192,38,211,0.5)"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </radialGradient>
+            </defs>
+            <ellipse cx="100" cy="80" rx="70" ry="70" fill="url(#g1)"/>
+            <!-- Simple avatar silhouette -->
+            <ellipse cx="100" cy="55" rx="28" ry="32" fill="#c4a07a"/>
+            <path d="M58 140 Q58 105 100 100 Q142 105 142 140Z" fill="#1a0840"/>
+            <!-- Face details -->
+            <ellipse cx="88" cy="50" rx="6" ry="5" fill="white" opacity="0.9"/>
+            <ellipse cx="112" cy="50" rx="6" ry="5" fill="white" opacity="0.9"/>
+            <circle cx="89" cy="50" r="4" fill="#1a0a2e"/>
+            <circle cx="113" cy="50" r="4" fill="#1a0a2e"/>
+            <path d="M90 68 Q100 74 110 68" stroke="#b56040" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- Holographic ring -->
+            <ellipse cx="100" cy="80" rx="55" ry="12" stroke="rgba(192,38,211,0.6)" stroke-width="1" fill="none" stroke-dasharray="4,4"/>
+            <!-- HUD elements -->
+            <rect x="140" y="35" width="45" height="18" rx="3" fill="none" stroke="rgba(192,38,211,0.6)" stroke-width="0.8"/>
+            <text x="162" y="48" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(220,150,255,0.9)">AI ACTIVE</text>
+          </svg>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-title">ARIA — AI Metahuman Concierge</div>
+          <div class="demo-card-desc">Interact live with GHI's photorealistic AI concierge. Ask any passenger service question and experience sub-second multilingual responses.</div>
+          <div class="demo-card-footer">
+            <span class="demo-time-chip">🕘 09:50 · 10:35 · 13:30</span>
+            <button class="demo-register-btn">Register →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo 2 -->
+      <div class="demo-card reveal reveal-delay-1">
+        <div class="demo-card-visual dcv-ops">
+          <div class="demo-card-num">02</div>
+          <div class="demo-card-tag">Ground Ops</div>
+          <svg viewBox="0 0 240 190" width="240" height="190" fill="none" style="position:absolute;bottom:0;width:100%;">
+            <!-- Apron diagram top-down -->
+            <rect x="20" y="20" width="200" height="150" rx="8" fill="rgba(26,115,232,0.08)" stroke="rgba(26,115,232,0.25)" stroke-width="0.8"/>
+            <!-- Gate indicators -->
+            <rect x="35" y="35" width="30" height="50" rx="4" fill="rgba(26,115,232,0.2)" stroke="rgba(26,115,232,0.4)" stroke-width="0.8"/>
+            <text x="50" y="65" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(100,180,255,0.9)">B14</text>
+            <rect x="100" y="35" width="30" height="50" rx="4" fill="rgba(26,115,232,0.2)" stroke="rgba(26,115,232,0.4)" stroke-width="0.8"/>
+            <text x="115" y="65" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(100,180,255,0.9)">B15</text>
+            <rect x="165" y="35" width="30" height="50" rx="4" fill="rgba(26,115,232,0.2)" stroke="rgba(26,115,232,0.4)" stroke-width="0.8"/>
+            <text x="180" y="65" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(100,180,255,0.9)">B16</text>
+            <!-- Aircraft dots -->
+            <ellipse cx="50" cy="110" rx="18" ry="8" fill="rgba(255,255,255,0.15)" stroke="rgba(60,220,120,0.6)" stroke-width="1"/>
+            <ellipse cx="115" cy="110" rx="18" ry="8" fill="rgba(255,255,255,0.15)" stroke="rgba(245,158,11,0.7)" stroke-width="1"/>
+            <ellipse cx="180" cy="110" rx="18" ry="8" fill="rgba(255,255,255,0.15)" stroke="rgba(239,68,68,0.6)" stroke-width="1"/>
+            <!-- Status labels -->
+            <text x="50" y="125" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(60,220,120,0.8)">READY</text>
+            <text x="115" y="125" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(245,158,11,0.8)">FUEL</text>
+            <text x="180" y="125" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(239,68,68,0.8)">DELAY</text>
+            <!-- AI status bar -->
+            <rect x="20" y="150" width="200" height="15" rx="3" fill="rgba(26,115,232,0.1)"/>
+            <text x="120" y="162" text-anchor="middle" font-size="8" font-family="monospace" fill="rgba(100,200,255,0.8)">GHI TURNAROUND AI · REAL-TIME</text>
+          </svg>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-title">Turnaround Intelligence Platform</div>
+          <div class="demo-card-desc">Real-time AI coordination of every aircraft turnaround event — from gate arrival to pushback clearance — cutting delays by 35%.</div>
+          <div class="demo-card-footer">
+            <span class="demo-time-chip">🕑 13:30 · 15:00</span>
+            <button class="demo-register-btn">Register →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo 3 -->
+      <div class="demo-card reveal reveal-delay-2">
+        <div class="demo-card-visual dcv-passenger">
+          <div class="demo-card-num">03</div>
+          <div class="demo-card-tag">Passenger</div>
+          <svg viewBox="0 0 240 190" width="240" height="190" fill="none" style="position:absolute;inset:0;width:100%;height:100%;">
+            <!-- Journey timeline -->
+            <line x1="40" y1="95" x2="200" y2="95" stroke="rgba(34,197,94,0.4)" stroke-width="1.5" stroke-dasharray="6,4"/>
+            <!-- Stages -->
+            <circle cx="55" cy="95" r="12" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.6)" stroke-width="1.5"/>
+            <text x="55" y="99" text-anchor="middle" font-size="9" fill="rgba(34,197,94,0.9)">CI</text>
+            <text x="55" y="118" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(255,255,255,0.5)">Check-in</text>
+            <circle cx="100" cy="95" r="12" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.6)" stroke-width="1.5"/>
+            <text x="100" y="99" text-anchor="middle" font-size="9" fill="rgba(34,197,94,0.9)">SC</text>
+            <text x="100" y="118" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(255,255,255,0.5)">Security</text>
+            <circle cx="145" cy="95" r="12" fill="rgba(34,197,94,0.3)" stroke="rgba(34,197,94,0.8)" stroke-width="1.5"/>
+            <text x="145" y="99" text-anchor="middle" font-size="9" fill="rgba(34,197,94,1)">LG</text>
+            <text x="145" y="118" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(255,255,255,0.7)">Lounge</text>
+            <circle cx="190" cy="95" r="12" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.6)" stroke-width="1.5"/>
+            <text x="190" y="99" text-anchor="middle" font-size="9" fill="rgba(34,197,94,0.9)">GT</text>
+            <text x="190" y="118" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(255,255,255,0.5)">Gate</text>
+            <!-- AI bubble -->
+            <rect x="110" y="35" width="80" height="38" rx="6" fill="rgba(34,197,94,0.12)" stroke="rgba(34,197,94,0.35)" stroke-width="0.8"/>
+            <text x="150" y="52" text-anchor="middle" font-size="8" fill="rgba(34,197,94,0.9)" font-family="monospace">ARIA GUIDES</text>
+            <text x="150" y="65" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.5)" font-family="monospace">Every step · 40+ langs</text>
+            <line x1="145" y1="73" x2="145" y2="82" stroke="rgba(34,197,94,0.4)" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-title">VIP Passenger Journey AI</div>
+          <div class="demo-card-desc">Follow a premium passenger from kerb to gate with AI personalisation at every step — check-in, lounge booking, fast-track and boarding.</div>
+          <div class="demo-card-footer">
+            <span class="demo-time-chip">🕙 10:50 · 14:20</span>
+            <button class="demo-register-btn">Register →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo 4 -->
+      <div class="demo-card reveal reveal-delay-3">
+        <div class="demo-card-visual dcv-analytics">
+          <div class="demo-card-num">04</div>
+          <div class="demo-card-tag">Analytics</div>
+          <svg viewBox="0 0 240 190" width="240" height="190" fill="none" style="position:absolute;inset:0;width:100%;height:100%;">
+            <!-- Chart bars -->
+            <rect x="30" y="130" width="22" height="40" rx="3" fill="rgba(245,158,11,0.4)"/>
+            <rect x="60" y="100" width="22" height="70" rx="3" fill="rgba(245,158,11,0.5)"/>
+            <rect x="90" y="80" width="22" height="90" rx="3" fill="rgba(245,158,11,0.6)"/>
+            <rect x="120" y="60" width="22" height="110" rx="3" fill="rgba(245,158,11,0.75)"/>
+            <rect x="150" y="45" width="22" height="125" rx="3" fill="rgba(245,158,11,0.9)"/>
+            <rect x="180" y="35" width="22" height="135" rx="3" fill="#f59e0b"/>
+            <!-- Trend line -->
+            <polyline points="41,130 71,100 101,80 131,60 161,45 191,35" stroke="rgba(239,68,68,0.8)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Baseline -->
+            <line x1="20" y1="170" x2="220" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+            <!-- AI label -->
+            <rect x="80" y="15" width="80" height="20" rx="4" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="0.8"/>
+            <text x="120" y="30" text-anchor="middle" font-size="8" font-family="monospace" fill="rgba(245,158,11,0.9)">PREDICTIVE AI +38%</text>
+          </svg>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-title">Predictive Operations Analytics</div>
+          <div class="demo-card-desc">AI-powered disruption prediction, load forecasting and KPI dashboards that help ops managers make faster, smarter decisions.</div>
+          <div class="demo-card-footer">
+            <span class="demo-time-chip">🕑 14:00 · 16:00</span>
+            <button class="demo-register-btn">Register →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo 5 -->
+      <div class="demo-card reveal reveal-delay-4">
+        <div class="demo-card-visual dcv-nlp">
+          <div class="demo-card-num">05</div>
+          <div class="demo-card-tag">NLP</div>
+          <svg viewBox="0 0 240 190" width="240" height="190" fill="none" style="position:absolute;inset:0;width:100%;height:100%;">
+            <!-- Chat bubbles -->
+            <rect x="25" y="25" width="110" height="28" rx="10" fill="rgba(0,151,167,0.25)" stroke="rgba(0,151,167,0.5)" stroke-width="0.8"/>
+            <text x="80" y="43" text-anchor="middle" font-size="9" fill="rgba(0,200,220,0.9)">¿Dónde está mi equipaje?</text>
+            <rect x="105" y="65" width="110" height="28" rx="10" fill="rgba(0,151,167,0.15)" stroke="rgba(0,151,167,0.4)" stroke-width="0.8"/>
+            <text x="160" y="83" text-anchor="middle" font-size="9" fill="rgba(0,200,220,0.8)">Where is my luggage?</text>
+            <rect x="25" y="105" width="110" height="28" rx="10" fill="rgba(0,151,167,0.25)" stroke="rgba(0,151,167,0.5)" stroke-width="0.8"/>
+            <text x="80" y="123" text-anchor="middle" font-size="9" fill="rgba(0,200,220,0.9)">行李在哪里？</text>
+            <rect x="105" y="145" width="110" height="28" rx="10" fill="rgba(0,151,167,0.15)" stroke="rgba(0,151,167,0.4)" stroke-width="0.8"/>
+            <text x="160" y="163" text-anchor="middle" font-size="9" fill="rgba(0,200,220,0.8)">أين حقيبتي؟</text>
+            <!-- Language labels -->
+            <text x="25" y="18" font-size="7" font-family="monospace" fill="rgba(0,200,220,0.5)">ES</text>
+            <text x="105" y="58" font-size="7" font-family="monospace" fill="rgba(0,200,220,0.5)">EN</text>
+            <text x="25" y="98" font-size="7" font-family="monospace" fill="rgba(0,200,220,0.5)">ZH</text>
+            <text x="105" y="138" font-size="7" font-family="monospace" fill="rgba(0,200,220,0.5)">AR</text>
+          </svg>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-title">Multilingual NLP Engine</div>
+          <div class="demo-card-desc">Live demonstration of real-time multilingual understanding — switch between 40+ languages mid-conversation with zero latency or context loss.</div>
+          <div class="demo-card-footer">
+            <span class="demo-time-chip">🕒 15:00 · 16:30</span>
+            <button class="demo-register-btn">Register →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo 6 -->
+      <div class="demo-card reveal reveal-delay-5">
+        <div class="demo-card-visual dcv-vip">
+          <div class="demo-card-num">06</div>
+          <div class="demo-card-tag">Premium</div>
+          <svg viewBox="0 0 240 190" width="240" height="190" fill="none" style="position:absolute;inset:0;width:100%;height:100%;">
+            <!-- Lounge layout top-down -->
+            <rect x="20" y="20" width="200" height="150" rx="8" fill="rgba(192,38,211,0.08)" stroke="rgba(192,38,211,0.25)" stroke-width="0.8"/>
+            <!-- Seats -->
+            <rect x="35" y="40" width="18" height="14" rx="3" fill="rgba(192,38,211,0.25)"/>
+            <rect x="35" y="60" width="18" height="14" rx="3" fill="rgba(192,38,211,0.25)"/>
+            <rect x="35" y="80" width="18" height="14" rx="3" fill="rgba(192,38,211,0.35)"/>
+            <!-- Bar counter -->
+            <rect x="65" y="35" width="50" height="20" rx="4" fill="rgba(192,38,211,0.2)" stroke="rgba(192,38,211,0.4)" stroke-width="0.8"/>
+            <text x="90" y="50" text-anchor="middle" font-size="8" fill="rgba(220,150,255,0.8)">BAR</text>
+            <!-- AI kiosk -->
+            <rect x="150" y="40" width="50" height="70" rx="6" fill="rgba(192,38,211,0.15)" stroke="rgba(192,38,211,0.5)" stroke-width="1"/>
+            <text x="175" y="72" text-anchor="middle" font-size="8" fill="rgba(220,150,255,0.9)">ARIA</text>
+            <text x="175" y="84" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(192,38,211,0.7)">KIOSK</text>
+            <circle cx="175" cy="55" r="8" fill="rgba(192,38,211,0.25)" stroke="rgba(192,38,211,0.6)" stroke-width="0.8"/>
+            <!-- Upsell notification -->
+            <rect x="60" y="130" width="120" height="28" rx="5" fill="rgba(192,38,211,0.15)" stroke="rgba(192,38,211,0.4)" stroke-width="0.8"/>
+            <text x="120" y="142" text-anchor="middle" font-size="8" fill="rgba(220,150,255,0.9)">✓ Suite Upgrade Offered</text>
+            <text x="120" y="153" text-anchor="middle" font-size="7" font-family="monospace" fill="rgba(192,38,211,0.6)">AI PERSONALISATION ACTIVE</text>
+          </svg>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-title">Premium Lounge & Upsell AI</div>
+          <div class="demo-card-desc">AI-driven premium service personalisation — suite upgrades, dining bookings, spa reservations and companion services all delivered conversationally.</div>
+          <div class="demo-card-footer">
+            <span class="demo-time-chip">🕓 11:30 · 15:30</span>
+            <button class="demo-register-btn">Register →</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /demo-strip -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+  STATS SECTION
+════════════════════════════════════════════════════════ -->
+<section class="stats-section">
+  <div style="max-width:1000px;margin:0 auto;text-align:center;">
+    <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:2.5rem;">Proven impact across GHI member airports</p>
+    <div class="stats-grid">
+      <div class="stat-cell reveal">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Faster Query Resolution</div>
+      </div>
+      <div class="stat-cell reveal reveal-delay-1">
+        <div class="stat-num">92%</div>
+        <div class="stat-label">Passenger Satisfaction</div>
+      </div>
+      <div class="stat-cell reveal reveal-delay-2">
+        <div class="stat-num">3×</div>
+        <div class="stat-label">Disruption Response</div>
+      </div>
+      <div class="stat-cell reveal reveal-delay-3">
+        <div class="stat-num">60+</div>
+        <div class="stat-label">Airports Deployed</div>
+      </div>
+      <div class="stat-cell reveal reveal-delay-4">
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Languages Supported</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+  SCHEDULE / BOOK SECTION
+════════════════════════════════════════════════════════ -->
+<section class="schedule-section" id="schedule">
+  <div class="schedule-inner">
+    <div class="section-pill reveal" style="display:inline-flex;"><span class="section-pill-dot"></span>Private Demo</div>
+    <h2 class="section-h2 reveal" style="margin:0 auto 0.8rem;">Book Your <em>Private Session</em></h2>
+    <p class="section-lead reveal" style="margin:0 auto;text-align:center;">
+      Reserve a 30-minute 1-on-1 with our AI team at the Panama Convention Centre. Sessions are limited.
+    </p>
+
+    <div class="schedule-card reveal">
+      <div class="form-grid">
+        <input class="form-field" type="text" placeholder="First name"/>
+        <input class="form-field" type="text" placeholder="Last name"/>
+        <input class="form-field form-full" type="email" placeholder="Work email address"/>
+        <input class="form-field" type="text" placeholder="Company / Airport / Airline"/>
+        <input class="form-field" type="text" placeholder="Job title"/>
+        <select class="form-field form-full" style="color:var(--text-muted);">
+          <option value="" disabled selected>Preferred session time</option>
+          <option>Morning · 09:00 – 12:00</option>
+          <option>Afternoon · 13:00 – 16:00</option>
+          <option>Evening · 16:00 – 18:00</option>
+        </select>
+        <select class="form-field form-full" style="color:var(--text-muted);">
+          <option value="" disabled selected>Primary interest</option>
+          <option>ARIA Metahuman Concierge</option>
+          <option>Turnaround Intelligence</option>
+          <option>VIP Passenger Journey AI</option>
+          <option>Predictive Analytics</option>
+          <option>Multilingual NLP Engine</option>
+          <option>Premium Lounge AI</option>
+        </select>
+      </div>
+      <button class="submit-btn" onclick="handleFormSubmit(this)">
+        Reserve My Spot at GHI AI Day →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">GHI AI Day · 10th Americas Conference</div>
+    <div class="footer-sub">Panama Convention Centre · 2025 · All rights reserved</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">Programme</a>
+    <a href="#">Speakers</a>
+    <a href="#">Venue</a>
+    <a href="#">Sponsors</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+   JAVASCRIPT
+═══════════════════════════════════════════════════════════ -->
+<script>
+// ─── NAV SCROLL EFFECT ─────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─── PARTICLES ─────────────────────────────────────────
+(function generateParticles() {
+  const container = document.getElementById('heroParticles');
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const sz = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width: ${sz}px; height: ${sz}px;
+      left: ${Math.random() * 100}%;
+      animation-duration: ${Math.random() * 15 + 8}s;
+      animation-delay: ${Math.random() * 12}s;
+      opacity: ${Math.random() * 0.5 + 0.1};
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// ─── LIGHT BEAMS ───────────────────────────────────────
+(function generateBeams() {
+  const container = document.getElementById('lightBeams');
+  for (let i = 0; i < 12; i++) {
+    const beam = document.createElement('div');
+    beam.className = 'light-beam';
+    const hue = Math.random() > 0.5 ? '210, 115, 232' : '124, 58, 237';
+    beam.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: linear-gradient(to bottom, transparent, rgba(${hue}, 0.3) 50%, transparent);
+      animation-duration: ${Math.random() * 6 + 4}s;
+      animation-delay: ${Math.random() * 8}s;
+    `;
+    container.appendChild(beam);
+  }
+})();
+
+// ─── VIDEO PLACEHOLDER STARS ───────────────────────────
+(function generateStars() {
+  const container = document.getElementById('vpStars');
+  if (!container) return;
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      width: ${sz}px; height: ${sz}px;
+      top: ${Math.random() * 60}%;
+      left: ${Math.random() * 100}%;
+      animation-duration: ${Math.random() * 3 + 2}s;
+      animation-delay: ${Math.random() * 3}s;
+    `;
+    container.appendChild(s);
+  }
+})();
+
+// ─── VIDEO PLACEHOLDER BUILDING WINDOWS ────────────────
+(function generateWindows() {
+  const container = document.getElementById('vpWindows');
+  if (!container) return;
+  for (let i = 0; i < 60; i++) {
+    const w = document.createElement('div');
+    w.className = 'win';
+    const sz = Math.random() * 3 + 2;
+    w.style.cssText = `
+      width: ${sz}px; height: ${sz * 1.5}px;
+      top: ${Math.random() * 80}%;
+      left: ${Math.random() * 100}%;
+      animation-duration: ${Math.random() * 4 + 8}s;
+      animation-delay: ${Math.random() * 10}s;
+      opacity: ${Math.random() * 0.6 + 0.2};
+    `;
+    container.appendChild(w);
+  }
+})();
+
+// ─── VIDEO PLACEHOLDER TAXIWAY LIGHTS ──────────────────
+(function generateTaxilights() {
+  const container = document.getElementById('vpTaxilights');
+  if (!container) return;
+  const colors = ['#3b82f6','#22c55e','#f59e0b','#ef4444'];
+  for (let i = 0; i < 24; i++) {
+    const t = document.createElement('div');
+    t.className = 'taxilight';
+    const color = colors[i % colors.length];
+    t.style.cssText = `
+      width: 4px; height: 4px;
+      background: ${color};
+      box-shadow: 0 0 6px 2px ${color};
+      bottom: ${Math.random() * 90}%;
+      left: ${(i / 24) * 95 + 2}%;
+      animation-duration: ${Math.random() * 1.5 + 0.8}s;
+      animation-delay: ${(i * 0.12)}s;
+    `;
+    container.appendChild(t);
+  }
+})();
+
+// ─── STROBE LIGHT TRACKING ─────────────────────────────
+(function trackStrobe() {
+  const aircraft = document.getElementById('aircraft');
+  const strobeL = document.getElementById('strobeL');
+  const strobeR = document.getElementById('strobeR');
+  if (!aircraft || !strobeL) return;
+
+  function updateStrobe() {
+    const rect = aircraft.getBoundingClientRect();
+    if (strobeL) {
+      strobeL.style.left = (rect.left + 10) + 'px';
+      strobeL.style.bottom = (window.innerHeight - rect.bottom + 20) + 'px';
+    }
+    if (strobeR) {
+      strobeR.style.left = (rect.left + rect.width - 10) + 'px';
+      strobeR.style.bottom = (window.innerHeight - rect.bottom + 20) + 'px';
+    }
+    requestAnimationFrame(updateStrobe);
+  }
+  updateStrobe();
+})();
+
+// ─── SCROLL REVEAL ─────────────────────────────────────
+(function initReveal() {
+  const elements = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  elements.forEach(el => observer.observe(el));
+})();
+
+// ─── AGENDA FILTER ─────────────────────────────────────
+function filterAgenda(type, btn) {
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Filter cards
+  document.querySelectorAll('.agenda-card').forEach(card => {
+    if (type === 'all' || card.dataset.type === type) {
+      card.style.display = '';
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(16px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 20);
+    } else {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-8px)';
+      setTimeout(() => { card.style.display = 'none'; }, 300);
+    }
+  });
+}
+
+// ─── FORM SUBMIT ───────────────────────────────────────
+function handleFormSubmit(btn) {
+  const form = btn.closest('.schedule-card');
+  const inputs = form.querySelectorAll('.form-field');
+  let filled = 0;
+  inputs.forEach(i => { if (i.value && i.value !== '') filled++; });
+
+  if (filled < 3) {
+    btn.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+    btn.textContent = '⚠ Please fill in at least your name, email and company';
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.textContent = 'Reserve My Spot at GHI AI Day →';
+    }, 3000);
+    return;
+  }
+
+  btn.textContent = '✓ Confirmed! We\'ll see you in Panama — check your inbox.';
+  btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+  btn.style.boxShadow = '0 8px 28px rgba(34,197,94,0.35)';
+  btn.disabled = true;
+}
+
+// ─── SMOOTH PARALLAX ON HERO ───────────────────────────
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  // Parallax the video/placeholder bg
+  const videowrap = hero.querySelector('.hero-video-wrap');
+  if (videowrap) {
+    videowrap.style.transform = `translateY(${scrollY * 0.4}px)`;
+  }
+  // Fade hero content out slightly on scroll
+  const content = hero.querySelector('.hero-content');
+  if (content) {
+    const opacity = Math.max(0, 1 - scrollY / 500);
+    content.style.opacity = opacity;
+    content.style.transform = `translateY(${scrollY * 0.15}px)`;
+  }
+}, { passive: true });
+
+// ─── DEMO CARD REGISTRATION FEEDBACK ──────────────────
+document.querySelectorAll('.demo-register-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const orig = this.textContent;
+    this.textContent = '✓ Added';
+    this.style.background = 'var(--brand-blue)';
+    this.style.color = 'white';
+    document.getElementById('schedule').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
